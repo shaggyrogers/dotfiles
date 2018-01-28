@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# -*- coding: UTF-8 -*-
+###############################################################################
+# pip3-upgrade-all
+# ================
+#
+# Version:               1.0.0
+# Author:                Michael De Pasquale
+# Creation Date:         2018-01-28
+# License:               None
+#
+# Description
+# -----------
+# Updates all outdated python3 packages.
+#
+###############################################################################
+
+function pip_update {
+    PIP_CMD=$1
+    failed_upgrades=0
+    total_upgrades=0
+    echo "Upgrading user python packages using $PIP_CMD..."
+
+    for i in $($PIP_CMD list --outdated --format=freeze | cut -d = -f 1); do
+        ((total_upgrades+=1))
+        if ! echo $i | xargs $PIP_CMD install --user --upgrade ; then
+            ((failed_upgrades+=1))
+        fi
+    done
+
+    echo -e "\rUpgrades complete. $failed_upgrades/$total_upgrades failed."
+}
+
+pip_update "pip"
+pip_update "pip3"
+pip_update "python3.6 -m pip"
+
+exit 0

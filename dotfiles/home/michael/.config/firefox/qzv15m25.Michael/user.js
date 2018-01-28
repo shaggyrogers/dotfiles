@@ -93,7 +93,6 @@ user_pref("browser.download.hide_plugins_without_extensions", false);
 user_pref("browser.eme.ui.firstContentShown", true);
 user_pref("browser.feeds.showFirstRunUI", false);
 user_pref("browser.migrated-sync-button", true);
-user_pref("browser.migration.version", 59);
 
 /* New Tab Page - Activity Stream*/
 browser.newtabpage.activity-stream.enabled
@@ -245,22 +244,17 @@ user_pref("extensions.dave@tails.boum.org.sdk.baseURI", "resource://dave-at-tail
 user_pref("extensions.dave@tails.boum.org.sdk.domain", "dave-at-tails-dot-boum-dot-org");
 user_pref("extensions.dave@tails.boum.org.sdk.load.reason", "startup");
 user_pref("extensions.dave@tails.boum.org.sdk.rootURI", "jar:file:///home/michael/.mozilla/firefox/qzv15m25.Michael/extensions/dave@tails.boum.org.xpi!/");
-user_pref("extensions.dave@tails.boum.org.sdk.version", "0.2.8");
 user_pref("extensions.e10s.rollout.blocklist", "");
 user_pref("extensions.e10s.rollout.hasAddon", true);
 user_pref("extensions.e10s.rollout.policy", "50allmpc");
 user_pref("extensions.e10sBlockedByAddons", false);
 user_pref("extensions.e10sMultiBlockedByAddons", true);
-user_pref("extensions.followonsearch.cohortSample", "0.0");
 user_pref("extensions.formautofill.addresses.enabled", false);
 user_pref("extensions.formautofill.creditCards.enabled", false);
-user_pref("extensions.formautofill.firstTimeUse", false);
 user_pref("extensions.fxdevtools-adapters@mozilla.org.sdk.baseURI", "resource://fxdevtools-adapters-at-mozilla-dot-org/");
 user_pref("extensions.fxdevtools-adapters@mozilla.org.sdk.domain", "fxdevtools-adapters-at-mozilla-dot-org");
 user_pref("extensions.fxdevtools-adapters@mozilla.org.sdk.load.reason", "startup");
 user_pref("extensions.fxdevtools-adapters@mozilla.org.sdk.rootURI", "file:///home/michael/.mozilla/firefox/qzv15m25.Michael/extensions/fxdevtools-adapters@mozilla.org/");
-user_pref("extensions.fxdevtools-adapters@mozilla.org.sdk.version", "0.3.8");
-user_pref("extensions.getAddons.cache.lastUpdate", 1513033528);
 user_pref("extensions.getAddons.databaseSchema", 5);
 user_pref("extensions.greasemonkey.enabled", false);
 user_pref("extensions.greasemonkey.haveInsertedToolbarbutton", true);
@@ -268,9 +262,6 @@ user_pref("extensions.greasemonkey.menuCommanderEventNameSuffix", "IHUW6Z25SLVZH
 user_pref("extensions.greasemonkey.newscript_namespace", "michael-scripts");
 user_pref("extensions.greasemonkey.stats.prompted", true);
 user_pref("extensions.greasemonkey.sync.enabled", false);
-user_pref("extensions.greasemonkey.version", "3.17");
-user_pref("extensions.hotfix.lastVersion", "20170302.01");
-user_pref("extensions.lastAppBuildId", "20171129230719");
 user_pref("extensions.lastAppVersion", "57.0.1");
 user_pref("extensions.lastPlatformVersion", "57.0.1");
 user_pref("extensions.livehttpheaders.exclude", false);
@@ -314,7 +305,6 @@ user_pref("general.warnOnAboutConfig", false);
 user_pref("geo.enabled", false);
 user_pref("geo.wifi.uri", "");
 user_pref("geo.wifi.xhr.timeout", 1);
-user_pref("idle.lastDailyNotification", 1513011838);
 
 user_pref("lightweightThemes.persisted.footerURL", false);
 user_pref("lightweightThemes.persisted.headerURL", false);
@@ -331,25 +321,7 @@ user_pref("network.predictor.cleaned-up", true);
 user_pref("network.predictor.enabled", false);
 user_pref("network.prefetch-next", false);
 
-user_pref("network.proxy.backup.ftp", "127.0.0.1");
-user_pref("network.proxy.backup.ftp_port", 9050);
-user_pref("network.proxy.backup.socks", "127.0.0.1");
-user_pref("network.proxy.backup.socks_port", 9050);
-user_pref("network.proxy.backup.ssl", "punterpal.com.au");
-user_pref("network.proxy.backup.ssl_port", 9050);
-user_pref("network.proxy.ftp", "punterpal.com.au");
-user_pref("network.proxy.ftp_port", 8113);
-user_pref("network.proxy.http", "punterpal.com.au");
-user_pref("network.proxy.http_port", 8113);
-user_pref("network.proxy.no_proxies_on", "");
-user_pref("network.proxy.share_proxy_settings", true);
-user_pref("network.proxy.socks", "punterpal.com.au");
-user_pref("network.proxy.socks_port", 8113);
-user_pref("network.proxy.socks_remote_dns", true);
-user_pref("network.proxy.ssl", "punterpal.com.au");
 
-user_pref("network.proxy.ssl_port", 8113);
-user_pref("network.proxy.type", 0);
 
 user_pref("network.warnOnAboutNetworking", false);
 
@@ -382,7 +354,6 @@ user_pref("security.dialog_enable_delay", 0);
 user_pref("device.sensors.enabled", false);
 
 // Disable unsafe ciphers/protocols
-user_pref("security.tls.version.min", 1); // disable SSLv3
 //user_pref("security.ssl3.rsa_rc4_128_md5", false);
 //user_pref("security.ssl3.rsa_rc4_128_sha", false);
 //user_pref("security.ssl3.ecdh_ecdsa_rc4_128_sha", false);

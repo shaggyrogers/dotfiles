@@ -5,7 +5,3 @@
 --exclude=.git
 --exclude=.svn
 --exclude=.hg
---exclude=.git
---exclude=.git
---exclude=.git
---exclude=.git

@@ -44,8 +44,7 @@ fi
 # Single-key y/n prompt
 function confirm {
     read -sn 1 -p "$* [Y/N]? "
-    [[ ${REPLY:0:1} = [Yy] ]]
-    printf '\n'
+    [[ ${REPLY:0:1} == [Yy] ]] && printf '\n'
 }
 
 # Graphical session only

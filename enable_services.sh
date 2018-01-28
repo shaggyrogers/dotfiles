@@ -14,5 +14,8 @@
 #
 ###############################################################################
 
-sudo systemctl enable fstrim.timer
+echo 'Enabling user services...'
 systemctl --user enable psd.service
+
+echo 'Enabling system services...'
+sudo systemctl enable fstrim.timer

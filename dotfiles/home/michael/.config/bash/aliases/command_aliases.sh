@@ -1,25 +1,20 @@
 #!/bin/bash
 # -*- coding: UTF-8 -*-
 ###############################################################################
-# command_aliases.sh                                                          
-# ==================                                                          
-#                                                                             
-# Version:               1.0.0                                                
-# Author:                Michael De Pasquale                                  
-# Creation Date:         2017-12-07                                           
-# License:               None                                                 
-#                                                                             
-# Description                                                                 
-# -----------                                                                 
-# Defines bash aliases in order to shorten frequently used commands, set      
-# frequently used arguments as default or replace one application/command     
-# with another.                                                               
-#                                                                             
-# Usage                                                                       
-# -----                                                                       
-# Define aliases only if they are worth the time and effort needed to learn   
-# them and aren't likely to cause issues or confusion later on.               
-#                                                                             
+# command_aliases.sh
+# ==================
+#
+# Version:               1.0.0
+# Author:                Michael De Pasquale
+# Creation Date:         2017-12-07
+# License:               None
+#
+# Description
+# -----------
+# Defines bash aliases in order to shorten frequently used commands, set
+# frequently used arguments as default or replace one application/command
+# with another.
+#
 ###############################################################################
 
 # cli (CALC)ulator
@@ -76,14 +71,6 @@ alias m='command man'
 
 # (MD5)
 alias md5='command openssl md5'
-
-# Install in all python versions
-function pips-install-user() {
-    if [ -z $1 ]; then return 1; fi
-    python -m pip install --user $1
-    python3 -m pip install --user $1
-    python3.6 -m pip install --user $1
-}
 
 # (S)udo, (S)udo (A)pt
 alias s='command sudo '

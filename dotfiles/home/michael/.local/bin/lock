@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# -*- coding: UTF-8 -*-
+###############################################################################
+# lock
+# ====
+#
+# Version:               1.0.0
+# Author:                Michael De Pasquale
+# Creation Date:         2017-11-28
+# License:               None
+#
+# Description
+# -----------
+# Runs i3lock with a set configuration.
+#
+###############################################################################
+
+i3lock -k --timepos='x+0.5*w-0.5*cw:y+0.5*h-0.5*ch' \
+          --timecolor='#FFFFFFCC' \
+          --timesize=48 \
+          --datecolor='#FFFFFFCC' \
+          --datesize='24' \
+          --indicator \
+          --ring-width=8 \
+          --radius=36 \
+          --indpos='x+1.8*r:y+h-1.8*r' \
+          --veriftext='' \
+          --wrongtext='' \
+          --insidevercolor='#FFFFFF88' \
+          --insidewrongcolor='#FF111188' \
+          --insidecolor='#00000000' \
+          --ringvercolor='#FFFFFFCC' \
+          --ringwrongcolor='#FFFFFFCC' \
+          --ringcolor='#FFFFFFCC' \
+          --linecolor='#00000000' \
+          --separatorcolor='#00000000' \
+          --keyhlcolor='#11FF11CC' \
+          --bshlcolor='#FF1111CC' \
+          -i $HOME'/.config/i3/lockimg.png' &
+
+sleep 1.0
+i3lockpid=$!
+winid=`xwininfo -name "i3lock" | grep "Window id" | grep -oE "0x[0-9a-f]+"`
+
+if [ -z "$winid" ]; then
+    echo "Could not find i3lock window"
+    exit 1
+fi
+
+conky -w "$winid" &
+conkypid=$!
+wait $i3lockpid
+kill $conkypid
+
+exit 0
