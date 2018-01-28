@@ -35,18 +35,20 @@ function sanitise {
     # Build sed expressions for preview and edit
     SHOWMATCHES=''
     DELETEMATCHES=''
+
     for p in $(echo "$EXPRS"); do
         SHOWMATCHES+="s/.*$p.*/DELETE:&/g; "
         DELETEMATCHES+="/.*$p.*/d; "
     done
 
-    # Print edit preview & deleted files
-    printf "\n$FILEPATH\n\nEdit Preview\n============\n"
+    # Print edit preview
+    printf "\n$FILEPATH\nEdit Preview\n%s\n" \
+        "==================================================================="
     cat "$FILEPATH" | sed -E "$SHOWMATCHES" | sed 's/DELETE:DELETE://g' \
         | grep --color -E '^DELETE:|$'
 
-    printf "\n$FILEPATH\n\nEdit Preview\n============\n"
-
+    printf "%s\n" \
+        "==================================================================="
     # prompt user to delete matches
     if confirm 'Delete matches?'; then
         sed -E "$DELETEMATCHES" -i "$FILEPATH"

@@ -19,3 +19,4 @@ systemctl --user enable psd.service
 
 echo 'Enabling system services...'
 sudo systemctl enable fstrim.timer
+exit 0
