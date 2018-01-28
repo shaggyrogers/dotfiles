@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# -*- coding: UTF-8 -*-
+###############################################################################
+# kitty-update
+# ============
+#
+# Version:               1.0.0
+# Author:                Michael De Pasquale
+# Creation Date:         2017-12-16
+# License:               None (public domain)
+#
+# Description
+# -----------
+# Updates kitty terminal emulator.
+#
+###############################################################################
+
+# Make sure the directory containing kitty exists
+if [ ! -d $HOME/.local/ ]; then
+    echo 'Failed to update kitty: Could not find directory $HOME/.local/'
+    exit 1
+fi
+
+# Enter .local and check if any of the files in kitty/ are being used
+cd $HOME/.local
+
+for file in `find kitty/`; do
+
+    if fuser -u $file; then
+        echo 'Failed to update kitty: One or more files are in use!'
+        exit 1
+    fi
+done
+
+# Wipe kitty folder and clone repository
+rm -rf kitty/
+git clone https://github.com/kovidgoyal/kitty.git kitty/
+
+# Run setup script
+cd kitty
+
+if python3 setup.py build; then
+    echo 'Update completed successfully.'
+    exit 0
+fi
+
+echo 'An error occured while running setup script.'
+exit 1

@@ -1,0 +1,359 @@
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+"""
+taskwarrior-productivity
+========================
+
+  Version:               1.0.0
+  Author:                Michael De Pasquale
+  Creation Date:         2018-01-04
+  License:               None
+
+  Description
+  -----------
+  Saves an active task and the time it was added.
+
+  Arguments
+  ---------
+  active-name
+    Get the name of the currently active task.
+
+  active-update <id> <task-data>
+    Add a new active taskwarrior task.
+
+  active-delete <id>
+    Delete a task that is no longer active.
+"""
+
+import datetime
+import fcntl
+import json
+import math
+import os
+import sys
+import traceback
+from functools import singledispatch
+
+# Configuration
+STATE_FILE_PATH = '~/.taskwarrior-productivity.state'
+
+
+# JSON default serialise function
+@singledispatch
+def toSerialisable(obj):
+    """ Serialises an object based on type. """
+
+    return str(obj)
+
+
+# Type overloads
+@toSerialisable.register(datetime.datetime)
+def toSerialisableDatetime(obj):
+    return obj.timestamp()
+
+
+class ActiveTask:
+    """ A generic interface for an active task. """
+
+    def __init__(self, data, whenAdded):
+        # A dictionary containing the format-specific task data
+        self.data = data
+
+        # The format of task, only 'Taskwarrior' is currently valid
+        self.taskFormat = None
+
+        # when the task became active / was added
+        self.whenAdded = whenAdded
+
+    # JSON serialise/deserialise interface methods
+    def serialiseJSON(self):
+        """ Returns a string representation of a dictionary of variable names
+            and their values.
+        """
+
+        return serialiseJSON(self.__dict__)
+
+    @staticmethod
+    def fromState(stateDict):
+        """ Returns None if stateDict is invalid, or an ActiveTask created from
+            stateDict.
+        """
+
+        if stateDict is None:
+            return None
+
+        # Validate dictionary
+        if not ('data' in stateDict and 'taskFormat' in stateDict and
+                'whenAdded' in stateDict):
+            sys.stderr.write("stateDict: ActiveTask dict is not valid.\n")
+
+            return None
+
+        # Build class / subclass
+        whenAdded = stateDict.get('whenAdded')
+
+        if whenAdded is not None:
+            whenAdded = datetime.datetime.fromtimestamp(whenAdded)
+
+        inst = ActiveTask(stateDict.get('data'), whenAdded)
+        inst.taskFormat = stateDict.get('taskFormat')
+
+        if inst.taskFormat == 'Taskwarrior':
+            return ActiveTaskwarriorTask(inst.data, inst.whenAdded)
+
+        return inst
+
+    # ActiveTask interface methods
+    def isValid(self):
+        """ Determines if this task is valid. """
+        raise NotImplementedError
+
+    def getID(self):
+        """ Returns an identifier unique to the taskFormat. """
+        raise NotImplementedError
+
+    def getDescription(self):
+        """ Returns a name or description of the task. """
+        raise NotImplementedError
+
+
+@toSerialisable.register(ActiveTask)
+def toSerialisableActiveTask(obj):
+    return obj.__dict__
+
+
+class ActiveTaskwarriorTask(ActiveTask):
+    """ Represents an active taskwarrior task. """
+
+    def __init__(self, data, whenAdded=None):
+        """ Create an ActiveTaskwarriorTask from a dictionary. """
+        self.data = data
+        self.taskFormat = 'Taskwarrior'
+
+        if whenAdded is not None:
+            self.whenAdded = whenAdded
+
+    def getRequiredVars(self):
+        """ Returns a list of required member taskwarrior variables. """
+
+        return ['status', 'uuid', 'entry', 'description']
+
+    # ActiveTask interface methods
+    def isValid(self):
+        """ Returns True if this is a valid Taskwarrior task, False otherwise.
+            This isn't completely accurate, depending on the status value there
+            are other attributes that are required. Assumes that the ActiveTask
+            member variables are valid.
+        """
+        taskVars = list(self.data.keys())
+
+        return any([v not in taskVars for v in self.getRequiredVars()])
+
+    def getID(self):
+        """ Returns a unique ID for this task. """
+        id = self.data.get('id')
+
+        if id is not None:
+            return id
+
+        return self.data['uuid']
+
+    def getDescription(self):
+        return self.data['description']
+
+
+class ActiveTaskManager:
+    def __init__(self, statePath=None):
+        # The current active task, represented using an ActiveTask
+        self.__activeTask = None
+
+        # If we should save state
+        self.__stateChange = False
+
+        # Load the current state, if a state file was provided.
+        if statePath is not None:
+            self.__loadState(statePath)
+
+    def __loadState(self, statePath):
+        """ Load the current state from the given state file. If unsuccessful,
+            the ActiveTaskManager will be in the default state.
+        """
+        stateDict = {}
+        stateData = None
+
+        try:
+            with open(statePath, 'r') as stateFile:
+                fcntl.flock(stateFile.fileno(), fcntl.LOCK_EX)
+                stateData = stateFile.read()
+                fcntl.flock(stateFile.fileno(), fcntl.LOCK_UN)
+
+        except FileNotFoundError as e:
+            return
+
+        try:
+            stateDict = json.loads(stateData)
+
+        except Exception as e:
+            traceback.print_exc(file=sys.stderr)
+
+            return
+
+        # Validate
+        classVars = list(self.__dict__.keys())
+
+        for v in classVars:
+
+            if v not in stateDict:
+                print("stateDict invalid (no {0})".format(v), file=sys.stderr)
+
+                return
+
+            # Parse classes and other toSerialisable() types here
+            if v == '_ActiveTaskManager__activeTask':
+                stateDict[v] = ActiveTask.fromState(stateDict[v])
+
+            self.__dict__[v] = stateDict[v]
+
+        self.__stateChange = False
+
+    def __saveState(self, statePath):
+        """ Saves the current state to the given state file. """
+
+        # Open file and block until exclusive lock is obtained
+        with open(statePath, 'w') as stateFile:
+            fcntl.flock(stateFile.fileno(), fcntl.LOCK_EX)
+
+            # Dump class dictionary to state file
+            try:
+                strData = json.dumps(self.__dict__, default=toSerialisable)
+                stateFile.write(strData)
+
+            except Exception as e:
+                traceback.print_exc(file=sys.stderr)
+                stateFile.close()
+
+            # Release lock
+            fcntl.flock(stateFile.fileno(), fcntl.LOCK_UN)
+
+    def __updateActive(self, taskData):
+        """ Updates or adds a new active task with the associated data.
+            Assumes the task is a Taskwarrior task.
+        """
+
+        try:
+            taskDict = json.loads(taskData)
+
+        except json.decoder.JSONDecodeError as e:
+            traceback.print_exc(file=sys.stderr)
+            sys.exit(2)
+
+        self.__activeTask = ActiveTaskwarriorTask(taskDict,
+                                                  datetime.datetime.now())
+        self.__stateChange = True
+
+        return 0
+
+    def __deleteActive(self, taskID=None):
+        """ Deletes the given task, if it exists. """
+
+        if self.__activeTask is None:
+            return 0
+
+        if taskID is None or self.__activeTask.getID() == taskID:
+            self.__activeTask = None
+            self.__stateChange = True
+
+        return 0
+
+    def __activeTaskTime(self):
+        """ Prints the minutes since the active task was added. """
+
+        if self.__activeTask is None:
+            return 0
+
+        addedTime = self.__activeTask.whenAdded
+        activeTime = datetime.datetime.now() - addedTime
+        activeTimeMin = max(math.floor(activeTime.seconds / 60.0), 0)
+
+        print(activeTimeMin)
+
+        return 0
+
+    def command(self, *commandArgs):
+        """ Parses the string arguments for each command and then runs it.
+            Returns False if unsuccessful. Exits early with an error code if
+            and error occurs.
+        """
+
+        if len(commandArgs) == 0:
+            print("Arguments required.\n\nCommands:")
+            print("  active-name")
+            print("    Prints the currently active task's name or "
+                  "description.\n")
+            print("  active-update task-data")
+            print("    Sets the given task as active and records the time.\n")
+            print("  active-delete [task-uuid]")
+            print("    Deletes the currently active task. Can check uuid.\n")
+            print("  active-time")
+            print("    Prints the currently active task's active time, in "
+                  "mins\n")
+
+            sys.exit(0)
+
+        commandName = commandArgs[0]
+        commandArgs = commandArgs[1:]
+
+        # TODO: Create command class and register commands by name
+        # taskwarrior-productivity active-name
+        if commandName == 'active-name':
+
+            if self.__activeTask is not None:
+                print(self.__activeTask.getDescription())
+
+            return 0
+
+        # taskwarrior-productivity active-time
+        if commandName == 'active-time':
+            return self.__activeTaskTime()
+
+        # taskwarrior-productivity active-update task-data
+        if commandName == 'active-update':
+
+            if len(commandArgs) < 1:
+                print(
+                    'Error: too few arguments for {0}'.format(commandName),
+                    file=sys.stderr)
+                sys.exit(1)
+
+            self.__stateChange = True
+
+            return self.__updateActive(commandArgs[0])
+
+        # taskwarrior-productivity active-delete [task-uuid]
+        if commandName == 'active-delete':
+
+            if len(commandArgs) > 0:
+                return self.__deleteActive(commandArgs[0])
+
+            return self.__deleteActive()
+
+    def saveState(self, statePath):
+        """ Saves state if necessary. """
+
+        if not self.__stateChange:
+            return
+
+        self.__saveState(statePath)
+
+
+# Execute script if not imported
+if __name__ == '__main__':
+    statePath = os.path.expanduser(STATE_FILE_PATH)
+    assert statePath != STATE_FILE_PATH
+
+    # Run command & save state
+    activeTaskManager = ActiveTaskManager(statePath)
+    activeTaskManager.command(*sys.argv[1:])
+    activeTaskManager.saveState(statePath)
+
+    sys.exit(0)

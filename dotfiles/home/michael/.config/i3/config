@@ -1,0 +1,351 @@
+###############################################################################
+# config
+# ======
+#
+# Author:                Michael De Pasquale
+# Creation Date:         2017-11-01
+# License:               None
+#
+# Description
+# -----------
+# i3-gaps configuration file
+#
+###############################################################################
+
+# Behaviour
+workspace_auto_back_and_forth yes
+focus_follows_mouse no
+floating_modifier $mod1
+
+# Gaps between containers 
+gaps inner 12
+gaps outer 4
+
+# Super_L / Alt_L / Shift / Control_L
+set $mod1 Mod4
+set $mod2 Mod1
+set $mod3 Shift
+set $mod4 'control'
+
+set $left h
+set $down j
+set $up k
+set $right l
+set $left2 Left
+set $down2 Down
+set $up2 Up
+set $right2 Right
+
+set $ws01 "1:work"
+set $ws02 "2:proj1"
+set $ws03 "3:proj2"
+set $ws04 "4:misc1"
+set $ws05 "5:misc2"
+set $ws06 "6:social"
+set $ws07 "7:todo"
+set $ws08 "8:media"
+set $ws09 "9:sysmon"
+set $ws10 "10:sysconf"
+set $ws11 "11:srvmon"
+set $ws12 "12:misc3"
+set $ws13 "13:misc4"
+set $ws14 "14:misc5"
+set $ws15 "15:misc6"
+set $ws16 "16:misc7"
+set $ws17 "17:misc8"
+set $ws18 "18:btc"
+set $ws19 "19:tor"
+set $ws20 "20:tails"
+
+# Move to prev/next workspace 
+bindsym $mod1+$mod2+$mod3+$left workspace prev
+bindsym $mod1+$mod2+$mod3+$right workspace next
+bindsym $mod1+$mod3+$tab workspace prev
+bindsym $mod1+$tab workspace next
+
+# Move current window to prev/next workspace
+bindsym $mod1+$mod2+$mod3+$down exec "i3-msg move workspace prev; i3-msg workspace prev"
+bindsym $mod1+$mod2+$mod3+$up exec "i3-msg move workspace next; i3-msg workspace next"
+
+# Jump to workspaces 1-10
+bindsym $mod1+1 workspace $ws01
+bindsym $mod1+2 workspace $ws02
+bindsym $mod1+3 workspace $ws03
+bindsym $mod1+4 workspace $ws04
+bindsym $mod1+5 workspace $ws05
+bindsym $mod1+6 workspace $ws06
+bindsym $mod1+7 workspace $ws07
+bindsym $mod1+8 workspace $ws08
+bindsym $mod1+9 workspace $ws09
+bindsym $mod1+0 workspace $ws10
+
+# Jump to workspaces 11-20
+bindsym $mod1+$mod3+1 workspace $ws11
+bindsym $mod1+$mod3+2 workspace $ws12
+bindsym $mod1+$mod3+3 workspace $ws13
+bindsym $mod1+$mod3+4 workspace $ws14
+bindsym $mod1+$mod3+5 workspace $ws15
+bindsym $mod1+$mod3+6 workspace $ws16
+bindsym $mod1+$mod3+7 workspace $ws17
+bindsym $mod1+$mod3+8 workspace $ws18
+bindsym $mod1+$mod3+9 workspace $ws19
+bindsym $mod1+$mod3+0 workspace $ws20
+
+# Jump to workspaces 1-10
+bindsym $mod1+$mod2+1 move container to workspace $ws01
+bindsym $mod1+$mod2+2 move container to workspace $ws02
+bindsym $mod1+$mod2+3 move container to workspace $ws03
+bindsym $mod1+$mod2+4 move container to workspace $ws04
+bindsym $mod1+$mod2+5 move container to workspace $ws05
+bindsym $mod1+$mod2+6 move container to workspace $ws06
+bindsym $mod1+$mod2+7 move container to workspace $ws07
+bindsym $mod1+$mod2+8 move container to workspace $ws08
+bindsym $mod1+$mod2+9 move container to workspace $ws09
+bindsym $mod1+$mod2+0 move container to workspace $ws10
+
+# Jump to workspaces 10-20
+bindsym $mod1+$mod2+$mod3+1 move container to workspace $ws11
+bindsym $mod1+$mod2+$mod3+2 move container to workspace $ws12
+bindsym $mod1+$mod2+$mod3+3 move container to workspace $ws13
+bindsym $mod1+$mod2+$mod3+4 move container to workspace $ws14
+bindsym $mod1+$mod2+$mod3+5 move container to workspace $ws15
+bindsym $mod1+$mod2+$mod3+6 move container to workspace $ws16
+bindsym $mod1+$mod2+$mod3+7 move container to workspace $ws17
+bindsym $mod1+$mod2+$mod3+8 move container to workspace $ws18
+bindsym $mod1+$mod2+$mod3+9 move container to workspace $ws19
+bindsym $mod1+$mod2+$mod3+0 move container to workspace $ws20
+
+## Application Shortcuts
+set $calculator "rofi -modi calc:wcalc -show calc:wcalc"
+set $dropDownTerm 'kitty --class=kittydropdownterm'
+set $workspaceSwitcher "i3-switch-workspace"
+set $editor nvim 
+set $fileManager "kitty ranger"
+set $fileManagerGUI "nemo"
+set $launcher "rofi -show run -modi run"
+set $lockscr "~/.local/bin/lock"
+set $pager nvim 
+set $terminal kitty
+set $visual nvim 
+
+## Per-window settings
+for_window [class="Conky"] floating enable
+for_window [class="Conky"] sticky enable
+for_window [class="KeePass2"] floating enable
+for_window [class="KeePass2"] sticky enable
+for_window [class="KeePass2"] resize set 1024 640
+for_window [class="KeePass2"] move absolute position 16 16
+for_window [class="KeePass2"] move to scratchpad
+for_window [class="GParted"] floating enable 
+for_window [class="GParted"] resize set 1024 640
+for_window [class="GParted"] move absolute position 1048 16
+for_window [class="Seahorse"] floating enable
+for_window [class="Seahorse"] resize set 1024 640
+for_window [class="Seahorse"] move absolute position 16 664
+for_window [class="kittydropdownterm"] floating enable
+for_window [class="kittydropdownterm"] resize set 2544 480
+for_window [class="kittydropdownterm"] move position 8 -6
+
+# Assign windows to workspaces
+assign [class="google-chrome"] $ws06
+assign [title="Taskwarrior"] $ws07
+assign [class="cmusmusicplayer"] $ws08
+
+# Run launcher/(D)menu on $mod1+D
+bindsym $mod1+d exec --no-startup-id $launcher
+
+#(W)indow switcher, (C)alculator on mod1+mod2+d/w/c
+bindsym $mod1+$mod2+c exec --no-startup-id $calculator
+bindsym $mod1+$mod2+w exec --no-startup-id $workspaceSwitcher
+ 
+# (M)usic player on mod1+mod2+m
+bindsym $mod1+$mod2+m exec "kitty --class=cmusmusicplayer --override background_opacity=0.7 --override background='#202020' 'cmus' &"
+
+# Run terminal on mod1+return
+bindsym $mod1+$mod2+Return exec --no-startup-id kitty
+bindsym $mod1+$mod3+Return exec --no-startup-id kitty --class=kittydropdownterm
+
+# file (B)rowser / graphical file (B)rowser
+bindsym $mod1+$mod2+b exec --no-startup-id $fileManager
+bindsym $mod1+$mod3+b exec --no-startup-id $fileManagerGUI
+
+# (I)nternet browser
+bindsym $mod1+$mod2+i exec --no-startup-id firefox
+
+# kee(P)ass mod1+mod2+p
+bindsym $mod1+$mod2+p [class=KeePass2] scratchpad show
+
+# Run xkill on mod1+mod2+q (Win+Alt+Q
+bindsym --release $mod1+$mod2+q exec "beep -f 1500 -l 50 -r 2; xkill"
+
+# (L)ock screen on mod+scroll lock
+bindsym $mod1+Escape exec beep
+
+# (Q)uit focused window on mod1+q
+bindsym $mod1q kill
+
+# Window/container shortcuts
+## Change focus using vim movement keys
+bindsym $mod1+$left focus left
+bindsym $mod1+$down focus down
+bindsym $mod1+$up focus up
+bindsym $mod1+$right focus right
+
+## ..using cursor keys
+bindsym $mod1+$left2 focus left
+bindsym $mod1+$down2 focus down
+bindsym $mod1+$up2 focus up
+bindsym $mod1+$right2 focus right
+
+## focus the parent/child containers
+bindsym $mod1+a focus parent
+bindsym $mod1+$mod2+a focus child
+
+## Move focused window
+### Using vim movement keys
+bindsym $mod1+$mod2+$left move left
+bindsym $mod1+$mod2+$down move down
+bindsym $mod1+$mod2+$up move up
+bindsym $mod1+$mod2+$right move right
+
+### Using cursor keys
+bindsym $mod1+$mod2+$left2 move left
+bindsym $mod1+$mod2+$down2 move down
+bindsym $mod1+$mod2+$up2 move up
+bindsym $mod1+$mod2+$right2 move right
+
+# Resize using vim movement keys
+bindsym $mod1+$mod3+$left resize shrink width 10 px or 10 ppt
+bindsym $mod1+$mod3+$down resize grow height 10 px or 10 ppt
+bindsym $mod1+$mod3+$up resize shrink height 10 px or 10 ppt
+bindsym $mod1+$mod3+$right resize grow width 10 px or 10 ppt
+
+# Resizing container using cursor movement keys
+bindsym $mod1+$mod3+$left2 resize shrink width 10 px or 10 ppt
+bindsym $mod1+$mod3+$up2 resize grow height 10 px or 10 ppt
+bindsym $mod1+$mod3+$down2 resize shrink height 10 px or 10 ppt
+bindsym $mod1+$mod3+$right2 resize grow width 10 px or 10 ppt
+
+## Container layout
+### Change container layout (stacked, tabbed, toggle split)
+bindsym $mod1+s layout stacking
+bindsym $mod1+w layout tabbed
+bindsym $mod1+e layout toggle split
+
+## Split container vertically or horizontally
+bindsym $mod1+v split v
+bindsym $mod1+$mod2+v split h
+
+## Fullscreen for focused container
+bindsym $mod1+f fullscreen toggle
+
+## Toggle tiling / floating
+bindsym $mod1+$mod2+space floating toggle
+
+## Toggle between floating and tiling window focus
+bindsym $mod1+space focus mode_toggle
+
+## reload the configuration file or  reload i3 in-place
+bindsym $mod1+r reload
+bindsym $mod1+$mod2+r restart
+
+## exit i3 (logs you out of your X session)
+bindsym $mod1+$mod2+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+## Volume controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+## Media player controls - Clementine
+set $clementinePlay  "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 PlayPause"
+set $clementinePause "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 PlayPause"
+set $clementineNext  "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 Next" 
+set $clementinePrev  "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 Previous"
+
+## Media player controls - cmus
+set $cmusPlay            "$HOME/.config/cmus/cmus-playpause-launch.sh"
+set $cmusPause           "$HOME/.config/cmus/cmus-playpause-launch.sh"
+set $cmusNext            "cmus-remote --next"
+set $cmusPrev            "cmus-remote --prev"
+
+## Media player keys
+bindsym--release XF86AudioPlay exec --no-startup-id $cmusPlay
+bindsym --release XF86AudioPause exec --no-startup-id $cmusPause
+bindsym --release XF86AudioNext exec --no-startup-id $cmusNext
+bindsym --release XF86AudioPrev exec --no-startup-id $cmusPrev
+
+# Appearance
+font pango:Arimo Nerd Font Bold 12
+new_window pixel 6
+hide_edge_borders both
+workspace_layout default
+default_orientation auto
+
+# Status line appearance
+set $separator #444444
+set $background #1B304B
+set $statusline #4B5262
+
+set $focused_workspace_bg #84AACD
+set $focused_workspace_border #84AACD
+set $focused_workspace_text #454C5B
+set $inactive_workspace_bg #00405C
+set $inactive_workspace_border #00405C
+set $inactive_workspace_text l454C5B
+set $urgent_workspace_bg #00585C
+set $urgent_workspace_border #005F88
+set $urgent_workspace_text #005F88
+set $unfocused_workspace_bg #00405C
+set $unfocused_workspace_border #00405C
+
+set $focused_window_bg #E1E8F0
+set $focused_window_border #E1E8F0
+set $focused_window_text #005F88
+set $inactive_window_bg #5F88B1
+set $inactive_window_border #005F88
+set $inactive_window_text #E1E8F0
+set $unfocused_window_bg #005F88
+set $unfocused_window_border #005F88
+set $unfocused_window_text #AFCCDD
+set $urgent_window_bg #eb709b
+set $urgent_window_border #5B97CF
+set $urgent_window_text #FAFBFC
+
+# Startup applications
+exec --no-startup-id "compton -CGb --config '/home/michael/.config/compton.conf'"
+exec "feh ~/.config/i3/wallpaper.jpg --no-fehbg --bg-center"
+exec --no-startup-id keepass2
+exec "google-chrome 'http://messenger.com/' &"
+exec "kitty --class=cmusmusicplayer --override background_opacity=0.7 --override background='#202020' 'cmus' &"
+exec "conky -c /usr/share/conky/conky-time.conf &"
+exec "conky -c /usr/share/conky/active-task-timer.conf &"
+
+# Status bar
+bar {
+    i3bar_command i3bar -t
+    status_command i3blocks -c ~/.config/i3/i3blocks.conf
+    strip_workspace_numbers yes
+    position bottom
+    mode hide
+    
+    font pango:Arimo Nerd Font, Weather Icons
+    separator_symbol " "
+
+    colors {
+        separator #00000000
+        background #00000000
+        
+        statusline $statusline  
+        focused_workspace $focused_workspace_border $focused_workspace_bg $focused_workspace_text
+        active_workspace $focused_workspace_border $focused_workspace_bg $focused_workspace_text        
+        inactive_workspace $inactive_workspace_border $inactive_workspace_bg $inactive_workspace_text
+        urgent_workspace $urgent_workspace_border $urgent_workspace_bg $urgent_workspace_text
+    }
+}
+
+## Window color scheme
+client.focused $focused_window_border $focused_window_bg $focused_window_text 
+client.focused_inactive $inactive_window_border $inactive_window_bg $inactive_window_text
+client.unfocused $unfocused_window_border $unfocused_window_bg $unfocused_window_text
+client.urgent $urgent_window_border $urgent_window_bg $urgent_window_text 

@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# -*- coding: UTF-8 -*-
+###############################################################################
+# cmus
+# ====
+#
+# Author:                Anachron
+# License:               GPL-3.0
+#
+# Description
+# -----------
+# Outputs the title of the currently playing song and a status icon.
+# 
+# Source
+# ------
+# https://github.com/Anachron/i3blocks/blob/master/blocks/cmus
+#
+###############################################################################
+
+# Get info and parse
+INFO_CMUS=$(cmus-remote -Q 2>/dev/null)
+
+if [[ $? -eq 0 ]]; then
+  INFO_STATUS=$(echo "${INFO_CMUS}" | sed -n -e 's/^.*status\s*//p' | head -n 1)
+  INFO_TITLE=$(echo "${INFO_CMUS}" | sed -n -e 's/^.*title\s*//p' | head -n 1)
+  INFO_FILE=$(echo "${INFO_CMUS}" | sed -n -e 's/^.*file.*\///p' | head -n 1)
+else
+  exit
+fi
+
+# Output icon (ICON)
+if [[ $1 == "ICON" ]]; then
+    if echo $INFO_STATUS | grep -P '[Pp]laying' > /dev/null; then printf '' && exit 0; fi
+    if echo $INFO_STATUS | grep -P '[Pp]aused'> /dev/null; then printf '' && exit 0; fi
+    if echo $INFO_STATUS | grep -P '[Ss]topped'> /dev/null; then printf '' && exit 0; fi
+fi
+
+# Title only
+if [ -z "$INFO_TITLE" ]; then echo $INFO_FILE && exit 0; fi
+echo "${INFO_TITLE}"
+
+exit 0

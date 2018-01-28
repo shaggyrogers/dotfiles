@@ -1,0 +1,11 @@
+# Exclude directories that don't contain real code
+--exclude=Units
+--exclude=tinst-root
+--exclude=Tmain
+--exclude=.git
+--exclude=.svn
+--exclude=.hg
+--exclude=.git
+--exclude=.git
+--exclude=.git
+--exclude=.git

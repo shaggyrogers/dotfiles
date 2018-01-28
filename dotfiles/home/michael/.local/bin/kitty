@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# -*- coding: UTF-8 -*-
+###############################################################################
+# kitty
+# =====
+#
+# Version:               1.0.0
+# Author:                Michael De Pasquale
+# Creation Date:         2017-12-16
+# License:               None (public domain)
+#
+# Description
+# -----------
+# Launches kitty terminal emulator.
+#
+###############################################################################
+
+# Make sure the directory containing kitty exists
+if [ ! -d $HOME/.local/kitty/ ]; then
+    echo 'Failed to launch kitty: Could not find $HOME/.local/kitty.'
+    exit 1
+fi
+
+# Replace this process with kitty, passing this script's arguments to it.
+exec python3 $HOME/.local/kitty/ "$@"

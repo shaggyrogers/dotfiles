@@ -1,0 +1,787 @@
+/* This is required.*/
+@namespace url(http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul);
+
+/*============================================================================
+ */
+
+/* hide native tabs */
+#TabsToolbar { visibility: collapse !important; z-index:  1 !important;}
+
+/* As little space before the tab name as possible.
+   The fold/unfold icon is not affected. */
+.tab:not(.pinned) {
+  padding-left: 0px !important; /* !important is required when there are enough tabs to cause a scrollbar */
+}
+
+/* Change styling of pending (unloaded) tabs */
+.tab.discarded {
+  opacity: 0.75;
+}
+
+.tab.discarded .label {
+  color: red;
+}
+
+/* Reduce size*/
+.tabbrowser-tab {
+  min-width: 1em !important;
+  clip-width: 1em !important;
+}
+#sidebar{
+    min-width: 1em !important;
+}
+
+/* to hide the sidebar header  and new tab btn*/
+#sidebar-header {
+    visibility: collapse;
+}
+.contextual-identities-selector{
+    visibility: none;
+}
+
+/*============================================================================
+ * https://www.reddit.com/r/FirefoxCSS/comments/7dkhuh/color_your_url_bar_based_on_website_security/
+ * Security bar color - indicates TLS/SSL status*/
+#urlbar {
+  position: relative;
+  z-index: 1;
+}
+#identity-box:after {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: white;
+  opacity: 0.2;
+}
+/* There is also grantedPermissions, but irrelevant. */
+/* about:about */
+#urlbar[pageproxystate='valid'] #identity-box.unknownIdentity:after {
+    background: #ff0039; /* Firefox Red 50 */
+  /*background: var(--toolbar-bgcolor);*/
+}
+/* about:config */
+#urlbar[pageproxystate='valid'] #identity-box.chromeUI:after {
+    background: #0a84ff; /* Firefox Blue 50 */
+}
+/* uBlock Origin Dashboard */
+#urlbar[pageproxystate='valid'] #identity-box.extensionPage:after {
+    background: #45a1ff; /* Firefox Blue 40 */
+}
+/* https://www.github.com/ */
+#urlbar[pageproxystate='valid'] #identity-box.verifiedIdentity:after{
+    background: #058b00; /* Firefox Green 70 */
+}
+/* https://www.google.com/ */
+#urlbar[pageproxystate='valid'] #identity-box.verifiedDomain:after{
+    background: #12bc00; /* Firefox Green 60 */
+}
+/* https://mixed-script.badssl.com/ */
+#urlbar[pageproxystate='valid'] #identity-box.mixedActiveBlocked:after {
+    background: #30e60b; /* Firefox Green 50 */
+}
+/* https://mixed.badssl.com/ */
+#urlbar[pageproxystate='valid'] #identity-box.mixedDisplayContent:after {
+    background: #d7b600; /* Firefox Yellow 60 */
+}
+/* https://very.badssl.com/ */
+#urlbar[pageproxystate='valid'] #identity-box.mixedDisplayContentLoadedActiveBlocked:after {
+    background: #d7b600; /* Firefox Yellow 60 */
+}
+/* https://self-signed.badssl.com/ but add certificate exception */
+#urlbar[pageproxystate='valid'] #identity-box.certUserOverridden:after {
+    background: #ffe900; /* Firefox Yellow 50 */
+}
+/* Don't know an example for this */
+#urlbar[pageproxystate='valid'] #identity-box.weakCipher:after {
+    background: #a47f00; /* Firefox Yellow 70 */
+}
+/* https://mixed-script.badssl.com/ but disable protection */
+#urlbar[pageproxystate='valid'] #identity-box.mixedActiveContent:after {
+    background: #d70022;  /* Firefox Red 60 */
+}
+/* http://http-login.badssl.com/ */
+#urlbar[pageproxystate='valid'] #identity-box.insecureLoginForms:after {
+    background: #a4000f;  /* Firefox Red 70 */
+}
+/* Revert to standard color when editing/focused */
+#urlbar[pageproxystate='valid'][focused="true"] #identity-box::after {
+  background: var(--toolbar-bgcolor);
+}
+
+/*============================================================================*/
+/* Autohide bookmarks toolbar when not in use*/
+#PersonalToolbar {
+  opacity: 0 !important;
+  border-bottom: none !important;
+  height: auto !important;
+  max-height: none !important;
+  transition: all 0.45s ease 0s !important;
+  pointer-events: none;
+}
+#nav-bar{
+  border-bottom-width: 1px !important;
+  border-bottom-color: rgba(0,0,0,.2) !important;
+  border-bottom-width: 1px !important;
+  border-bottom-style:solid !important;
+  padding-top: 5px !important;
+}
+#navigator-toolbox {
+  margin-bottom: 0px !important; /*was -78px; stopped working and fucked up nav bar*/
+  position: static !important;
+}
+#navigator-toolbox:hover{
+  position: relative !important;
+}
+#nav-bar:hover{
+  border-bottom: none !important;
+  overflow: visible !important;
+  border-bottom-width: 1px !important;
+  border-bottom-color: rgba(0,0,0,0.2) !important;
+}
+#nav-bar:hover ~ #PersonalToolbar{
+  opacity: 1 !important;
+  transition-delay: 0s !important;
+  pointer-events: all;
+}
+#PersonalToolbar:hover{
+  pointer-events: all;
+  opacity: 1 !important;
+  transition-delay: 0s !important;
+  /*border-bottom: none !important; */
+}
+#navigator-toolbox:hover > #nav-bar{
+  border-bottom-color: rgba(0,0,0,0) !important;
+}
+#PlacesToolbar{
+  padding-bottom: 5px !important;
+  height: auto !important;
+  max-height: none !important;
+}
+/*Bookmark hover & click feedback*/
+.bookmark-item{
+    align-items: center;
+    justify-content: center;
+}
+.bookmark-item{
+    align-items: center;
+    justify-content: center;
+}
+.bookmark-item:hover{
+    background: rgb(215,215,215) !important;
+    animation: bookmark-item-hover-feedback 1.05s steps(60) infinite;
+}
+
+/*where'd you find this?*/
+@keyframes damn-son {
+  0% {
+    opacity: 1.0 !important;
+    color: red !important;
+    transform: scale(1) !important;
+  }
+  100% {
+    opacity: 0;
+    color: red !important;
+    transform: scale(40);
+  }
+}
+.bookmark-item:active{
+    background: rgb(215,215,215) !important;
+    animation: damn-son 375ms cubic-bezier(0,0,.58,1);
+}
+
+/*sidebar-splitter*/
+#sidebar-splitter{
+  width: 4px !important;
+  border-right: none !important;
+  border-left-color: rgba(0,0,0,.2) !important;
+}
+
+/*============================================================================*/
+/* Multi-row bookmarks toolbar */
+#bookmarks-ptf {
+  display: block !important;
+}
+
+#bookmarks-ptf toolbarseparator {
+  display: inline !important;
+}
+
+#bookmarks-ptf .bookmark-item {
+  visibility: visible !important;
+}
+
+#overflow-padder {
+  width: auto !important;
+}
+
+#bookmarks-chevron {
+  display: none !important;
+}
+/* Multi-row bookmarks toolbar 2*/
+#personal-bookmarks {
+  display: block;
+}
+
+#personal-bookmarks #PlacesToolbar {
+  display: block;
+  min-height: 0px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 999px;
+  margin: 0px !important;
+  padding-bottom: 15px !important;
+}
+
+#personal-bookmarks #PlacesToolbar > hbox {
+  display: -moz-stack !important;
+  left: 0px;
+  right: 0px;
+  width: 100%;
+}
+
+#personal-bookmarks #PlacesToolbar #PlacesToolbarItems {
+  /*display:block;*/
+  overflow-x: visible;
+  overflow-y: visible;
+}
+
+#personal-bookmarks #PlacesToolbar #PlacesToolbarItems > box {
+  display: block;
+}
+
+#personal-bookmarks #PlacesToolbar > .bookmark-item {
+  visibility: visible !important;
+}
+
+#personal-bookmarks #PlacesToolbar .chevron {
+  display: none;
+}
+
+#personal-bookmarks #PlacesToolbar > hbox > hbox {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+#personal-bookmarks #PlacesToolbar #PlacesToolbarDropIndicator[collapsed="true"] {
+  display: none;
+}
+
+#personal-bookmarks #PlacesToolbar #PlacesToolbarDropIndicator {
+  display: none;
+}
+
+#personal-bookmarks #PlacesToolbar toolbarbutton.bookmark-item {
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+#personal-bookmarks #PlacesToolbar toolbarbutton.bookmark-item:hover:active:not([disabled="true"]), #personal-bookmarks #PlacesToolbar toolbarbutton.bookmark-item[open="true"] {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  -moz-padding-start: 4px;
+  -moz-padding-end: 2px;
+}
+
+#personal-bookmarks #PlacesToolbar toolbarseparator {
+  -moz-appearance: none !important;
+  visibility: visible !important;
+  display: inline;
+  text-shadow: none !important;
+  border-left: 3px solid ThreeDShadow !important;
+  border-right: 3px solid ThreeDHighlight !important;
+  vertical-align: middle;
+}
+
+#personal-bookmarks toolbarbutton.bookmark-item[dragover][open] {
+  -moz-appearance: toolbarbutton;
+}
+/*============================================================================*/
+/* Modified Nocturnal theme - made light
+ https://userstyles.org/styles/105352/nocturnal-firefox-theme-read-description*
+ * */
+#nav-bar {
+  height: 40px !important;
+  z-index: 0 !important;
+} 
+  
+/* fades buttons */
+#downloads-button,#new-tab-button,#ctraddon_bookmarks-button,#ctraddon_reload-button, bookmarks-button, reload-button {
+    opacity: 0.8 !important;
+}
+#PanelUI-footer-inner > toolbarseparator {
+    box-shadow: none !important;
+    border: none !important;
+}
+#TabsToolbar .tabbrowser-tab {
+  /*background: var(--tab-bg) !important;*/
+  border: 0px solid #1d1e2a !important;
+  border-radius: 0px !important;
+  /*color: var(--main-text) !important;*/
+  margin: 0px 0px 0px 0px !important;
+  margin-top: -3px !important;
+  /*box-shadow: 4px 4px 13px rgba(0,0,0,0.3) !important;*/
+}
+#main-window {
+ margin-top:-5px!important;
+ margin-left:-1px!important;
+ margin-right:-1px!important;
+ margin-bottom: -1px !important;
+}  
+#navigator-toolbox {
+    border-bottom: 0px solid #59444b !important;
+}
+#notification-popup-box, #page-proxy-favicon {
+    opacity: 0.5 !important;
+    filter: grayscale(0.9) !important;    
+}
+#personal-bookmarks, .bookmark-item {
+/*background: var(--tab-bg) !important;     */
+height: 30px !important;
+/*color: var(--main-text) !important;*/
+}
+/* selected tab */
+#TabsToolbar .tabbrowser-tab[selected] {
+  /*background-color: var(--url-bg) !important; */
+  background-color: #FFFFFF !important; 
+  /*background: url(https://puu.sh/kwLI3/300a84af8b.png) !important;*/
+  background-size: 100% 100% !important;
+  background-repeat: no-repeat !important;
+  color: var(--secondary-text) !important; 
+  border-bottom: 2px solid var(--url-bg) !important;   
+  opacity: 1 !important;   
+
+  /* Added - show title*/
+  max-width: 400px !important;
+  min-width: 250px !important;
+
+  /*border-radius: 12px !important;*/
+}
+/* changes bg color of pinned tabs when updated */
+.tabbrowser-tab[pinned][titlechanged]:not([selected="true"]) > .tab-stack > .tab-content {
+ /*opacity: 0.6 !important;*/
+   background: rgb(255,255,255) !important;
+   color: var(22,22,22) !important; 
+}
+
+/* hover tab */
+#TabsToolbar .tabbrowser-tab:hover {
+    /*background-color: var(--url-bg) !important; */
+    /*background: url(https://puu.sh/kwLI3/300a84af8b.png) !important;*/
+    background: #FFFFFF !important;
+    /*background-size: 100% 100% !important;
+    background-repeat: no-repeat !important;*/
+}
+/* fix tab bg color and removes australis */
+#TabsToolbar .tab-background {
+    background: transparent !important;
+}
+#TabsToolbar .tab-background-start,
+#TabsToolbar .tab-background-end {
+    background: transparent !important;
+    background-image: none !important;
+}
+#TabsToolbar .tab-background-middle {
+    background: transparent !important;
+}
+
+#TabsToolbar .tab-background-start::before,  #TabsToolbar .tab-background-end::before {
+  background-image: none !important;
+}
+.tab-background-start[selected=true]:-moz-locale-dir(ltr)::after,
+    .tab-background-end[selected=true]:-moz-locale-dir(ltr)::after {
+    background-image: none!important;
+}
+ /*removes seperators between pinned tabs */
+#TabsToolbar .tabbrowser-tab:after,
+#TabsToolbar .tabbrowser-tab:before {
+    display: none !important;
+    /*! visibility: hidden !important; */
+}
+.tab-text {
+    text-align: center !important;
+}
+
+.tab-label {
+    -moz-box-flex: 1 !important; 
+    text-align: center !important;
+}
+/* menu bar color */
+#main-menubar, #toolbar-menubar, #menubar-items, menubar > menu {
+    /*background: var(--tab-bg) !important;*/
+    /*color: var(--secondary-text) !important;*/
+    text-shadow: none !important;
+    border: none !important;
+    margin-top: 0px !important;
+    z-index:  1 !important;
+}
+/* menu icon */
+#PanelUI-button, #nav-bar-overflow-button {
+    background: var(--url-bg) !important;
+}
+
+/* back/forward buttons*/
+#back-button > .toolbarbutton-icon {
+    list-style-image: url(http://puu.sh/nNmIC/afb1912a86.png) !important;
+    margin-left: -3px !important; 
+}
+#forward-button {
+    list-style-image: url(http://puu.sh/nNmJ1/ea4c68de75.png) !important;
+    margin-left: -3px !important; 
+}
+#back-button:hover, #forward-button:hover {
+    background: transparent !important;
+    /*background-color: var(--focus-tab-bg) !important;*/
+    opacity: 0.3 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#back-button:not([disabled="true"]):not([open="true"]):not(:active):hover > .toolbarbutton-icon, #back-button, #back-button .toolbarbutton-icon:hover, #back-button .toolbarbutton-icon, #forward-button .toolbarbutton-icon, #forward-button {
+    border-radius: 0px !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 0px solid #000 !important;
+    padding: 2px !important;
+    box-shadow: none !important;     
+    margin-left: 0px !important; 
+    margin-top: 1px !important; 
+    margin-bottom: 1px !important;
+    /*background-color: var(--url-bg) !important;*/
+    width: 25px !important;
+    height: 30px !important;
+}
+
+#back-button:disabled, #forward-button:disabled {
+    opacity: 0.4 !important;
+}
+
+/* remove disabled back button border */
+#back-button#back-button#back-button>image.toolbarbutton-icon {
+box-shadow: none !important;
+}
+/* back/forward buttons*/
+#back-button > .toolbarbutton-icon {
+        list-style-image: url(http://puu.sh/nNmIC/afb1912a86.png) !important;
+        margin-left: -3px !important; 
+    }
+#forward-button {
+        list-style-image: url(http://puu.sh/nNmJ1/ea4c68de75.png) !important;
+        margin-left: -3px !important; 
+}
+
+#back-button:hover, #forward-button:hover {
+        background: transparent !important;
+        /*background-color: var(--focus-tab-bg) !important;*/
+        opacity: 0.3 !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+#back-button:not([disabled="true"]):not([open="true"]):not(:active):hover > .toolbarbutton-icon, #back-button, #back-button .toolbarbutton-icon:hover, #back-button .toolbarbutton-icon, #forward-button .toolbarbutton-icon, #forward-button {
+       border-radius: 0px !important;
+       background: transparent !important;
+       background-color: transparent !important;
+       border: 0px solid #000 !important;
+       padding: 2px !important;
+       box-shadow: none !important;     
+       margin-left: 0px !important; 
+       margin-top: 1px !important; 
+       margin-bottom: 1px !important;
+       /*background-color: var(--url-bg) !important;*/
+       width: 25px !important;
+       height: 30px !important;
+   }
+
+#back-button:disabled, #forward-button:disabled {
+    opacity: 0.4 !important;
+}
+
+/* remove disabled back button border */
+#back-button#back-button#back-button>image.toolbarbutton-icon {
+    box-shadow: none !important;
+}
+/* history dropdown */
+.urlbar-history-dropmarker, .urlbar-history-dropmarker:hover {
+     list-style-image: url(http://puu.sh/nNmHy/a8b9d78673.png) !important;
+     margin-top: -2px !important;
+     opacity: 0.8 !important;
+    }
+.urlbar-history-dropmarker:hover {
+opacity: 0.5 !important;
+}
+ .urlbar-history-dropmarker .dropmarker-icon {
+     width: 16px !important;       
+}
+
+/* go icon */
+#urlbar-go-button, #urlbar-go-button:hover, #urlbar-go-button:hover:active {
+   width: 16px !important;
+   height: 16px !important;
+    margin-top: -4px !important;
+  /*background-image: url(http://puu.sh/nNmGo/6eeca2ca99.png) !important;*/
+    }
+ #urlbar-go-button, #urlbar-go-button:not([disabled]):hover, #urlbar-go-button:not([disabled]):hover:active {
+    }
+
+#PanelUI-footer-inner > toolbarseparator {
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* menu button */
+#PanelUI-button {
+    background: url('http://i.imgur.com/mPApSLM.png') !important;    
+    background-color: rgb(255,255,255) !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    box-shadow: none !important;
+    margin-left: -3px !important;
+    width: 44px !important;
+   height: 10px !important;
+    border: none !important;
+}
+#PanelUI-button:hover {
+    background-color: rgba(215,215,215, 0.5) !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    box-shadow: none !important;
+    margin-top: 0px !important;
+    width: 44px !important;
+   height: 10px !important;
+    border: none !important;
+}
+ 
+#PanelUI-button .button-icon,
+#PanelUI-button .button-text {
+    display: none !important;
+}
+#PanelUI-menu-button {
+    opacity: 0 !important;
+    width: 10px !important;
+    height: 16px !important;
+    margin-right: -5px !important;
+}
+
+/* remove shitty fog */
+#TabsToolbar:not(:-moz-lwtheme)::after {
+    display: none;
+}
+
+/* bookmarks folder icons*/
+menu.bookmark-item:not([query]):not([label="Bookmarks Toolbar"]), menuitem.bookmark-item, menu.bookmark-item:not([query]):not([label="Bookmarks Toolbar"])[open] { 
+/*list-style-image: url("https://puu.sh/leYZ9/1769a4b8b7.ico") !important;*/
+-moz-image-region: rect(0 32px 32px 0) !important;
+}
+
+/* bookmark icon */
+#bookmarks-menu-button {
+    background-image: url('https://puu.sh/qHQDH/ca332e6e20.png') !important;
+    /*background-color: var(--url-bg) !important;*/
+    background-color: rgba(255,255,255,0.25) !important;
+    background-repeat: no-repeat  !important;
+    background-position: center !important;
+    opacity: 0.7 !important;
+    margin-top: -1px !important;
+    margin-left: 11px !important;
+    box-shadow: none !important;
+    width: 18px !important;
+    height: 15px !important;
+    border: none !important;
+}
+/* bookmark icon */
+#bookmarks-menu-button:hover {
+    /*background-color: var(--url-bg) !important;*/
+    background-repeat: no-repeat  !important;
+    background-position: center !important;
+    opacity: 0.4 !important;
+    margin-top: -1px !important;
+    margin-left: 11px !important;
+    box-shadow: none !important;
+    width: 18px !important;
+    height: 15px !important;
+    border: none !important;
+}
+/* Add Ons Page - wip*/
+#view-port, #addons-page, .status-control-wrapper {
+  /*background-color: var(--focus-tab-bg) !important;*/
+  border: none !important;
+}
+
+.addon.addon-view, .category, #nav-header, #categories, #header-search, #PanelUI-footer {
+    /*background-color: var(--tab-bg) !important;*/
+    box-shadow: none !important;
+}
+
+#header-search, #userstyle-sorting, #userstyle-footer {
+    border: none !important;
+}
+
+.addon.addon-view, .category {
+  border-top: 0px !important;
+  border-bottom: 0px !important;
+   /*border-color: var(--main-text) !important;*/
+}
+
+.advancedinfo-container, .name-container, .category, .text-link, .details.button-link, #userstyles-note {
+  /*color: var(--third-text) !important;*/
+}
+
+#new-userstyle, #install-from-url,.addon-control, #userstyle-sorting-status, #userstyle-sorting-name, #userstyle-sorting-type, .sorter, #back-btn, #forward-btn, #header-utils-btn {
+  /*background-color: var(--focus-tab-bg) !important;*/
+  border: none !important;
+  /*color: var(--secondary-text) !important;*/
+  box-shadow: none !important;
+}
+
+#window-controls {
+    opacity: 0 !important;
+}
+#window-controls:hover {
+    opacity: 0.4 !important;
+}
+
+/* menu buttons */
+
+  #tabview-button .toolbarbutton-icon,
+  #save-page-button .toolbarbutton-icon,
+  #developer-button .toolbarbutton-icon,
+  #preferences-button .toolbarbutton-icon,
+  #webrtc-status-button .toolbarbutton-icon, #new-window-button .toolbarbutton-icon,
+  #new-tab-button .toolbarbutton-icon,
+  #go-button:hover,
+  #downloads-button:not([attention]) .toolbarbutton-icon,
+  #zoom-in-button .toolbarbutton-icon,
+  #copy-button .toolbarbutton-icon,
+  #add-ons-button .toolbarbutton-icon,
+  #find-button .toolbarbutton-icon,
+  #sidebar-button .toolbarbutton-icon, #context-stop,
+  .tabs-closebutton:hover .toolbarbutton-icon,
+  .tab-close-button:hover .toolbarbutton-icon,
+  #downloads-button[paused] .toolbarbutton-icon,
+  #urlbar-stop-button:hover,
+  #cut-button .toolbarbutton-icon,
+  #zoom-out-button .toolbarbutton-icon,
+  #stop-button .toolbarbutton-icon,
+  #characterencoding-button .toolbarbutton-icon, #tabview-button .toolbarbutton-icon,
+  #history-button .toolbarbutton-icon,
+  #history-panelmenu .toolbarbutton-icon,
+  #fullscreen-button .toolbarbutton-icon,
+  #urlbar-reload-button:hover,
+  #paste-button .toolbarbutton-icon,
+  #reload-button .toolbarbutton-icon, #urlbar[level="broken"] #page-proxy-favicon, #feed-button .toolbarbutton-icon, #password-notification-icon,
+  #home-button .toolbarbutton-icon,
+  #open-file-button .toolbarbutton-icon,
+  #email-link-button .toolbarbutton-icon, #sync-button .toolbarbutton-icon,
+  #social-share-button .toolbarbutton-icon, #privatebrowsing-button .toolbarbutton-icon,
+  #print-button .toolbarbutton-icon,  
+  #PanelUI-menu-button .toolbarbutton-icon, 
+  #nav-bar-overflow-button .toolbarbutton-icon,
+  #classic_bm_button23-toolbar-button > .toolbarbutton-icon,
+  #bookmarks-menu-button:not([starred]) .toolbarbutton-icon,
+  #bookmarks-button .toolbarbutton-icon,
+  #bookmarks-menu-button > .toolbarbutton-menubutton-dropmarker > .dropmarker-icon, #ublock0-button, #downloads-button { 
+  filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'invert\'>\
+    <feColorMatrix in='SourceGraphic' type='matrix' values=\
+    '1.1 0.0 0.0 0.0 0.0 \
+    1.0 0.0 0.0 0.0 0.0 \
+    1.1 0.0 0.0 0.0 0.0 \
+    1.1 0.0 0.0 1.1 0.0'/></filter></svg>#invert") !important;
+    /*filter: hue-rotate(120deg) !important;*/
+     opacity: 0.5 !important;
+  }
+
+                                           /* about ffox dialog */    
+#aboutDialogContainer, #clientBox, .main-content {
+    /*background: var(--tab-bg) !important;
+    color: var(--secondary-text) !important;*/
+}    
+#noUpdatesFound > label, #trademark, #verifiedManage, #fxaUnlinkButton, #fxaChangeDeviceName, #fxaSyncComputerName, .androidAttribution {
+     /*color: var(--main-text) !important;*/
+ }
+
+/* library window */
+#placesToolbar, #verifiedManage, #fxaUnlinkButton, #fxaChangeDeviceName, #fxaSyncComputerName, #help-button, #generalTab, #dataChoicesTab, #networkTab, #updateTab, #encryptionTab, #tabsElement, .checkbox-check {
+    /*background: var(--focus-tab-bg) !important;*/
+}
+    
+#browserStartupPage, #browserHomePage, #useCurrent, #useBookmark, #restoreDefaultHomePage, #chooseFolder, #filter, #handlersView, #typeColumn, #actionColumn, #historyMode, #addonExceptions, #passwordExceptions, #changeMasterPassword, #showPasswords, #engineShown, #engineName, #engineKeyword, #engineChildren, #engineList, #defaultEngine, #defaultFont, #defaultFontSize, #popupPolicyButton, #advancedFonts, #colors, #chooseLanguage, #warningScreen, #warningButton, #configDeck > vbox, #configTreeBody, #prefCol, #lockCol, #typeCol, #valueCol, #configTree > treecols:nth-child(1) {
+    /*background: var(--focus-tab-bg) !important;*/
+    border: none !important;   
+    /*color: var(--main-text) !important;*/
+}   
+
+#titlebar-buttonbox .titlebar-button .toolbarbutton-icon {
+   background: transparent !important;
+}
+
+#titlebar-buttonbox .titlebar-button {
+   background-color: transparent !important; 
+}
+
+:root {
+    /*--in-content-text-color: var(--main-text) !important;*/
+}    
+
+.panel-arrowbox {
+    margin-top: 25px !important;
+}
+    
+#placesList > treechildren, #searchFilter, #textbox {
+    /*background: var(--tab-bg) !important;
+     color: var(--main-text) !important;   */
+}
+.download.download-state, #clearDownloadsButton, richlistitem:not([selected]):hover, .addon[selected]:hover {
+    background: var(--url-bg) !important;
+     /*color: var(--third-text) !important;   */
+}      
+#placesToolbar, #placesView > splitter, #searchFilter, .checkbox-check, .fxaAccountBox, #verifiedManage, #fxaUnlinkButton, #fxaChangeDeviceName, #fxaSyncComputerName, .header, spacer.separator, #tabsElement, #handlersView > listheader, #engineList > treecols, #textbox, #configTree {
+    border: none !important;
+}       
+.checkbox-check {
+    border-radius: 0px !important;
+    box-shadow: none !important;
+}    
+
+.addon[selected] {
+    border: none !important;   
+    /*background: var(--url-bg) !important;*/
+}  
+  
+/* remove useless UI */
+#communityDesc, #contributeDesc {
+  display: none !important;  
+}
+
+/*.text-link.bottom-link {
+    opacity: 0 !important;
+}*/
+
+/*============================================================================
+ *
+/* Increase maximum bookmark toolbar item width, and use FontAwesome */
+/*#personal-bookmarks .bookmark-item > .toolbarbutton-text { 
+	max-width: 100px;
+	font: 15px FontAwesome; !important
+} 
+
+  
+
+#urlbar-container {max-width:400px!important}
+#search-container {max-width:200px!important}
+
+#personal-bookmarks, #PlacesToolbar {max-width:500px!important}*/
+
+/*Better to do this with javascript, if possible*/
+/*#personal-bookmarks .bookmark-item[label="Work & Uni"] > .toolbarbutton-icon {display:none!important}
+
+.bookmark-item[label="Work & Uni"]::before{
+	content: "";
+	font: 30px FontAwesome; !important
+}*/

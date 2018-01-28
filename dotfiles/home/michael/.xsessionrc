@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# -*- coding: UTF-8 -*-
+###############################################################################
+# .xsessionrc
+# ===========
+#
+# Version:               1.0.0
+# Author:                Michael De Pasquale
+# Creation Date:         2017-12-18
+# License:               None
+#
+# Description
+# -----------
+# Modifies X11 settings according to preference
+#
+###############################################################################
+
+# Define keycodes
+ESCAPE=9
+TAB=23
+CONTROL_L=37
+SHIFT_L=50
+SHIFT_R=62
+ALT_L=64
+CAPS_LOCK=66
+NUM_LOCK=77
+SCROLL_LOCK=78
+ALT_R=108
+CTRL_R=105
+DELETE=119
+PAUSE_BREAK=127
+SUPER_L=133
+F1=67
+F2=68
+F3=69
+F4=70
+F5=71
+F6=72
+F7=73
+F8=74
+F9=75
+F10=76
+F11=95
+F12=96
+MENU=135 # between Fn and Ctrl
+CANCEL=136 # Fn+F9 [3]. Should be XF86Launch3?
+FIND=144 # Fn+F10 [4]. Should be XF86Launch4?
+XF86BACK=166 # Fn + F7 [1]. Should be XF86Launch1?
+XF86FORWARD=167 # Fn + F8 [2]. Should be XF86Launch2?
+XF86SCROLLUP=185 # Fn + F11 [5]. Should be XF86Launch5?
+
+# Set Caps_Lock to escape, Shift+Caps_Lock to Caps_Lock
+# Modifier | Keysyms
+xmodmap -e 'remove Lock = Caps_Lock'
+
+# Keycode | Key Shift+Key ModeSw+Key ModeSw+Shift+Key AltGr+Key AltGr+Shift+Key
+xmodmap -e "keycode $CAPS_LOCK = Escape Caps_Lock"
+
+# Disable mouse acceleration
+xset m 0 0
+
+# Set a autorepeat rate and delay
+xset r rate 235 35
+
+# Disable autorepeat for Function keys
+xset -r $F1
+xset -r $F2
+xset -r $F3
+xset -r $F4
+xset -r $F5
+xset -r $F6
+xset -r $F7
+xset -r $F8
+xset -r $F9
+xset -r $F10
+xset -r $F11
+xset -r $F12
+
+# Set screen blanking time to 3 hours
+xset s on
+xset s 10800 10800

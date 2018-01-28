@@ -1,0 +1,24 @@
+# cmus config
+
+## General
+set format_title=%a - %l %{?y?(%y) }-%3n. %t [%{codec} %{codec_profile} %{bitrate}kpbs]
+set format_current=%a - %l -%3n. %t%= %y 
+set buffer_seconds=30
+
+## Output
+set output_plugin=alsa
+set dsp.alsa.device=default
+set mixer.alsa.device=default
+set mixer.alsa.channel=Master
+
+## Mode defaults
+set aaa_mode=all
+set auto_reshuffle=true
+set continue=true
+set follow=true
+set play_library=true
+set play_sorted=false
+
+## Appearance / UI
+set show_current_bitrate=true
+set show_remaining_time=false

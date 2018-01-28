@@ -1,0 +1,65 @@
+#
+# This file MUST be edited with the 'visudo' command as root.
+#
+# Please consider adding local content in /etc/sudoers.d/ instead of
+# directly modifying this file.
+#
+# See the man page for details on how to write a sudoers file.
+
+# Set defaults
+# 
+# Don't run if unable to hide password entry
+Defaults    !visiblepw
+
+# Reset environment variables unless they are in env_keep
+Defaults    env_reset 
+
+# Set timeout for using sudo without a password after successful authentication
+Defaults    timestamp_timeout=45
+
+# Personality
+Defaults    insults
+
+# Set the number of attempts to 2
+Defaults    passwd_tries=2
+
+# mailto for users that aren't allowed to use sudo or enter incorrect passwords.
+Defaults    mail_no_user
+Defaults    mail_badpass
+
+# List of environment variables to keep
+Defaults	env_keep += "DISPLAY COLORTERM LS_COLORS COLUMNS LINES HOME LANG"
+Defaults    env_keep += "HOSTNAME HISTSIZE TERMINFO XAUTHORITY EDITOR LC_*"
+Defaults    env_keep += "LINGUAS _XKB_CHARSET XAPPLRESDIR XFILESEARCHPATH"
+Defaults    env_keep += "XUSERFILESEARCHPATH XDG_SESSION_COOKIE"
+
+Defaults    secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+
+# Define a user alias for system administrators
+User_Alias	SYSADMINS = michael
+
+# Define aliases for command groups
+Cmnd_Alias	PROCESSES = /usr/bin/nice, /bin/kill, /usr/bin/renice, \
+ 			    /usr/bin/pkill, /usr/bin/top, /usr/bin/killall
+Cmnd_Alias	REBOOT = /sbin/halt, /sbin/reboot, /sbin/poweroff, /sbin/shutdown
+
+# Needed for profile-sync-daemon overlay support
+Cmnd_Alias	MOUNT = /bin/mount, /bin/umount
+
+# User privilege specification
+root	ALL=(ALL:ALL) ALL
+
+# Members of the admin group may gain root privileges
+%admin  ALL=(ALL) ALL
+
+# Allow members of group sudo to execute any command
+%sudo	ALL=(ALL:ALL) ALL
+
+# Allow system administrators to execute certain commands
+SYSADMINS  ALL=(ALL) NOPASSWD: PROCESSES, REBOOT, MOUNT
+
+# Required for profile-sync-daemon
+michael ALL=(ALL) NOPASSWD: /usr/bin/psd-overlay-helper
+
+# See sudoers(5) for more information on "#include" directives:
+#includedir /etc/sudoers.d

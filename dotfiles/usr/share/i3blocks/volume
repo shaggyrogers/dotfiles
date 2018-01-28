@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# -*- coding: UTF-8 -*-
+##############################################################################
+# volume                                                                      
+# ======                                                                      
+#                                                                             
+# Version:               1.0.0                                                
+# Author:                Michael De Pasquale                                  
+# Creation Date:         2018-01-07                                           
+# License:               None                                                 
+#                                                                             
+# Description                                                                 
+# -----------                                                                 
+# Returns the volume as a percentage with an icon based on the volume level.  
+#                                                                             
+##############################################################################
+
+# Get default sink
+NAME=$(pacmd stat | awk -F": " '/^Default sink name: /{print $2}')
+
+# Check mute
+if pacmd list-sinks | awk "/$NAME/{f=1}/[Mm]uted:/ && f{print $2; exit}" | \
+        grep -Pe 'muted:\s*[Yy]es' > /dev/null; then
+    MUTED=1
+fi
+
+# Get volume, assume balanced
+VOL=$(pacmd list-sinks | awk "/$NAME/{f=1}/[Vv]olume:/ && f{print $2; exit}" \
+    | grep -Po '\d+\%' | head -n 1 |  tr -d '%')
+
+# Get icon
+if [[ $MUTED ]]; then ICON=''
+elif (( $VOL < 20 )); then ICON=''
+elif (( $VOL > 19 )) && (( $VOL < 50 )); then ICON=''
+else ICON=''; fi
+
+# Print icon only (ICON) / volume % only (NUM)
+if [[ $1 == "ICON" ]]; then printf "$ICON" && exit 0; fi
+if [[ $1 == "NUM" ]]; then printf "%+2s%%" "$VOL" && exit 0; fi
+
+printf "$ICON %+2s%%" $VOL
+exit 0
