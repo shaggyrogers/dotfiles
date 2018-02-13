@@ -31,54 +31,10 @@ function ft_style_clear {
 function ft_style_b {
     PS1+="$(printf "\[\x1b[1m\]")"
 }
-function ft_style_b_clear {
-    PS1+="$(printf "\[\x1b[22m\]")"
-}
-function ft_style_u {
-    PS1+="$(printf "\[\x1b[4m\]")"
-}
-function ft_style_u_clear {
-    PS1+="$(printf "\[\x1b[24m\]")"
-}
-function ft_style_inv {
-    PS1+="$(printf "\[\x1b[7m\]")"
-}
-function ft_style_inv_clear {
-    PS1+="$(printf "\[\x1b[27m\]")"
-}
-function ft_style_strike {
-    PS1+="$(printf "\[\x1b[9m\]")"
-}
-function ft_style_strike_clear {
-    PS1+="$(printf "\[\x1b[29m\]")"
-}
-function ul_color() {
-    PS1+="$(printf "\[\x1b[58;2;$1;$2;$3m\]")"
-}
-function ul_color_clear {
-    PS1+="$(printf "\[\x1b[24m\]")"
-}
-function ul_clear {
-    PS1+="$(printf "\[\x1b[4:0m\]")"
-}
-function ul_style_line {
-    PS1+="$(printf "\[\x1b[4:1m\]")"
-}
-function ul_style_dline {
-    PS1+="$(printf "\[\x1b[4:2m\]")"
-}
-function ul_style_curly {
-    PS1+="$(printf "\[\x1b[4:3m\]")"
-}
-function ul_style_line2 {
-    PS1+="$(printf "\[\x1b[4m\]")"
-}
-function ul_style_clear {
-    PS1+="$(printf "\[\x1b[24m\]")"
-}
 function nextseg {
     PS1+=""
 }
+
 function _update_ps1() {
     local ERROR="$1"
     PS1=''

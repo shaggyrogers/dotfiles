@@ -22,11 +22,11 @@ if &background ==# 'dark'
   if !has('gui_running') && get(g:, 'solarized_termtrans', 0)
     hi Normal ctermfg=246 ctermbg=NONE guifg=#839496 guibg=NONE guisp=NONE cterm=NONE gui=NONE
     hi Terminal ctermfg=fg ctermbg=NONE guifg=fg guibg=NONE guisp=NONE cterm=NONE gui=NONE
-    hi ColorColumn ctermfg=NONE ctermbg=236 guifg=NONE guibg=NONE guisp=NONE cterm=NONE gui=NONE
+    hi ColorColumn ctermfg=236 ctermbg=NONE guifg=#C70B00 guibg=NONE guisp=NONE cterm=NONE gui=NONE
   else
     hi Normal ctermfg=246 ctermbg=235 guifg=#839496 guibg=#00313D guisp=NONE cterm=NONE gui=NONE
     hi Terminal ctermfg=fg ctermbg=235 guifg=fg guibg=#00313D guisp=NONE cterm=NONE gui=NONE
-    hi ColorColumn ctermfg=NONE ctermbg=236 guifg=NONE guibg=#083C4A guisp=NONE cterm=NONE gui=NONE
+    hi ColorColumn ctermfg=NONE ctermbg=236 guifg=#C70B00 guibg=NONE guisp=NONE cterm=NONE gui=NONE
   endif
 
   hi Conceal ctermfg=32 ctermbg=NONE guifg=#268bd2 guibg=NONE guisp=NONE cterm=NONE gui=NONE
@@ -112,7 +112,6 @@ if &background ==# 'dark'
   hi ErrorMsg ctermfg=160 ctermbg=230 guifg=#dc322f guibg=#fdf6e3 guisp=NONE cterm=NONE,reverse gui=NONE,reverse
   hi FoldColumn ctermfg=246 ctermbg=NONE guifg=#839496 guibg=NONE guisp=NONE cterm=NONE gui=NONE
   hi Folded ctermfg=246 ctermbg=NONE guifg=#839496 guibg=NONE guisp=#00313D cterm=NONE,bold gui=NONE,bold
-  hi IncSearch ctermfg=166 ctermbg=NONE guifg=#cb4b16 guibg=NONE guisp=NONE cterm=NONE,standout gui=NONE,standout
 
   if !has('gui_running') && get(g:, 'solarized_termtrans', 0)
       hi LineNr ctermfg=242 ctermbg=NONE guifg=#586e75 guibg=NONE guisp=NONE cterm=NONE gui=NONE
@@ -129,13 +128,17 @@ if &background ==# 'dark'
   hi PmenuThumb ctermfg=242 ctermbg=235 guifg=#586e75 guibg=#00313D guisp=NONE cterm=NONE,reverse gui=NONE,reverse
   hi Question ctermfg=37 ctermbg=NONE guifg=#2aa198 guibg=NONE guisp=NONE cterm=NONE,bold gui=NONE,bold
   hi! link QuickFixLine Search
-  hi Search ctermfg=136 ctermbg=NONE guifg=#b58900 guibg=NONE guisp=NONE cterm=NONE,reverse gui=NONE,reverse
+
+  hi IncSearch ctermfg=166 ctermbg=NONE guifg=#FFB81A guibg=NONE guisp=NONE cterm=bold gui=bold
+  hi Search ctermfg=136 ctermbg=NONE guifg=#FFF714 guibg=NONE guisp=NONE cterm=bold gui=bold
+  hi Substitute ctermfg=136 ctermbg=NONE guifg=#DA1AFF guibg=NONE guisp=NONE cterm=bold gui=bold
 
   if !has('gui_running') && get(g:, 'solarized_termtrans', 0)
     hi SignColumn ctermfg=246 ctermbg=NONE guifg=#839496 guibg=NONE guisp=NONE cterm=NONE gui=NONE
   else
     hi SignColumn ctermfg=246 ctermbg=NONE guifg=#839496 guibg=#002D38 guisp=NONE cterm=NONE gui=NONE
   endif
+
 
   " May cause side effects - changes the airline color below vertical split and wild menu
   hi StatusLineNC guifg=#ffffff guibg=#444444 gui=NONE

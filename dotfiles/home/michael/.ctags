@@ -3,17 +3,11 @@
 --extra=+f
 --sort=no
 
---exclude=.git
---exclude=.svn
---exclude=.hg
---exclude=.DS_Store
+--exclude=*.git*
 --exclude=*.pyc
 --exclude=*.pyo
+--exclude=.DS_Store
 --exclude=*.md
---exclude=*.log
---exclude=*.tmp
---exclude=*.o
---exclude=*.so
 
 --python-kinds=cfm
 

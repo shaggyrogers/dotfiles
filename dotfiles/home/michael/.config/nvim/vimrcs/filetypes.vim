@@ -11,6 +11,23 @@
 "                                                                             "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" all filetypes                                               "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Load a dictionary for the current filetype, if one exists
+function! LoadFiletypeDictionary()
+    let path = $HOME . '/.config/nvim/dictionaries/' . &filetype .'.txt'
+    echom path
+    if ! filereadable(path) | return | endif
+    silent execute 'setlocal dict+=' . path
+    echom 'Loaded completion dictionary: ' . path
+endfunction
+
+augroup AllFiletypeConfig
+    autocmd!
+    autocmd FileType * :call LoadFiletypeDictionary()
+augroup end
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " C                                                           "
@@ -18,8 +35,7 @@
 augroup CFiletypeConfig
     autocmd!
     autocmd BufWrite *.c,*.h :call DeleteTrailingWS()
-    autocmd Filetype c :call DeleteTrailingWS() |
-                                \ call matchadd('ColorColumn', '\%>80v',100) |
+    autocmd Filetype c :call matchadd('ColorColumn', '\%>80v',100) |
                                 \ setlocal tw=79 |
                                 \ retab
 augroup end
@@ -31,8 +47,7 @@ augroup end
 augroup CPPFiletypeConfig
     autocmd!
     autocmd BufWrite *.cpp,*.cxx,*.cc,*.c++,*.cp,*.C :call DeleteTrailingWS()
-    autocmd Filetype cpp :call DeleteTrailingWS() |
-                                \ call matchadd('ColorColumn', '\%>80v',100) |
+    autocmd Filetype cpp :call matchadd('ColorColumn', '\%>80v',100) |
                                 \ setlocal tw=79 |
                                 \ retab
 augroup end
@@ -44,8 +59,7 @@ augroup end
 augroup GoFiletypeConfig
     autocmd!
     autocmd BufWrite *.go :call DeleteTrailingWS()
-    autocmd Filetype go :call DeleteTrailingWS() |
-                                \ call matchadd('ColorColumn', '\%>80v',100) |
+    autocmd Filetype go :call matchadd('ColorColumn', '\%>80v',100) |
                                 \ setlocal tw=79 |
                                 \ retab
 augroup end
@@ -57,8 +71,7 @@ augroup end
 augroup JavaFiletypeConfig
     autocmd!
     autocmd BufWrite *.java,*.Java :call DeleteTrailingWS()
-    autocmd Filetype java :call DeleteTrailingWS() |
-                                \ call matchadd('ColorColumn', '\%>80v',100) |
+    autocmd Filetype java :call matchadd('ColorColumn', '\%>80v',100) |
                                 \ setlocal tw=79 |
                                 \ retab
 augroup end
@@ -80,6 +93,7 @@ function! MarkdownFiletypeSyntax()
         syntax clear mkdTableVHL
         syntax clear mkdTableH
         syntax clear mkdTableV
+        syntax clear mkdBold
 
         " Github flavored markdown
         syntax clear githubFlavoredMarkdownTable
@@ -87,10 +101,12 @@ function! MarkdownFiletypeSyntax()
         syntax clear githubFlavoredMarkdownTableDelimiter
     catch
     endtry
-    syntax match mkdListItem '\m\(^\s\{0,3}\)\@<=[*\-+]' conceal cchar=
-    syntax match mkdGitCheckBox '\m\(^\s\{0,3\}[*\-+]\?\s\?\)\@<=\[ \?\]'
+
+    syntax match mkdListItem '\m\(^\s\{0,3}\)\@<=[*+]\([*\-+]\)\@!' conceal cchar=•
+    syntax match mkdListItem '\m\(^\s\{0,3}\)\@<=[\-]\([*\-+]\)\@!' conceal cchar=
+    syntax match mkdGitCheckBox '\m\(^\s\{0,3\}\([*\-+]\([*\-+]\)\@<!\)\?\s\?\)\@<=\[ \?\]'
                             \ conceal cchar=☐
-    syntax match mkdGitCheckBoxChecked  '\m\(^\s\{0,3\}[*\-+]\?\s\?\)\@<=\[x\]'
+    syntax match mkdGitCheckBoxChecked  '\m\(^\s\{0,3\}\([*\-+]\([*\-+]\)\@<!\)\?\s\?\)\@<=\[x\]'
                             \ conceal cchar=☑
     syn match mkdTableSep "\(^\s\{0,3\}\)\@<=|:\?-\(:\?-\+:\?|\)\+"
                             \ contains=mkdTableVHL,mkdTableVHLR,mkdTableVHR,
@@ -111,6 +127,7 @@ function! MarkdownFiletypeSyntax()
     syn match mkdTableH '-' contained containedin=mkdTableSep conceal cchar=━
     syn match mkdTableV '|' contained containedin=mkdTable conceal cchar=┃
     hi! link Conceal Identifier
+    hi! link mkdBold Question
 
     setlocal conceallevel=2
     setlocal concealcursor="nv"
@@ -120,11 +137,13 @@ augroup MarkdownFiletypeConfig
     autocmd!
     autocmd BufWrite *.md,*.MD :call DeleteTrailingWS()
     autocmd Filetype markdown call matchadd('ColorColumn', '\%>80v', 100) |
-                                \ call MarkdownFiletypeSyntax() |
-                                \ call DeleteTrailingWS() |
                                 \ setlocal tw=79 |
+                                \ setlocal dictionary+=/usr/share/dict/words |
+                                \ setlocal complete+=kspell |
+                                \ setlocal spell |
                                 \ retab
-    autocmd BufEnter *.md,*.MD :hi! link Conceal Identifier
+    autocmd BufEnter *.md,*.MD call MarkdownFiletypeSyntax() | TableModeEnable
+    autocmd BufLeave *.md,*.MD TableModeDisable
 augroup end
 
 
@@ -139,8 +158,11 @@ function! PythonFiletypeSyntax()
         syntax clear pyNiceBuiltin
         syntax clear pyNiceStatement
         syntax clear pyNiceComment
+        syntax clear pythonComment
     catch
     endtry
+
+
 
     syn match pythonOperator '\V=\|*\|-\|/\|+\|@\|%\|&\||\|^\|~\|<\|>\|!='
     syn keyword pythonOperator is or and
@@ -158,10 +180,12 @@ function! PythonFiletypeSyntax()
     syntax keyword pyNiceStatement lambda conceal cchar=λ
     syntax keyword pyNiceBuiltin all conceal cchar=∀
     syntax keyword pyNiceBuiltin any conceal cchar=∃
-    syntax match pyNiceComment '\m\(^\s*#\s*[*\-+]\s)\?\)\@<=\[ \?\]'
-                                                \ conceal cchar=☐
-    syntax match pyNiceComment '\m\(^\s*#\s*[*\-+]\s\?\)\@<=\[x\]' conceal cchar=☑
-    syntax match pyNiceComment '\m\(^\s*#\s*\)\@<=[*\-+]' conceal cchar=
+    syntax match pyNiceComment '\m\(^\s*#\s*\([*\-+][^*\-+]\)\?\s*\)\@<=\[ \?\]' contained conceal cchar=☐
+    syntax match pyNiceComment '\m\(^\s*#\s*\([*\-+][^*\-+]\)\?\s*\)\@<=\[[*x+]\]' contained conceal cchar=☑
+    syntax match pyNiceComment '\m\(^\s*#\s*\)\@<=[*+]\([^*\-+]\|$\)\@=' contained conceal cchar=•
+    syntax match pyNiceComment '\m\(^\s*#\s*\)\@<=[\-]\([^*\-+]\|$\)\@=' contained conceal cchar=
+    syn cluster pyNiceCommentGroup contains=pythonTodo,pyNiceComment,@spell
+    syn match pythonComment "#.*$" contains=pythonTodo,@pyNiceCommentGroup
 
     hi link pyNiceComment Comment
     hi link pyNiceOperator Operator
@@ -179,21 +203,20 @@ augroup PythonFiletypeConfig
                             \ setlocal softtabstop=4 |
                             \ setlocal shiftwidth=4 |
                             \ setlocal textwidth=80 |
+                            \ setlocal tw=79 |
                             \ setlocal nosmartindent |
                             \ setlocal autoindent |
                             \ setlocal smarttab |
                             \ setlocal expandtab |
-                            \ setlocal tw=79 |
                             \ filetype indent on |
+                            \ setlocal define=^\s*\\(def\\\\|class\\) |
                             \ call matchadd('ColorColumn', '\%>80v', 100) |
-                            \ call DeleteTrailingWS() |
                             \ call PythonFiletypeSyntax() |
                             \ retab
 
     autocmd BufWrite *.py,*.pyx,*.pyd,*.pyw,*.pxi,*.pyi
                                                 \ call DeleteTrailingWS()
-    autocmd BufEnter *.py,*.pyx,*.pyd,*.pyw,*.pxi,*.pyi
-                            \ :hi! link Conceal Operator
+    autocmd BufEnter *.py,*.pyx,*.pyd,*.pyw,*.pxi,*.pyi :call PythonFiletypeSyntax()
 
     " TODO: Abbreviations
 augroup end
@@ -205,7 +228,6 @@ augroup BashFiletypeConfig
     autocmd!
     autocmd BufWrite *.sh,*.bash :call DeleteTrailingWS()
     autocmd Filetype sh :call matchadd('ColorColumn', '\%>80v', 100) |
-                                        \ call DeleteTrailingWS() |
                                         \ setlocal tw=79 |
                                         \ retab
 augroup end
@@ -213,13 +235,32 @@ augroup end
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Vim Scripts                                                 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! VimScriptFiletypeSyntax()
+    try
+        syntax clear vimNiceComment
+    catch
+    endtry
+
+    syntax match vimNiceComment '\m\(^\s*"\s*\([*\-+][^*\-+]\)\?\s*\)\@<=\[ \?\]' contained conceal cchar=☐
+    syntax match vimNiceComment '\m\(^\s*"\s*\([*\-+][^*\-+]\)\?\s*\)\@<=\[[*x+]\]' contained conceal cchar=☑
+    syntax match vimNiceComment '\m\(^\s*"\s*\)\@<=[*+]\([^*\-+]\|$\)\@=' contained conceal cchar=•
+    syntax match vimNiceComment '\m\(^\s*"\s*\)\@<=[\-]\([^*\-+]\|$\)\@=' contained conceal cchar=
+    syn cluster vimCommentGroup contains=vimNiceComment,@vimCommentGroup
+
+    hi link vimNiceComment Comment
+    hi! link Conceal Operator
+
+    setlocal conceallevel=2 | setlocal concealcursor=""
+endfunction
+
 augroup VimscriptFiletypeConfig
     autocmd!
     autocmd BufWrite *.vim :call DeleteTrailingWS()
     autocmd Filetype vim :call matchadd('ColorColumn', '\%>80v',100) |
-                                        \ call DeleteTrailingWS() |
                                         \ setlocal tw=79 |
-                                        \ retab
+                                        \ retab |
+                                        \ call VimScriptFiletypeSyntax()
+    autocmd BufEnter *.vim :call VimScriptFiletypeSyntax()
 augroup end
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -227,9 +268,9 @@ augroup end
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Delete trailing whitespace
 func! DeleteTrailingWS()
-    exe "normal mz"
-    %s/\s\+$//ge
-    exe "normal `z"
+    let l = line(".") | let c = col(".")
+    %s/\s\+$//e
+    call cursor(l, c)
 endfunc
 
 " Return true/false if the cursor is at a given Highlight group.

@@ -1,7 +1,7 @@
 # cmus config
 
 ## General
-set format_title=%a - %l %{?y?(%y) }-%3n. %t [%{codec} %{codec_profile} %{bitrate}kpbs]
+set format_title=cmus %a - %l %{?y?(%y) }-%3n. %t [%{codec} %{codec_profile} %{bitrate}kpbs]
 set format_current=%a - %l -%3n. %t%= %y 
 set buffer_seconds=30
 

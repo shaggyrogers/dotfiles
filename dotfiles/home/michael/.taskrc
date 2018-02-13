@@ -22,4 +22,4 @@ tasd.key=\/home\/michael\/.task\/keys\/client.key.pem
 taskd.server=localhost:53589
 regex=on
 taskd.key=\/home\/michael\/.task\/keys\/michael.key.pem
-#taskd.credentials= <                                  >
+taskd.credentials=michael-desktop\/michael\/6eac224a-73e4-4f56-9a1a-e82ae15736de

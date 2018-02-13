@@ -11,25 +11,20 @@
 #
 # Description
 # -----------
-# A short summary of this script and its purpose.
+# Launches mp3info in a kitty instance with the selected track as input.
 #
 # Requirements
 # ------------
-# * Required applications go here.
-#
-# Usage
-# -----
-# How to use this script. Can leave this out if there are no arguments.
+# * mp3info
 #
 ###############################################################################
 
 SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 file="$(cmus-remote -C 'echo {}')"
 
-if [ -f "$file" ]
-then
-        /usr/bin/env kitty -c=\
-            "from subprocess import call; call(['mp3info', '-i', '$file'])"
+if [ -f "$file" ]; then
+    /usr/bin/env kitty -c=\
+        "from subprocess import call; call(['mp3info', '-i', '$file'])"
 else
-         echo "Oop, couldn't find selected track" >&2
-     fi
+     echo "Could not find track $file." >&2
+fi

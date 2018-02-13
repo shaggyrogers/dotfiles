@@ -1,38 +1,30 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # -*- coding: UTF-8 -*-
-# ~/.bashrc: executed by bash(1) for non-login shells.
+###############################################################################
+# .bashrc
+# =======
+#
+# Author:                Michael De Pasquale
+# Creation Date:         2017-08-10
+# License:               None
+#
+# Description
+# -----------
+# Configures non-login bash shells.
+#
+###############################################################################
 
-# If not running interactively, do nothing
+# interactive shells only.
 if [ "$-" ]; then
-
-    # check the window size after each command and update LINES and COLUMNS if necessary
+    # check the window size after each command and update LINES and COLUMNS.
     shopt -s checkwinsize
 
     # make less more friendly for non-text input files, see lesspipe(1)
     [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-    # set variable identifying the chroot you work in (used in the prompt below)
-    if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-        debian_chroot=$(cat /etc/debian_chroot)
-    fi
-
-    # set a fancy prompt (non-color, unless we know we "want" color)
-    case "$TERM" in
-        xterm-color|*-256color) color_prompt=yes;;
-    esac
-
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-        # We have color support; assume it's compliant with Ecma-48
-        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-        # a case would tend to support setf rather than setaf.)
-        color_prompt=yes
-    else
-        color_prompt=
-    fi
-
-    # Run prompt setup script
-    # COLORTERM='truecolor' is non-standard, but fairly common
+    # Run prompt setup script. Note: 'truecolor' is nonstandard.
     if [ "$TERM" != "linux" ] && [[ "$COLORTERM" =~ "truecolor" ]]; then
+        color_prompt=yes
 
         if [ -f "$HOME/.config/bash/bash_prompt.sh" ]; then
             source "$HOME/.config/bash/bash_prompt.sh"
@@ -40,7 +32,7 @@ if [ "$-" ]; then
     fi
 
     # Color support for directory list and *grep commands
-    if [ -x /usr/bin/dircolors ]; then
+    if [ -x /usr/bin/dircolors ] && [ -n color_prompt ]; then
         test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
         alias ls='command ls --color=auto'
         alias dir='command dir --color=auto'
@@ -50,22 +42,10 @@ if [ "$-" ]; then
         alias egrep='command egrep --color=auto'
     fi
 
-    ## Run command alias scripts
-    if [ -x "$HOME/.config/bash/aliases/command_aliases.sh" ]; then
-        . "$HOME/.config/bash/aliases/command_aliases.sh"
-    fi
-    # Run notification alias scripts
-    if [ -x "$HOME/.config/bash/aliases/notification_aliases.sh" ]; then
-        . "$HOME/.config/bash/aliases/notification_aliases.sh"
-    fi
-    # ♫♪♫
-    if [ -x "$HOME/.config/bash/aliases/beep_music_aliases.sh" ]; then
-        . "$HOME/.config/bash/aliases/notification_aliases.sh"
-    fi
-    # Kitty config
-    if [[ "$TERM" =~ "xterm-kitty" ]]; then
-        source "$HOME/.config/bash/aliases/kitty_aliases.sh"
-    fi
+    ## Run all scripts in .config/bash/profile_scripts
+    for i in $(find "$HOME/.config/bash/profile_scripts/" -maxdepth 1 -type f); do
+        . $i
+    done
 
     # enable bash completion
     if ! shopt -oq posix; then
@@ -76,7 +56,7 @@ if [ "$-" ]; then
       fi
     fi
 
-    # Editor
+    # Editor environment variable
     export EDITOR=nvim
 
     # Delete a word with ctrl + w, and the entire line with ctrl + e
@@ -98,7 +78,7 @@ if [ "$-" ]; then
     shopt -s histappend
     set cmdhist
 
-    # Required for fuck
+    # Required for thefuck
     PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
 
     # Define "prenice" = pgrep + renice
@@ -116,8 +96,8 @@ if [ "$-" ]; then
             echo "Usage: prenice <pattern> <priority>"
             return 2
         fi
-
-        if test "$( renice -n $2 -p $pid )"; then
+    
+        if test "$(sudo renice -n $2 -p $pid )"; then
             return 0
         fi
 

@@ -1,0 +1,9 @@
+# .gitignore
+
+# C extensions
+*.so
+
+# tags
+tags
+.tags
+!tags/

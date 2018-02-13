@@ -8,7 +8,7 @@
 "
 " Description
 " -----------
-"   General vim settings go here.
+" General vim settings go here.
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -36,7 +36,7 @@ set tabstop=4
 set autoindent
 set smartindent
 
-" Enable line break and line wraping
+" Enable line break and line wrapping
 set lbr
 set wrap
 
@@ -67,8 +67,9 @@ set whichwrap+=<,>,h,l,[,]
 
 " When editing a file, always jump to the last cursor position
 augroup LastFileLocation
+    au!
     autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-                        \ | exe "normal g'\"" | endif
+                        \ | exe "normal! g'\"" | endif
 augroup end
 
 
@@ -100,7 +101,10 @@ set viewoptions=cursor,curdir,folds,options
 set viewdir=~/.config/nvim/temp_data/undodir
 
 " Ignore compiled files for wildmenu
-set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store,*.o,*~,*.pyc
+set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store,*.o,*.so,*.md,*~,*.pyc
+set wildignore+=*.pyo,*.swp,*.bak,*.class,*.sln,*.pdb,*.dll,*.tmp
+set wildignore+=tags,.tags,ctags,.ctags
+set wildignore+=*.jpg,*.gif,*.mp3,*.flac,*.mkv,*.mp4,*.avi,*.pdf
 
 " Set fold method to manual. Shortcut is spacebar.
 set foldmethod=manual
@@ -132,12 +136,21 @@ set mat=2
 " Enable syntax highlighting
 syntax enable
 
+let term='ucrkitty'
+call system('TERM=ucrkitty')
+
 " Don't show normal mode text (airline shows mode)
 set noshowmode
 
+" Don't redraw while executing macros, registers etc.
+set lazyredraw
+
+" enable truecolor support
+if exists('+termguicolors') | set termguicolors
+    elseif exists('+guicolors') | set guicolors
+endif
+
 " Colorscheme
-set t_Co=256
-set termguicolors
 let g:solarized_termtrans = 1  " 1 if term bg is transparent
 let g:solarized_visibility = 'normal'
 let g:solarized_statusline = 'normal'
@@ -151,9 +164,10 @@ colorscheme solarized8_flat_fork
 
 " Custom window title
 set title
-let &titlestring = $USER."@".hostname() . ": nvim " . expand("%:t")"
-autocmd BufEnter * let &titlestring = $USER."@".hostname() . ": nvim " .
-                                    \ expand("%:t")"
+augroup setTitlestring
+    au!
+    autocmd BufEnter * :set title titlestring=nvim%=-%=%<%{expand(\"%:~:.:t\")}%=[%l/%L]%=(%P) titlelen=70
+augroup end
 
 " Always show tab and status lines
 set showtabline=2
@@ -191,7 +205,7 @@ set nolist
 set fillchars=vert:█,diff:-
 
 " Set custom fold text
-" Got this from somewhere, but can't remember where. Slightly modified.
+" can't remember where I found this. Slightly modified.
 function! FoldTextCustom()
     let line = ' ' . substitute(getline(v:foldstart),
                             \ '^\s*"\?\s*\|\s*"\?\s*{{' . '{\d*\s*', '', 'g')
@@ -205,16 +219,44 @@ function! FoldTextCustom()
 endfunction
 set foldtext=FoldTextCustom()
 
+" Hide cursorline in insert mode
+augroup cursorlineToggle
+    au!
+    autocmd InsertLeave,WinEnter * set cursorline
+    autocmd InsertEnter,WinLeave * set nocursorline
+augroup end
+
+" Preview window height (default 12)
+set previewheight=8
+
+" Disable built-in matchparen plugin in favour of autoload/parenmatch
+let g:loaded_matchparen = 1
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Editing                                                     "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Keyword completion
+set complete=.,w,b,t,k,kspell,s,i
+set completeopt=menu,menuone,preview
+set pumheight=10
+
+" Pasting
+set copyindent
+
+" Automatic formatting
+set formatoptions=tcqjr
+
+" Enable the cursor to move one character past the last
+set virtualedit=onemore
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Misc.                                                       "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Don't redraw while executing macros, registers etc.
-set lazyredraw
-
 " Disable bell
 set noerrorbells
-set t_vb=
+set belloff=all
 set vb
 
 " Enable modelines
@@ -227,3 +269,6 @@ set maxfuncdepth=300
 " Timeout of 500 for mapped sequences, 750ms for key code sequences
 set timeoutlen=750
 set tm=500
+
+" Always echo the number of lines changed.
+set report=0
