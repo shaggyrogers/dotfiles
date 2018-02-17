@@ -94,10 +94,14 @@ endfunc
 
 " Reload vim scripts
 if !exists('*ReloadVimScripts')
-    function! ReloadVimScripts(path)
-        echom a:path
+    function! ReloadVimScripts(path) abort
         if IsLoadedVimScript(a:path)
-            so a:path | redraw | echom 'Reloaded ' . a:path | return
+            try | execute 'source ' . a:path
+            catch
+                echom 'Failed to reload ' . a:path . ': ' v:exception
+                return
+            endtry
+            redraw | echom 'Reloaded ' . a:path | return
         endif
     endfunction
 endif

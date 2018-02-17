@@ -205,18 +205,18 @@ nnoremap <M-Tab> <C-w>w
 
 " Resize using Ctrl+Alt and +/-, up/down normally and left-right with shift
 " Requires terminal capable of and configured to send the corresponding keys
-nnoremap <silent><F11>zKUND :call NaturalWindowResize('h')<CR>
-vnoremap <silent><F11>zKUND <esc>:call NaturalWindowResize('h')<CR>gv
-inoremap <silent><F11>zKUND <C-o>:call NaturalWindowResize('h')<CR>
-nnoremap <silent><F11>zKPLS :call NaturalWindowResize('l')<CR>
-vnoremap <silent><F11>zKPLS <esc>:call NaturalWindowResize('l')<CR>gv
-inoremap <silent><F11>zKPLS <C-o>:call NaturalWindowResize('l')<CR>
-nnoremap <silent><F11>zKMIN :call NaturalWindowResize('j')<CR>
-vnoremap <silent><F11>zKMIN <esc>:call NaturalWindowResize('j')<CR>gv
-inoremap <silent><F11>zKMIN <C-o>:call NaturalWindowResize('j')<CR>
-nnoremap <silent><F11>zKEQL :call NaturalWindowResize('k')<CR>
-vnoremap <silent><F11>zKEQL <esc>:call NaturalWindowResize('k')<CR>gv
-inoremap <silent><F11>zKEQL <C-o>:call NaturalWindowResize('k')<CR>
+nnoremap <silent><F11>zKUND :call NaturalWindowResize('h')<CR>:redraw<CR>
+vnoremap <silent><F11>zKUND <esc>:call NaturalWindowResize('h')<CR>:redraw<CR>gv
+inoremap <silent><F11>zKUND <C-o>:call NaturalWindowResize('h')<CR><C-o>:redraw<CR>
+nnoremap <silent><F11>zKPLS :call NaturalWindowResize('l')<CR>:redraw<CR>
+vnoremap <silent><F11>zKPLS <esc>:call NaturalWindowResize('l')<CR>:redraw<CR>gv
+inoremap <silent><F11>zKPLS <C-o>:call NaturalWindowResize('l')<CR><C-o>:redraw<CR>
+nnoremap <silent><F11>zKMIN :call NaturalWindowResize('j')<CR>:redraw<CR>
+vnoremap <silent><F11>zKMIN <esc>:call NaturalWindowResize('j')<CR>:redraw<CR>gv
+inoremap <silent><F11>zKMIN <C-o>:call NaturalWindowResize('j')<CR><C-o>:redraw<CR>
+nnoremap <silent><F11>zKEQL :call NaturalWindowResize('k')<CR>:redraw<CR>
+vnoremap <silent><F11>zKEQL <esc>:call NaturalWindowResize('k')<CR>:redraw<CR>gv
+inoremap <silent><F11>zKEQL <C-o>:call NaturalWindowResize('k')<CR><C-o>:redraw<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

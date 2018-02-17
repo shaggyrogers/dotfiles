@@ -1,4 +1,4 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " filetypes.vim                                                               "
 " =============                                                               "
 "                                                                             "
@@ -14,13 +14,6 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " all filetypes                                               "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Load a dictionary for the current filetype, if one exists
-function! LoadFiletypeDictionary()
-    let path = $HOME . '/.config/nvim/dictionaries/' . &filetype .'.txt'
-    if ! filereadable(path) | return | endif
-    silent execute 'setlocal dict+=' . path
-endfunction
-
 augroup AllFiletypeConfig
     autocmd!
     autocmd FileType * :call LoadFiletypeDictionary()
@@ -34,8 +27,10 @@ augroup CFiletypeConfig
     autocmd!
     autocmd BufWrite *.c,*.h :call DeleteTrailingWS()
     autocmd Filetype c :call matchadd('ColorColumn', '\%>80v',100) |
-                                \ setlocal tw=79 | set foldcolumn=1 |
-                                \ retab
+                \ setlocal tw=79 |
+                \ set foldcolumn=1 |
+                \ call DoTagbar() |
+                \ retab
 augroup end
 
 
@@ -46,8 +41,10 @@ augroup CPPFiletypeConfig
     autocmd!
     autocmd BufWrite *.cpp,*.cxx,*.cc,*.c++,*.cp,*.C :call DeleteTrailingWS()
     autocmd Filetype cpp :call matchadd('ColorColumn', '\%>80v',100) |
-                                \ setlocal tw=79 | set foldcolumn=1 |
-                                \ retab
+                \ setlocal tw=79 |
+                \ set foldcolumn=1 |
+                \ call DoTagbar() |
+                \ retab
 augroup end
 
 
@@ -58,8 +55,10 @@ augroup GoFiletypeConfig
     autocmd!
     autocmd BufWrite *.go :call DeleteTrailingWS()
     autocmd Filetype go :call matchadd('ColorColumn', '\%>80v',100) |
-                                \ setlocal tw=79 | set foldcolumn=1 |
-                                \ retab
+                \ setlocal tw=79 |
+                \ set foldcolumn=1 |
+                \ call DoTagbar() |
+                \ retab
 augroup end
 
 
@@ -70,8 +69,10 @@ augroup JavaFiletypeConfig
     autocmd!
     autocmd BufWrite *.java,*.Java :call DeleteTrailingWS()
     autocmd Filetype java :call matchadd('ColorColumn', '\%>80v',100) |
-                                \ setlocal tw=79 | set foldcolumn=1 |
-                                \ retab
+                \ setlocal tw=79 |
+                \ set foldcolumn=1 |
+                \ call DoTagbar() |
+                \ retab
 augroup end
 
 
@@ -135,11 +136,12 @@ augroup MarkdownFiletypeConfig
     autocmd!
     autocmd BufWrite *.md,*.MD :call DeleteTrailingWS()
     autocmd Filetype markdown call matchadd('ColorColumn', '\%>80v', 100) |
-                                \ setlocal tw=79 | set foldcolumn=1 |
-                                \ setlocal dictionary+=/usr/share/dict/words |
-                                \ setlocal complete+=kspell |
-                                \ setlocal spell |
-                                \ retab
+                \ setlocal tw=79 |
+                \ set foldcolumn=1 |
+                \ setlocal dictionary+=/usr/share/dict/words |
+                \ setlocal complete+=kspell |
+                \ setlocal spell |
+                \ retab
     autocmd BufEnter *.md,*.MD call MarkdownFiletypeSyntax() | TableModeEnable
     autocmd BufLeave *.md,*.MD TableModeDisable
 augroup end
@@ -198,20 +200,21 @@ endfunction
 augroup PythonFiletypeConfig
     autocmd!
     autocmd Filetype python setlocal nocindent | setlocal tabstop=4 |
-                            \ setlocal softtabstop=4 |
-                            \ setlocal shiftwidth=4 |
-                            \ setlocal textwidth=80 |
-                            \ setlocal tw=79 |
-                            \ set foldcolumn=1 |
-                            \ setlocal nosmartindent |
-                            \ setlocal autoindent |
-                            \ setlocal smarttab |
-                            \ setlocal expandtab |
-                            \ filetype indent on |
-                            \ setlocal define=^\s*\\(def\\\\|class\\) |
-                            \ call matchadd('ColorColumn', '\%>80v', 100) |
-                            \ call PythonFiletypeSyntax() |
-                            \ retab
+                \ setlocal softtabstop=4 |
+                \ setlocal shiftwidth=4 |
+                \ setlocal textwidth=80 |
+                \ setlocal tw=79 |
+                \ set foldcolumn=1 |
+                \ setlocal nosmartindent |
+                \ setlocal autoindent |
+                \ setlocal smarttab |
+                \ setlocal expandtab |
+                \ filetype indent on |
+                \ setlocal define=^\s*\\(def\\\\|class\\) |
+                \ call matchadd('ColorColumn', '\%>80v', 100) |
+                \ call PythonFiletypeSyntax() |
+                \ call DoTagbar() |
+                \ retab
 
     autocmd BufWrite *.py,*.pyx,*.pyd,*.pyw,*.pxi,*.pyi
                                                 \ call DeleteTrailingWS()
@@ -227,8 +230,9 @@ augroup BashFiletypeConfig
     autocmd!
     autocmd BufWrite *.sh,*.bash :call DeleteTrailingWS()
     autocmd Filetype sh :call matchadd('ColorColumn', '\%>80v', 100) |
-                                        \ setlocal tw=79 | set foldcolumn=1 |
-                                        \ retab
+                \ setlocal tw=79 |
+                \ set foldcolumn=1 |
+                \ retab
 augroup end
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -256,9 +260,10 @@ augroup VimscriptFiletypeConfig
     autocmd!
     autocmd BufWrite *.vim :call DeleteTrailingWS()
     autocmd Filetype vim :call matchadd('ColorColumn', '\%>80v',100) |
-                                        \ setlocal tw=79 | set foldcolumn=1 |
-                                        \ retab |
-                                        \ call VimScriptFiletypeSyntax()
+                \ setlocal tw=79 | set foldcolumn=1 |
+                \ retab |
+                \ call DoTagbar() |
+                \ call VimScriptFiletypeSyntax()
     autocmd BufEnter *.vim :call VimScriptFiletypeSyntax()
 augroup end
 
@@ -284,3 +289,21 @@ function! IsCursorHiGroup(group)
 
     return 0
 endfunc
+
+
+" Load a dictionary for the current filetype, if one exists
+function! LoadFiletypeDictionary()
+    let path = $HOME . '/.config/nvim/dictionaries/' . &filetype .'.txt'
+    if ! filereadable(path) | return | endif
+    silent execute 'setlocal dict+=' . path
+endfunction
+
+" Show tagbar and update options if window is big enough
+function! DoTagbar()
+    if exists('*UpdateTagbarOptions')
+        let l:id = win_getid()
+        call UpdateTagbarOptions(1)
+        call win_gotoid(l:id)
+    endif
+endfunction
+

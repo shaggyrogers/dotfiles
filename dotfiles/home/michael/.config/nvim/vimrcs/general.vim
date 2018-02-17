@@ -97,9 +97,6 @@ set virtualedit=block,onemore
 " Jump to the first open window or tab for a buffer, or make a new tab
 set switchbuf=useopen,usetab,newtab
 
-" Keep 5 lines above and below the cursor while scrolling up/down
-set scrolloff=5
-
 " Allow backspace over indentation, eol characters and start position.
 set backspace=eol,start,indent
 
@@ -120,9 +117,6 @@ augroup end
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
 syntax enable
-
-"let term='ucrkitty'
-"call system('TERM=ucrkitty')
 
 " Don't show mode text (airline already does), don't redraw for macros etc
 set noshowmode
@@ -155,13 +149,13 @@ augroup setTitlestring
                 \ titlestring=nvim%=-%=%<%{expand(\"%:~:.:t\")}%=[%l/%L]%=(%P) titlelen=70
 augroup end
 
-" Tabline / statusline options
+" Tabline / statusline
 set showtabline=2
 set laststatus=2
 set ruler
 set number
 
-" Window options
+" Window
 set previewheight=8
 set fillchars=vert:█,diff:-
 set guioptions-=r
@@ -173,6 +167,12 @@ set wildmenu
 set wildmode=full
 set nosplitbelow
 set splitright
+
+" scroll
+set scroll=0
+set scrolloff=12
+set scrollback=999
+set scrollopt=ver,jump
 
 " List
 set listchars=eol:⏎,tab:␉⇥,space:⸳,extends:⋙,precedes:⋘,nbsp:␠

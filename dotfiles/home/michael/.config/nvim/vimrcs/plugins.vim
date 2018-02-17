@@ -17,7 +17,6 @@
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Configuration                                               "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1525,6 +1524,19 @@ let g:tagbar_type_markdown = {
     \ ]
 \ }
 
+" Show tagbar and don't close it automatically if we have enough space for it.
+function! UpdateTagbarOptions(...)
+    let l:twidth = nvim_win_get_width(nvim_get_current_win())
+    let l:width = l:twidth - &foldcolumn - 2 - &numberwidth - g:tagbar_width -1
+
+    if l:width > &textwidth
+        let g:tagbar_autoclose = 0
+        if a:0 > 0 && a:1 != 0
+            TagbarOpen
+        endif
+    endif
+endfunction
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Templates                                                   "
@@ -1568,8 +1580,8 @@ nnoremap <leader><Esc><Esc> :Wipeout<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Function keys
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <F5> :NERDTreeToggle<CR>
-nnoremap <F6> :TagbarToggle<CR>
-nnoremap <F7> :MundoToggle<CR>
-nnoremap <F9> :call DeleteTrailingWS()<CR>
+nnoremap <silent> <F5> :NERDTreeToggle<CR>
+nnoremap <silent> <F6> :call UpdateTagbarOptions()<CR>:TagbarToggle<CR>
+nnoremap <silent> <F7> :MundoToggle<CR>
+nnoremap <silent> <F9> :call DeleteTrailingWS()<CR>
 nnoremap <F12> :ALEFix<CR>:echom 'Running ALE fixers...'<CR>
