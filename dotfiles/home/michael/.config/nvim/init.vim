@@ -9,17 +9,14 @@
 "
 " Description
 " -----------
-" Main initialisation script for neovim
+" Loads vimrcs and creates autocmd to relead them on write.
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 
 set runtimepath+=~/.config/nvim/
 set termguicolors
 let g:__vimrcs_dir__ = '~/.config/nvim/vimrcs/'
 let g:__vimrc_errors__ = []
-
-" Add config scripts to this list.
 let g:__vimrcs__ = [
             \ 'general.vim',
             \ 'shortcuts.vim',
@@ -27,77 +24,80 @@ let g:__vimrcs__ = [
             \ 'plugins.vim',
             \ ]
 
-" Attempt to load each config script
-for cs in g:__vimrcs__
-    try
-        exec 'so '.g:__vimrcs_dir__.expand(cs)
-    catch
-        call add(g:__vimrc_errors__, 'Error "'.v:exception.'" occured while running '.cs)
-    endtry
-endfor
-
-" Display error message if any errors occured
-let numErrs = len(g:__vimrc_errors__)
-
-if numErrs > 0
-    echo numErrs.' error(s) occured while executing .vimrc:'
-
-    for sn in g:__vimrc_errors__
-        echomsg '➜ '.sn
+" Load vimrcs
+function! LoadVimrcs()
+    for cs in g:__vimrcs__
+        try | exec 'so '.g:__vimrcs_dir__.expand(cs)
+        catch | call add(g:__vimrc_errors__,
+                    \ 'Error "'.v:exception.'" occured while running '.cs)
+        endtry
     endfor
 
-    echomsg ' '
-endif
+    " Display error message if any errors occured
+    let numErrs = len(g:__vimrc_errors__)
+
+    if numErrs > 0
+        echo numErrs.' error(s) occured while executing .vimrc:'
+        for sn in g:__vimrc_errors__ | echomsg '➜ '.sn | endfor
+        echomsg ' '
+    endif
+endfunction
+
+call LoadVimrcs()
 
 " Automatically reload .vimrc, .gvimrc and config scripts
-augroup vimrc_autoreload
+augroup ReloadVimScript
     autocmd!
-    autocmd vimrc_autoreload BufWritePost * call ReloadIfVimrc()
+    autocmd BufWritePost */*.vim call ReloadVimScripts(expand("<amatch>"))
 augroup end
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Helper Functions                                            "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Expands wildcards/etc, resolves, symlinks and removes whitespace.
+
+" Expands wildcards, resolves symlinks and removes whitespace
 function! ProcessPath(str)
-    return substitute(resolve(expand(a:str)), '^\s*\(.\{-}\)\s*$', '\1', '')
+    let l:res = resolve(expand(a:str))
+    return substitute(l:res, '^\s*\(.*\)\s*$', '\1', '')
 endfunction
 
-" Returns true if the current file path is a vimrc file
-" path must be expanded and ProcessPathd
-function! IsVimrc()
-    let l:path = ProcessPath("%:p")
+" Returns a list of all loaded scripts. Applies ProcessPath to each.
+" Adapted from script 'getting the scriptnames in a Dictionary'
+" see :h scriptnames-dictionary
+function! GetLoadedScripts()
+    let scriptnames_output = ''
+    let scripts = []
 
-    " .vimrc and .gvimrc
-    if l:path == ProcessPath($MYVIMRC) || l:path == ProcessPath($MYGVIMRC)
-        return 1
-    endif
+    " Get list of scripts
+    redir => scriptnames_output
+        silent scriptnames
+    redir END
 
-    " all other vimrc files
-    for v in g:__vimrcs__
-
-        if l:path =~ expand(v).'$'
-
-            return 1
-        endif
+    " Parse each line
+    for line in split(scriptnames_output, "\n")
+        let nr = matchstr(line, '\d\+')
+        let name = substitute(line, '.\+:\s*', '', '')
+        let scripts += [ProcessPath(name)]
     endfor
 
+    return scripts
+endfunction
+
+" Returns true if the current file path is a loaded vim script
+function! IsLoadedVimScript(str)
+    let l:str = ProcessPath(a:str)
+    let l:scriptList = GetLoadedScripts()
+    if index(l:scriptList, l:str) != -1 | return 1 | endif
     return 0
 endfunc
 
-" Avoid redefining ReloadIfVimrc() while we are calling it.
-if !exists('*ReloadIfVimrc')
-
-    " Reloads the current file if it is a vimrc
-    function! ReloadIfVimrc()
-
-        if !IsVimrc()
-            return
+" Reload vim scripts
+if !exists('*ReloadVimScripts')
+    function! ReloadVimScripts(path)
+        echom a:path
+        if IsLoadedVimScript(a:path)
+            so a:path | redraw | echom 'Reloaded ' . a:path | return
         endif
-
-        so %
-        echom 'Reloaded '.ProcessPath("%:p")
-        redraw
-    endfunc
+    endfunction
 endif

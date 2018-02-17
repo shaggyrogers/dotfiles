@@ -13,6 +13,7 @@
 " TODO:
 " * [ ] Set Ranger-like enter/exit shortcuts for NERDTree windows
 " * [ ] Move mappings and important settngs to configuration
+" * [ ] Add asserts to all plgins
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -56,6 +57,9 @@ function! plugins#removePluginPatches()
     PlugUpdate
 endfunction
 
+command! PlugPatchAll call plugins#applyPluginPatches()
+command! PlugUnpatchAll call plugins#removePluginPatches()
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugins                                                     "
@@ -81,40 +85,35 @@ Plug 'https://github.com/elzr/vim-json.git'
 
 " Searching / Files
 Plug 'https://github.com/scrooloose/nerdtree.git'
-Plug 'https://gitlab.com/vim-IDE/vim-nerdtree-tabs'
 Plug 'https://github.com/Xuyuanp/nerdtree-git-plugin.git'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 Plug 'https://github.com/DavidEGx/ctrlp-smarttabs.git'
 Plug 'https://github.com/nixprime/cpsm.git'
 
 " Misc. features
+Plug 'https://github.com/kana/vim-submode.git'
 Plug 'https://github.com/mhinz/vim-startify.git'
 Plug 'https://github.com/mhinz/vim-signify'
 Plug 'https://github.com/tpope/vim-repeat.git'
 Plug 'https://github.com/aperezdc/vim-template.git'
-Plug 'https://github.com/rbgrouleff/bclose.vim.git'
 Plug 'https://github.com/tpope/vim-speeddating'
 Plug 'https://github.com/chrisbra/unicode.vim.git'
 Plug 'https://github.com/artnez/vim-wipeout.git'
 Plug 'https://github.com/tpope/vim-fugitive'
-Plug 'https://github.com/junegunn/vim-peekaboo'
+Plug 'https://github.com/Konfekt/FastFold.git'
 
 " UI/Visual Plugins
+Plug 'https://github.com/vim-airline/vim-airline.git'
+Plug 'https://github.com/vim-airline/vim-airline-themes.git'
 Plug 'https://github.com/rhysd/vim-gfm-syntax.git'
 Plug 'https://github.com/timakro/vim-searchant.git'
 Plug 'https://github.com/nathanaelkane/vim-indent-guides.git'
 Plug 'https://github.com/luochen1990/rainbow.git'
-Plug 'https://github.com/vim-airline/vim-airline.git'
-Plug 'https://github.com/vim-airline/vim-airline-themes.git'
-Plug 'https://github.com/morhetz/gruvbox.git'
-Plug 'https://github.com/junegunn/goyo.vim.git'
 Plug 'https://github.com/ryanoasis/vim-devicons.git'
 Plug 'https://github.com/Shougo/denite.nvim.git'
-Plug 'https://github.com/lambdalisue/neovim-prompt'
 Plug 'https://github.com/Shougo/unite.vim.git'
-Plug 'https://github.com/amix/vim-zenroom2'
+Plug 'https://github.com/lambdalisue/neovim-prompt'
 Plug 'https://github.com/kshenoy/vim-signature.git'
-Plug 'https://github.com/junegunn/limelight.vim.git'
 Plug 'https://github.com/itchyny/vim-cursorword.git'
 Plug 'https://github.com/machakann/vim-highlightedyank.git'
 
@@ -127,8 +126,8 @@ Plug 'https://github.com/Shougo/neoyank.vim.git'
 Plug 'https://github.com/AndrewRadev/splitjoin.vim'
 Plug 'https://github.com/godlygeek/tabular.git'
 Plug 'https://github.com/itmammoth/doorboy.vim.git'
-Plug 'https://github.com/jeetsukumaran/vim-indentwise.git'
 Plug 'https://github.com/dhruvasagar/vim-table-mode.git'
+Plug 'https://github.com/zirrostig/vim-schlepp'
 
 " Snippets
 Plug 'https://github.com/Shougo/context_filetype.vim.git'
@@ -167,14 +166,18 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)')) |
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Airline                                                     "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call assert_true(exists(':AirlineRefresh'))
+let g:airline_skip_empty_sections = 1
+
 " Enable and configure extensions
-let g:airline#extensions#keymap#enabled = 1
+let g:airline#extensions#keymap#enabled = 0
 let g:airline#extensions#hunks#enabled = 1
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline#extensions#whitespace#enabled = 0
 let g:airline#extensions#wordcount#enabled = 1
-let g:airline#extensions#windowswap = 1
 let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#bufferline#enabled = 0
+let airline#extensions#wordcount#formatter#default#fmt_short = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#show_splits = 0
@@ -193,7 +196,7 @@ let g:airline#extensions#tabline#right_alt_sep = ''
 let g:airline#extensions#tabline#show_close_button = 0
 
 " Enable powerline font glyphs
-let g:airline_powerline_fonts=1
+let g:airline_powerline_fonts = 1
 
 " Customise section labels
 let g:airline_mode_map = {
@@ -212,55 +215,95 @@ let g:airline_mode_map = {
                         \}
 
 " Customise airline symbols
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-
+if !exists('g:airline_symbols') | let g:airline_symbols = {} | endif
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
 let g:airline_symbols.linenr = ''
 let g:airline_symbols.linepercent = ''
 let g:airline_symbols.columnnr = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.notexists = ' 󰝐'
+let g:airline_symbols.spell = '󲃤󱗊'
+let g:airline_symbols.tablemode = '󰓯'
+let g:airline_symbols.errorjump = '󱡯󱗊'
+let g:airline_symbols.errorlistload = '󰓥᪽᪻‹›󱗊'
+let g:airline_symbols.tagsload = '󰓥󱕎'
 
 if s:useEmojis
     let g:airline_symbols.crypt = '🔐'
     let g:airline_symbols.readonly = '🔏'
     let g:airline_symbols.paste = '📋'
     let g:airline_symbols.modified = '📝'
+else
+    let g:airline_symbols.crypt = '󰌽'
+    let g:airline_symbols.readonly = '󰏮'
+    let g:airline_symbols.paste = '󰆑'
+    let g:airline_symbols.modified = '󰏪'
 endif
 
-" Remove Separators
-let g:airline_right_sep = ''
-let g:airline_left_sep = ''
-
-" Customise line/column number section
-let g:airline_section_z = '%#__accent_bold#%{g:airline_symbols.linenr}%#__restore__#%3p% %{g:airline_symbols.linepercent} %{g:airline_symbols.columnnr} %#__accent_bold#% %3v'
-
-let g:airline_section_y = '%{airline#util#wrap(airline#parts#ffenc(),0)} %{gutentags#statusline("󰓸󰁩")}'
-
-" Theme
+" Load theme
 let g:airline_theme = 'bubblegum'
+
+" 󰅗󰅰󰍝󰍞󰑣󰑤󰑦󰑘󰓦󰓸󰓹󰓺󰓻󰓼󰕰󰖿󰚒󰜠󰜡󱀻󱀨󱁂󱁥󱅭󱉀󱈶󱈷󱏇󱔭󱕎󱡣󱡪󱡶󱢖󱢁󱢳󱣎
+" Set airline sctions manually
+let g:airline_section_a =
+            \ '%{airline#util#wrap(airline#parts#mode(),0)}' .
+            \ '%{airline#util#append(airline#parts#crypt(),0)}' .
+            \ '%{airline#util#append(airline#parts#paste(),0)}' .
+            \ '%{airline#util#append(airline#extensions#keymap#status(),0)}' .
+            \ '%{airline#util#append(airline#parts#spell(),0)}' .
+            \ '%{airline#util#append("",0)}%{airline#util#append("",0)}' .
+            \ '%{airline#util#append(airline#parts#iminsert(),0)}' .
+            \ '%{airline#util#append(plugins#TableModeStatus(),0)}' .
+            \ '%{airline#util#append(plugins#ALEJumpStatus(),0)}'
+let g:airline_section_b =
+            \ '%{airline#util#wrap(airline#extensions#branch#get_head(),0)} ' .
+            \ '%{airline#util#wrap(airline#extensions#hunks#get_hunks(),0)}'
+let g:airline_section_z =
+            \ '%{airline#util#prepend(plugins#AirlineCustomLoadIndicators(),0)}' .
+            \ '%3p% %{g:airline_symbols.linepercent} ' .
+            \ '%{g:airline_symbols.linenr}%4l%  ' .
+            \ '%{g:airline_symbols.columnnr}%3v% '
+let g:airline_section_x =
+            \ '%{airline#util#append(' .
+            \ 'airline#extensions#tagbar#currenttag(),0)}% ' .
+            \ '%{airline#util#append(airline#parts#filetype(),0)}'
+
+" Refresh Airline after chaning ColorScheme or modifying vim scripts
+" Need call refresh twice so that it works for tabline (?)
+augroup AirlineRefresh
+    autocmd!
+    autocmd ColorScheme * AirlineRefresh | AirlineRefresh | echom 'b'
+    autocmd BufWritePost *.vim | if IsLoadedVimScript("<sfile>") |
+                \ AirlineRefresh | AirlineRefresh | endif
+augroup end
+
+" Group gutentags / ALE indicators
+function! plugins#AirlineCustomLoadIndicators()
+    let l:out = gutentags#statusline(g:airline_symbols.tagsload)
+    if l:out != '' | let l:out = l:out . ' ' | endif
+    let l:out = l:out . plugins#ALELintStatus()
+    return l:out
+endfunction
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " ALE                                                         "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Enable ALE and ALE airline extension
+call assert_true(exists(':ALELint'))
 let g:ale_enabled = 1
 let g:airline#extensions#ale#enabled = 1
-
-
-" Completion
-let g:ale_completion_delay = 100
 let g:ale_completion_enabled = 0
-let g:ale_completion_max_suggestions = 50
 
-" Echo error messages
+" echo error messages
 let g:ale_echo_cursor = 1
 let g:ale_echo_delay = 10
 let g:ale_echo_msg_format = '[%linter%] %severity% %code: %%s'
 let g:ale_echo_msg_error_str = 'Error'
 let g:ale_echo_msg_info_str = 'Info'
 let g:ale_echo_msg_warning_str = 'Warning'
-
 let g:ale_emit_conflict_warnings = 1
 
 " Fixers
@@ -299,11 +342,10 @@ let g:ale_open_list = 0
 let g:ale_pattern_options = {}
 let g:ale_pattern_options_enabled = !empty(g:ale_pattern_options)
 
-
 let g:ale_set_balloons = has('balloon_eval')
 let g:ale_set_highlights = has('syntax')
-let g:ale_set_loclist = 1
-let g:ale_set_quickfix = 0
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
 let g:ale_set_signs = 1
 
 let g:ale_sign_column_always = 1
@@ -311,7 +353,8 @@ let g:ale_sign_offset =  1000000
 let g:ale_type_map = {
             \ 'flake8': {'ES': 'WS', 'E': 'W'}
             \ }
-let g:ale_virtualenv_dir_names = ['.env', 'env', 've-py3', 've', 'virtualenv', 'venv']
+let g:ale_virtualenv_dir_names = ['.env', 'env', 've-py3', 've', 'virtualenv',
+            \ 'venv']
 let g:ale_warn_about_trailing_blank_lines = 1
 let g:ale_warn_about_trailing_whitespace = 1
 
@@ -325,7 +368,7 @@ let g:ale_change_sign_column_color = 0
 if s:useEmojis
     let g:ale_sign_error = '❗'
     let g:ale_sign_info = '💬'
-    let g:ale_sign_warning = '❕'
+    let g:ale_sign_warning = '⚠' "❕
     let g:ale_sign_style_error = '❓'
     let g:ale_sign_style_warning = '❔'
 else
@@ -336,8 +379,10 @@ else
     let g:ale_sign_style_warning = '󲁱'
 endif
 
+" Configure airline extension
 let airline#extensions#ale#error_symbol = g:ale_sign_error
 let airline#extensions#ale#warning_symbol = g:ale_sign_warning
+let airline#extensions#ale#show_line_number = 0
 
 hi! link ALESignColumnWithErrors ErrorMsg
 hi! link ALESignColumnWithoutErrors LineNr
@@ -345,22 +390,45 @@ hi! link ALEErrorSign Error
 hi! link ALEWarningSign Warning
 hi! link ALEInfoSign Info
 
-"ALEError
-"ALEWarning
-"ALEInfo
-"ALEStyleError
-"ALEStyleWarning
-"
-"ALEErrorSign
-"ALEWarningSign
-"ALEInfoSign
-"ALEStyleErrorSign
-"ALEStyleWarningSign
+"ALEError ALEWarning ALEInfo ALEStyleError ALEStyleWarning
+"ALEErrorSign ALEWarningSign ALEInfoSign ALEStyleErrorSign ALEStyleWarningSign
 
-
-" Misc
+" Misc 󰌹
 let g:ale_cache_executable_check_failures = 0
 let g:ale_command_wrapper = ''
+
+" status indicator
+let g:_ale_statusicon = ''
+
+augroup ALEStatusUpdate
+    autocmd!
+    autocmd User ALELintPre  let g:_ale_statusicon =
+                \ g:airline_symbols.errorlistload | AirlineRefresh
+    autocmd User ALELintPost let g:_ale_statusicon = '' | AirlineRefresh
+augroup END
+
+" Jump to error submode
+call submode#enter_with('errorjump', 'n', '', '<M-e>', ':cw<CR>')
+call submode#map('errorjump', 'n', '', 'h', ':cfirstCR>')
+call submode#map('errorjump', 'n', '', 'j', ':cnext<CR>')
+call submode#map('errorjump', 'n', '', 'k', ':cprevious<CR>')
+call submode#map('errorjump', 'n', '', 'l', ':clast<CR>')
+call submode#map('errorjump', 'n', '', 'q',
+            \ '<esc>:call submode#restore_options()<CR>:ccl<CR>')
+call submode#map('errorjump', 'n', '', '<esc>',
+            \ '<esc>:call submode#restore_options()<CR>:ccl<CR>')
+
+" Status indicators for submode
+function! plugins#ALELintStatus()
+    return printf('%s', g:_ale_statusicon)
+endfunction
+
+function! plugins#ALEJumpStatus()
+    if exists("*submode#current") && submode#current() == 'errorjump'
+        return printf('%s', g:airline_symbols.errorjump)
+    endif
+    return ''
+endfunction
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -449,27 +517,34 @@ let g:cpsm_match_empty_query = 0
 " Add custom menus
 let s:menus = {}
 let s:menus.buffer_settings = {
-    \ 'description': 'change settings for current buffer',
+    \ 'description': 'settings',
     \ 'command_candidates': [
         \ [ 'Toggle Relative Line Numbers', 'set invrelativenumber' ],
         \ [ 'Toggle Line Wrapping', 'set invwrap' ],
         \ [ 'Toggle Showing Tabs, Spaces and Newlines', 'set invlist' ],
+        \ [ 'Toggle Spell Checking', 'set invspell' ],
         \ ],
     \ }
 let s:menus.buffer_windows = {
-    \ 'description': 'hide/show windows in current tab',
+    \ 'description': 'windows',
     \ 'command_candidates': [
-        \ [ 'Toggle File Browser', 'NERDTreeToggle' ],
-        \ [ 'Toggle Undo Tree Explorer', 'MundoToggle' ],
-        \ [ 'Toggle Tag Explorer', 'TagbarToggle' ],
+        \ [ '[<F5>] Toggle File Browser', 'NERDTreeToggle' ],
+        \ [ '[<F6>] Toggle Tag Explorer', 'TagbarToggle' ],
+        \ [ '[<F7>] Toggle Undo Tree Explorer', 'MundoToggle' ],
+        \ [ 'Open Snippets Edit Window', 'top split | NeoSnippetEdit' ],
+        \ [ 'Open Terminal Tab', 'tab new term://bash' ],
         \ ],
     \ }
 let s:menus.buffer_commands = {
-    \ 'description': 'run command in current buffer',
+    \ 'description': 'commands',
     \ 'command_candidates': [
-        \ [ 'Run ALE Fixers', 'ALEFix' ],
-        \ [ 'Delete Trailing Whitespace', 'call DeleteTrailingWS()' ],
-        \ [ 'Jump to Change...', 'call DeleteTrailingWS()' ],
+        \ [ '[<F12>] Run ALE Fixers', 'ALEFix' ],
+        \ [ '[<F9> ] Delete Trailing Whitespace', 'call DeleteTrailingWS()' ],
+        \ [ '[<M-c>] Jump to Change...',
+            \ 'Denite change -auto-resize -mode=normal' ],
+        \ [ '[<M-p>] Put From Yank History... ',
+            \ 'Denite neoyank -auto-resize -mode=normal' ],
+        \ [ '[<M-r>] Put From Register...', 'Denite register -mode=normal' ],
         \ ],
     \ }
 
@@ -479,9 +554,8 @@ call denite#custom#var('menu', 'menus', s:menus)
 nnoremap <F2> :Denite menu:buffer_commands -auto-resize -mode=normal<CR>
 nnoremap <F3> :Denite menu:buffer_windows -auto-resize -mode=normal<CR>
 nnoremap <F4> :Denite menu:buffer_settings -auto-resize -mode=normal<CR>
-nnoremap <silent> <Leader>c :Denite change -auto-resize -mode=normal<CR>
-inoremap <silent> <Leader>c <C-o>:Denite change -auto-resize -mode=normal<CR>
-xnoremap <silent> <Leader>c <esc>:Denite change -auto-resize -mode=normal<CR>gv
+nnoremap <silent> <M-c> :Denite change -auto-resize -mode=normal<CR>
+nnoremap <silent> <M-r> :Denite register -mode=normal<CR>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -561,17 +635,17 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Goyo & Limelight                                            "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:goyo_width = 100
-let g:goyo_height = 100
-let g:limelight_conceal_guifg = 'DarkGray'
-let g:limelight_conceal_guifg = '#777777'
-let g:limelight_paragraph_span = 1
-let g:limelight_priority = -1
-
-autocmd! User GoyoEnter Limelight
-autocmd! User GoyoLeave Limelight!
-
-nnoremap <silent> <leader>z :Goyo<cr>
+"let g:goyo_width = 100
+"let g:goyo_height = 100
+"let g:limelight_conceal_guifg = 'DarkGray'
+"let g:limelight_conceal_guifg = '#777777'
+"let g:limelight_paragraph_span = 1
+"let g:limelight_priority = -1
+"
+"autocmd! User GoyoEnter Limelight
+"autocmd! User GoyoLeave Limelight!
+"
+"nnoremap <silent> <leader>z :Goyo<cr>
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -706,64 +780,11 @@ let g:snips_license = g:license
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" neotags                                                     "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"" Requires universal-ctags
-"g:neotags_enabled = 1
-"g:neotags_file = './.tags'
-"g:neotags_events_update = ['BufWritePost']
-"g:neotags_events_highlight = ['BufReadPre', 'BufEnter']
-"g:neotags_events_rehighlight = ['Filetype', 'Syntax']
-"g:neotags_run_ctags = 1
-"g:neotags_highlight = 1
-"g:neotags_recursive = 1
-"g:neotags_appendpath = 1
-"g:neotags_ctags_bin = 'ctags'
-"g:neotags_patternlength = 2048
-"
-"" ctags --list-kinds-full=language
-"g:neotags_ctags_args = ['--fields=+l ',
-"            \ '--c-kinds=+p ',
-"            \ '--c++-kinds=+p ',
-"            \ '--python-kinds=+l',
-"            \ '--sort=no --extras=+q'
-"            \ ]
-"g:neotags_ctags_timeout = 16
-"g:neotags_silent_timeout = 0
-"g:neotags_verbose = 0
-"g:neotags_ignore = ['text','nofile','mail','qf' ]
-"g:neotags_ft_conv = { 'C++': 'cpp', 'C#': 'cs' }
-"g:neotags_global_notin = ['.*String.*',
-"            \ '.*Comment.*',
-"            \ 'cIncluded',
-"            \ 'cCppOut2',
-"            \ 'cCppInElse2',
-"            \ 'cCppOutIf2',
-"            \ 'pythonDocTest',
-"            \ 'pythonDocTest2',
-"            \ ]
-"g:neotags#c#order = 'cgstuedfpm'
-"g:neotags#cpp#order = 'cgstuedfpm'
-"g:neotags#python#order = 'mfc'
-"g:neotags#ruby#order = 'mfc'
-"g:neotags#sh#order = 'f'
-"g:neotags#java#order = 'cim'
-"g:neotags#javascript#order = 'cCfmpo'
-"g:neotags#vim#order = 'acf'
-"g:neotags#perl#order = 's'
-"g:neotags#php#order = 'fc'
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " neoyank                                                     "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:neoyank#limit = 20
-let g:neoyank#file = ''
-if s:saveYanks
-    let g:neoyank#file = s:savedYanksPath
-else
-    let g:neoyank#disable_write = 1
-endif
+if s:saveYanks | let g:neoyank#file = s:savedYanksPath | else |
+            \ let g:neoyank#disable_write = 1 | let g:neoyank#file = '' | endif
 let g:neoyank#save_registers = ['"']
 
 nnoremap <silent> <M-p> :Denite neoyank -auto-resize -mode=normal<CR>
@@ -845,21 +866,6 @@ augroup end
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" peekaboo                                                    "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:peekaboo_window = 'vert bo 40new'
-let g:peekaboo_delay = 0
-let g:peekaboo_compact = 0
-
-" Can't disable these, so just choose a prefix we won't ever press
-let g:peekaboo_prefix = 'zpm1'
-let g:peekaboo_ins_prefix = 'zpm2'
-
-nnoremap <silent> <Leader>R :call peekaboo#aboo()<CR>
-xnoremap <silent> <Leader>R <esc>:call peekaboo#aboo()<CR>gv
-inoremap <silent> <Leader>R <C-o>:call peekaboo#aboo()<CR>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " python-syntax                                               "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:python_highlight_all = 1
@@ -938,6 +944,48 @@ endfunc
 " Signature                                                   "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:SignatureEnabledAtStartup = 1
+let g:SignatureWrapJumps = 0
+let g:SignatureIncludeMarkers = ')🚩@#$%^&*('
+
+"sign define FLAG text='🚩'
+
+" 1! 🚩 2@ 🔖 3# 󲁦 4$ 🔧 5% 🚧 6^ 📌 7& 📍 8* ⭐ 9( 󰄿 0) 󰅂
+
+let g:SignatureMap = {
+            \ 'Leader'             :  "m",
+            \ 'PlaceNextMark'      :  "",
+            \ 'ToggleMarkAtLine'   :  "mm",
+            \ 'PurgeMarksAtLine'   :  "",
+            \ 'DeleteMark'         :  "dm",
+            \ 'PurgeMarks'         :  "m<Space>",
+            \ 'PurgeMarkers'       :  "m<BS>",
+            \ 'GotoNextLineAlpha'  :  "",
+            \ 'GotoPrevLineAlpha'  :  "",
+            \ 'GotoNextSpotAlpha'  :  "",
+            \ 'GotoPrevSpotAlpha'  :  "",
+            \ 'GotoNextLineByPos'  :  "",
+            \ 'GotoPrevLineByPos'  :  "",
+            \ 'GotoNextSpotByPos'  :  "m]`",
+            \ 'GotoPrevSpotByPos'  :  "m[`",
+            \ 'GotoNextMarker'     :  "m]-",
+            \ 'GotoPrevMarker'     :  "m[-",
+            \ 'GotoNextMarkerAny'  :  "m]=",
+            \ 'GotoPrevMarkerAny'  :  "m[=",
+            \ 'ListBufferMarks'    :  "m/",
+            \ 'ListBufferMarkers'  :  "m?"
+            \ }
+
+" Ctrl+shift+hjkl - jump to next marked position
+" Requires terminal configured to send terminal F11 escape code
+map <silent> <F11>ZH m[=
+map <silent> <F11>ZJ m]`
+map <silent> <F11>ZK m[`
+map <silent> <F11>ZL m]=
+
+hi SignatureMarkText ctermfg=166 ctermbg=NONE guifg=#51FF4C guibg=NONE guisp=NONE
+            \ cterm=bold gui=bold
+hi SignatureMarkerText ctermfg=166 ctermbg=NONE guifg=#4CFFE2 guibg=NONE guisp=NONE
+            \ cterm=bold gui=bold
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -976,8 +1024,21 @@ let g:SimpylFold_fold_import = 1
 let g:smartpairs_start_from_word = 1
 
 " Extend the range of smartpairs to most of the screen
-let g:smartpairs_maxdepth = 40
+let g:smartpairs_maxdepth = 64
 
+" Mappings - <M-v> to select word, <M-V> to select paragraph
+function! SmartPairsN()
+    exec 'normal! v' | NextPairs
+endfunction
+function! SmartPairsV()
+    exec 'normal! gv'
+    NextPairs
+endfunction
+
+nnoremap <M-v> :call SmartPairsN()<CR>
+xnoremap <M-v> <esc>:call SmartPairsV()<CR>
+nnoremap <M-V> }V{
+xnoremap <M-V> <esc>}V{
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Splitjoin                                                   "
@@ -999,6 +1060,26 @@ let g:splitjoin_python_brackets_on_separate_lines = 1
 let g:splitjoin_handlebars_closing_bracket_on_same_line = 0
 let g:splitjoin_handlebars_hanging_arguments = 0
 let g:splitjoin_html_attributes_bracket_on_new_line = 0
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" schlepp                                                     "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:Schlepp#allowSquishingLines = 1
+let g:Schlepp#allowSquishingBlocks = 1
+let g:Schlepp#reindent = 1
+let g:Schlepp#useShiftWidthLines = 1
+
+" Mappings
+" Requires a terminal that maps Ctrl+Alt+hjkl to the corresponding keys below
+nmap <silent> <F11>zk V<Plug>SchleppUp<esc>
+nmap <silent> <F11>zj V<Plug>SchleppDown<esc>
+nmap <silent> <F11>zh V<Plug>SchleppLeft<esc>
+nmap <silent> <F11>zl V<Plug>SchleppRight<esc>
+vmap <silent> <F11>zk <Plug>SchleppUp
+vmap <silent> <F11>zj <Plug>SchleppDown
+vmap <silent> <F11>zh <Plug>SchleppLeft
+vmap <silent> <F11>zl <Plug>SchleppRight
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1349,6 +1430,14 @@ endfunction
 let g:startify_custom_footer = map(['', plugins#getRandomStartifyFooter()],
             \ '"   ".v:val')
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" submode                                                     "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:submode_timeout = 0
+let g:submode_always_show_submode = 0
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Tabularize                                                  "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1375,6 +1464,7 @@ vmap  <Leader>T<Space>   :Tabularize   /\S\+<CR>
 nmap <M-Space> :Tabularize /[    ][^     ]\+/<CR>
 vmap <M-Space> :Tabularize /[    ][^     ]\+/<CR>gv
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " vim-table-mode                                              "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1390,20 +1480,33 @@ let g:table_mode_syntax = 0
 let g:table_mode_auto_align = 1
 let g:table_mode_update_time = 500
 
+" Mappings
+nnoremap <Leader><bar> :TableModeToggle<CR>
+inoremap <Leader><bar> <C-o>:TableModeToggle<CR>
+xnoremap <Leader><bar> <esc>:TableModeToggle<CR>gv
+
+" Custom status indicator
+function! plugins#TableModeStatus()
+    if exists(':TableModeEnable') && tablemode#IsActive()
+        return printf('%s', g:airline_symbols.tablemode)
+    endif
+    return ''
+endfunction
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Tagbar                                                      "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:tagbar_width = 30
-let g:tagbar_autoclose = 1
-let g:tagbar_autofocus = 1
-let g:tagbar_sort = 0
-let g:tagbar_compact = 1
-let g:tagbar_indent = 1
-let g:tagbar_show_visibility = 1
-let g:tagbar_show_linenumbers = 0
 let g:tagbar_expand = 1
 let g:tagbar_foldlevel = 1
+let g:tagbar_indent = 1
+let g:tagbar_autoclose = 1
+let g:tagbar_autofocus = 1
+let g:tagbar_compact = 1
+let g:tagbar_sort = 0
+let g:tagbar_width = 30
+let g:tagbar_show_linenumbers = 0
+let g:tagbar_show_visibility = 1
 let g:tagbar_iconchars = ['▶', '▼']
 let g:tagbar_type_css = {
     \ 'ctagstype' : 'Css',
@@ -1422,20 +1525,25 @@ let g:tagbar_type_markdown = {
     \ ]
 \ }
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Templates                                                   "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call assert_true(exists(':Template'))
+
+" Configure templates
 let g:templates_fuzzy_start = 1
 let g:templates_directory = [ $HOME.'/.config/nvim/templates' ]
 let g:templates_search_height = 0
 let g:templates_global_name_prefix = 'template'
 let g:templates_no_builtin_templates = 1
+
+" Add template variables
 let g:templates_user_variables = [
         \   ['FILEHEADING', 'TemplateFileHeading'],
         \   ['FILEHEADINGULINE', 'TemplateFileHeadingUnderline'],
         \ ]
 
-" User-defined template variables
 function! TemplateFileHeading()
     return expand('%:p:t')
 endfunction
@@ -1446,9 +1554,22 @@ endfunction
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vissort                                                     "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+xmap <M-S> :<C-U>Vissort<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" wipeout                                                     "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <leader><Esc><Esc> :Wipeout<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Function keys
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <F5> :NERDTreeToggle<CR>
 nnoremap <F6> :TagbarToggle<CR>
 nnoremap <F7> :MundoToggle<CR>
+nnoremap <F9> :call DeleteTrailingWS()<CR>
 nnoremap <F12> :ALEFix<CR>:echom 'Running ALE fixers...'<CR>
