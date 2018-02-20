@@ -2,7 +2,6 @@
 " plugins.vim
 " ===========
 "
-" Version:               1.0.0
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
 "
@@ -10,17 +9,14 @@
 " -----------
 "   All plugin-related options and shortcuts go here.
 "
-" TODO:
-" * [ ] Set Ranger-like enter/exit shortcuts for NERDTree windows
-" * [ ] Move mappings and important settngs to configuration
-" * [ ] Add asserts to all plgins
-"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Configuration                                               "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let s:useEmojis = 0
+" TODO:
+" * Set Ranger-like enter/exit shortcuts for NERDTree windows
+" * Move mappings and important settngs to configuration
+" * Add asserts to all plgins
+"
+" Global configuration{{{
+let s:useEmojis = 0  "{{{
 let s:neovimPath = $HOME.'/.config/nvim'
 let s:savedYanksPath = $HOME.'/.config/nvim/temp_data/yankhistory.txt'
 
@@ -36,17 +32,17 @@ let g:github = "None"
 " Paths to plugins and plugin patches folders, relative to neovimPath
 let s:patchesDir = '/plugin_patches'
 let s:pluginsDir = '/plugged'
+"}}}
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugin patching                                             "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin patching{{{
 " Note: The layout of the patch files must match the layout of the plugins
 " folder for this to work.
 
 function! plugins#applyPluginPatches()
     exec '!cp -r '.s:neovimPath.s:patchesDir.'/* '.s:neovimPath.
         \ s:pluginsDir.'/'
+    source $MYVIMRC
 endfunction
 
 function! plugins#removePluginPatches()
@@ -58,11 +54,9 @@ endfunction
 
 command! PlugPatchAll call plugins#applyPluginPatches()
 command! PlugUnpatchAll call plugins#removePluginPatches()
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Plugins                                                     "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Load plugins{{{
 call plug#begin($HOME.'/.config/nvim/plugged')
 
 " Required for python plugin support
@@ -99,7 +93,6 @@ Plug 'https://github.com/tpope/vim-speeddating'
 Plug 'https://github.com/chrisbra/unicode.vim.git'
 Plug 'https://github.com/artnez/vim-wipeout.git'
 Plug 'https://github.com/tpope/vim-fugitive'
-Plug 'https://github.com/Konfekt/FastFold.git'
 
 " UI/Visual Plugins
 Plug 'https://github.com/vim-airline/vim-airline.git'
@@ -157,14 +150,16 @@ call plug#end()
 
 " Automatically install missing plugins and update remote plugins on startup
 " https://github.com/junegunn/vim-plug/wiki/extra
-autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)')) |
-  \ PlugInstall --sync | q | endif |
-  \ silent UpdateRemotePlugins
+augroup PluggedAuto
+    autocmd!
+    autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)')) |
+      \ PlugInstall --sync | q | endif |
+      \ silent UpdateRemotePlugins
+augroup end
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Airline                                                     "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Configure plugins{{{
+" Airline{{{
 call assert_true(exists(':AirlineRefresh'))
 let g:airline_skip_empty_sections = 1
 
@@ -245,7 +240,6 @@ endif
 " Load theme
 let g:airline_theme = 'bubblegum'
 
-" 󰅗󰅰󰍝󰍞󰑣󰑤󰑦󰑘󰓦󰓸󰓹󰓺󰓻󰓼󰕰󰖿󰚒󰜠󰜡󱀻󱀨󱁂󱁥󱅭󱉀󱈶󱈷󱏇󱔭󱕎󱡣󱡪󱡶󱢖󱢁󱢳󱣎
 " Set airline sctions manually
 let g:airline_section_a =
             \ '%{airline#util#wrap(airline#parts#mode(),0)}' .
@@ -286,11 +280,9 @@ function! plugins#AirlineCustomLoadIndicators()
     let l:out = l:out . plugins#ALELintStatus()
     return l:out
 endfunction
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" ALE                                                         "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" ALE{{{
 call assert_true(exists(':ALELint'))
 let g:ale_enabled = 1
 let g:airline#extensions#ale#enabled = 1
@@ -392,7 +384,7 @@ hi! link ALEInfoSign Info
 "ALEError ALEWarning ALEInfo ALEStyleError ALEStyleWarning
 "ALEErrorSign ALEWarningSign ALEInfoSign ALEStyleErrorSign ALEStyleWarningSign
 
-" Misc 󰌹
+" Misc
 let g:ale_cache_executable_check_failures = 0
 let g:ale_command_wrapper = ''
 
@@ -406,16 +398,38 @@ augroup ALEStatusUpdate
     autocmd User ALELintPost let g:_ale_statusicon = '' | AirlineRefresh
 augroup END
 
+function! ErrJmpCmd(cmd)
+    try | execute a:cmd | catch /.*/ | endtry
+endfunction
+
 " Jump to error submode
 call submode#enter_with('errorjump', 'n', '', '<M-e>', ':cw<CR>')
-call submode#map('errorjump', 'n', '', 'h', ':cfirstCR>')
-call submode#map('errorjump', 'n', '', 'j', ':cnext<CR>')
-call submode#map('errorjump', 'n', '', 'k', ':cprevious<CR>')
-call submode#map('errorjump', 'n', '', 'l', ':clast<CR>')
-call submode#map('errorjump', 'n', '', 'q',
-            \ '<esc>:call submode#restore_options()<CR>:ccl<CR>')
-call submode#map('errorjump', 'n', '', '<esc>',
-            \ '<esc>:call submode#restore_options()<CR>:ccl<CR>')
+call submode#map('errorjump', 'n', '', 'h', ':silent cfirst<CR>zx')
+call submode#map('errorjump', 'n', '', 'j',
+            \ ':silent call ErrJmpCmd("cnext")<CR>zx')
+call submode#map('errorjump', 'n', '', '<Tab>',
+            \ ':silent call ErrJmpCmd("cnext")<CR>zx')
+call submode#map('errorjump', 'n', '', '<Space>',
+            \ ':silent call ErrJmpCmd("cnext")<CR>zx')
+call submode#map('errorjump', 'n', '', '<CR>',
+            \ ':silent call ErrJmpCmd("cnext")<CR>zx')
+call submode#map('errorjump', 'n', '', 'k',
+            \ ':silent call ErrJmpCmd("cprevious")<CR>zx')
+call submode#map('errorjump', 'n', '', '<BS>',
+            \ ':silent call ErrJmpCmd("cprevious")<CR>zx')
+call submode#map('errorjump', 'n', '', 'l', ':silent clast<CR>zx')
+
+" Other keys exit mode and close quickfix window. List is not exhaustive.
+let qfexitkeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'q', 'w',
+            \ 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'a', 's',
+            \ 'd', 'f', 'g', 'z', 'x', 'c', 'v', 'b', 'm',
+            \ '<Esc>', '<Bslash>', '<Bar>', '<lt>', '<gt>', ';',
+            \ '/', "'", '-', '=', '`', '<Delete>']
+
+for i in qfexitkeys
+    call submode#map('errorjump', 'n', '', i,
+                \ '<esc>:silent call submode#restore_options()<CR>:ccl<CR>')
+endfor
 
 " Status indicators for submode
 function! plugins#ALELintStatus()
@@ -429,40 +443,34 @@ function! plugins#ALEJumpStatus()
     return ''
 endfunction
 
+" Ctrl+alt+shift+hl - next/prev error
+" Requires terminal configured to send keys below
+nnoremap <silent> <F11>zH :ALEPreviousWrap<CR>
+nnoremap <silent> <F11>zL :ALENextWrap<CR>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" closetag                                                    "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <F12> :ALEFix<CR>:echom 'Running ALE fixers...'<CR>
+"}}}
+
+" closetag{{{
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
 let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
 let g:closetag_emptyTags_caseSensitive = 1
 let g:closetag_shortcut = '>'
 let g:closetag_close_shortcut = '<leader>>'
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" CtrlP                                                       "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ctrlp_working_path_mode = 'c'
-
-" Disable ctrlp shortcut
-let g:ctrlp_map = '®'
-
-" Match, match window options
-let g:ctrlp_match_window = 'bottom, order:btt, min:1, max:20,results:20'
-
-" Configure persistent cache
+" CtrlP{{{
+let g:ctrlp_by_filename = 0
 let g:ctrlp_cache_clear_on_exit = 0
 let g:ctrlp_cache_dir = '~/.config/nvim/temp_data/ctrlp_cache'
-
-" Default to entire path, non-regex search.
-let g:ctrlp_regexp = 0
-let g:ctrlp_by_filename = 0
-
-" Max file limit
+let g:ctrlp_extensions = ['smarttabs']
+let g:ctrlp_map = '<Nop>01zx'
+let g:ctrlp_match_window = 'bottom, order:btt, min:1, max:20,results:20'
 let g:ctrlp_max_files = 4096
-
-" Add Perl-style ignore patterns here.
+let g:ctrlp_regexp = 0
+let g:ctrlp_smarttabs_exclude_quickfix = 1
+let g:ctrlp_switch_buffer = 'ET'
+let g:ctrlp_working_path_mode = 'c'
 let ctrlpIgnoreList = [
                         \ ".cache",
                         \ ".git",
@@ -473,27 +481,18 @@ let ctrlpIgnoreList = [
                         \ "*.so",
                         \ ]
 
-" Use the silver searcher for faster search, if it is installed
+" CPSM - Needs to be installed by running install.sh
+let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
+let g:cpsm_match_empty_query = 0
+
+" Use the silver searcher for faster search, fallback to grep
 if executable("ag")
     let agCmd = 'ag %s -i --nocolor --nogroup --hidden -g "" '
-
-    for i in ctrlpIgnoreList
-        let agCmd = agCmd.'--ignore '.i
-    endfor
-
+    for i in ctrlpIgnoreList | let agCmd = agCmd.'--ignore '.i | endfor
     let g:ctrp_user_command = agCmd
-else " Otherwise use grep as fallback
+else
     let grepCmd = ''
 endif
-
-" Switch to buffer if it is already open
-let g:ctrlp_switch_buffer = 'ET'
-
-" Extensions
-let g:ctrlp_extensions = ['smarttabs']
-
-" smarttabs
-let g:ctrlp_smarttabs_exclude_quickfix = 1
 
 " Shortcuts - find all (F)iles, (B)uffers, Most (R)ecent files or (T)ags
 nnoremap <leader>f :CtrlPMixed<cr>
@@ -503,18 +502,21 @@ nnoremap <leader>t :CtrlPBufTag<cr>
 
 " Find buffer (TAB)s
 nnoremap <leader><Tab> :CtrlPSmartTabs<CR>
+"}}}
 
-" CPSM
-" Note: Needs to be installed by running install.sh
-let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
-let g:cpsm_match_empty_query = 0
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Denite                                                      "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Denite{{{
 " Add custom menus
 let s:menus = {}
+let s:menus.main_menu = {
+    \ 'description': 'misc',
+    \ 'command_candidates': [
+        \ [ '[<M-p>] Put From Yank History... ',
+            \ 'Denite neoyank -auto-resize -mode=normal' ],
+        \ [ '[<M-r>] Put From Register...', 'Denite register -mode=normal' ],
+        \ [ '[<M-c>] Jump to Change...',
+            \ 'Denite change -auto-resize -mode=normal' ],
+        \ ],
+    \ }
 let s:menus.buffer_settings = {
     \ 'description': 'settings',
     \ 'command_candidates': [
@@ -538,12 +540,8 @@ let s:menus.buffer_commands = {
     \ 'description': 'commands',
     \ 'command_candidates': [
         \ [ '[<F12>] Run ALE Fixers', 'ALEFix' ],
-        \ [ '[<F9> ] Delete Trailing Whitespace', 'call DeleteTrailingWS()' ],
-        \ [ '[<M-c>] Jump to Change...',
-            \ 'Denite change -auto-resize -mode=normal' ],
-        \ [ '[<M-p>] Put From Yank History... ',
-            \ 'Denite neoyank -auto-resize -mode=normal' ],
-        \ [ '[<M-r>] Put From Register...', 'Denite register -mode=normal' ],
+        \ [ '[<F9> ] Fix Trailing Spaces', 'call DeleteTrailingWS()' ],
+        \ [ '[<F9> ] Fix Incorrect Indent Characters', 'retab' ],
         \ ],
     \ }
 
@@ -555,11 +553,10 @@ nnoremap <F3> :Denite menu:buffer_windows -auto-resize -mode=normal<CR>
 nnoremap <F4> :Denite menu:buffer_settings -auto-resize -mode=normal<CR>
 nnoremap <silent> <M-c> :Denite change -auto-resize -mode=normal<CR>
 nnoremap <silent> <M-r> :Denite register -mode=normal<CR>
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Deoplete                                                    "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Deoplete{{{
+" General configuration{{{
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_camel_case = 1
 let g:deoplete#auto_complete_start_length = 1
@@ -568,16 +565,8 @@ let g:deoplete#max_abbr_width = 100
 let g:deoplete#max_menu_width = 50
 let g:deoplete#auto_complete_delay = 40
 let g:deoplete#file#enable_buffer_path = 1
-
-" Use exact match from head for dictionary matches
-call deoplete#custom#source(
-\ 'dictionary', 'matchers', ['matcher_head'])
-
-" Set a minimum match length for dictionary matches
-call deoplete#custom#source(
-\ 'dictionary', 'min_pattern_length', 3)
-
-" deoplete-jedi - requires jedi to be installed
+"}}}
+" Configure deoplete-jedi{{{
 let g:deoplete#sources#jedi#server_timeout = 10
 let g:deoplete#sources#jedi#statement_length = 50
 let g:deoplete#sources#jedi#enable_cache = 1
@@ -585,114 +574,101 @@ let g:deoplete#sources#jedi#show_docstring = 0
 let g:deoplete#sources#jedi#python_path = '/usr/bin/python3.6'
 let g:deoplete#sources#jedi#debug_server = 0
 let g:deoplete#sources#jedi#extra_path =  []
+"}}}
+" Configure dictionary{{{
+call deoplete#custom#source('dictionary', 'matchers', ['matcher_head'])
+call deoplete#custom#source('dictionary', 'min_pattern_length', 3)
+"}}}
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" doorboy                                                     "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-inoremap <expr> <CR> (pumvisible() ? "\<C-y>" : "" ) . doorboy#map_cr()
-inoremap <expr><BS> neocomplete#smart_close_popup().doorboy#map_backspace()
-
+" doorboy{{{
+" Configure for filetypes {{{
 let g:doorboy_additional_quotations = {
-  \ '*': ['@'],
-  \ 'coffee': ['/']
+      \ '*': ['@'],
+      \ 'coffee': ['/']
   \ }
 let g:doorboy_nomap_quotations = {
-  \ 'javascript': ['/']
+      \ 'javascript': ['/']
   \ }
 let g:doorboy_additional_brackets = {
-  \ 'html': ['<>']
+      \ 'html': ['<>']
   \ }
-let g:doorboy_nomap_brackets = {
-  \ }
+"}}}
+" Mappings - avoid conflicts with neocomplete{{{
+inoremap <expr> <CR> (pumvisible() ? "\<C-y>" : "" ) . doorboy#map_cr()
+inoremap <expr> <BS> neocomplete#smart_close_popup().doorboy#map_backspace()
+"}}}
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-devicons                                                "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim-devicons{{{
+" General configuration{{{
 if s:useEmojis
     let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol = '📁'
     let g:DevIconsDefaultFolderOpenSymbol = '📂'
 endif
+"}}}
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" gfm-syntax                                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" gfm-syntax{{{
+" General configuration{{{
 let g:gfm_syntax_highlight_inline_code = 1
+let g:gfm_syntax_highlight_issue_number = 1
 let g:gfm_syntax_highlight_mention = 1
 let g:gfm_syntax_highlight_strikethrough = 1
-let g:gfm_syntax_highlight_issue_number = 1
 let g:gfm_syntax_highlight_table = 1
 
 if s:useEmojis == 1
     let g:gfm_syntax_highlight_emoji = 1
     let g:gfm_syntax_emoji_conceal = 1
 endif
+"}}}
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Goyo & Limelight                                            "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"let g:goyo_width = 100
-"let g:goyo_height = 100
-"let g:limelight_conceal_guifg = 'DarkGray'
-"let g:limelight_conceal_guifg = '#777777'
-"let g:limelight_paragraph_span = 1
-"let g:limelight_priority = -1
-"
-"autocmd! User GoyoEnter Limelight
-"autocmd! User GoyoLeave Limelight!
-"
-"nnoremap <silent> <leader>z :Goyo<cr>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Gutentags                                                   "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Requires universal ctags.
-let g:gutentags_enabled = 1
-let g:gutentags_generate_on_missing = 1
-let g:gutentags_generate_on_new = 1
-let g:gutentags_generate_on_write = 1
-let g:gutentags_generate_on_empty_buffer = 0
-let g:gutentags_background_update = 1
-let g:gutentags_define_advanced_commands = 1
-let g:gutentags_resolve_symlinks = 1
-
+" Gutentags{{{
+" General configuration{{{
+let g:gutentags_add_default_project_roots = 0
 let g:gutentags_ctags_tagfile = '.tags'
-let g:gutentags_ctags_exclude = ['*.md', '*.pyc', '.txt']
-let g:gutentags_ctags_exclude_wildignore = 1
-let g:gutentags_ctags_auto_set_tags = 1
-
-let g:gutentags_project_root = []
-let g:gutentags_add_default_project_roots = 1
+let g:gutentags_define_advanced_commands = 1
 let g:gutentags_exclude_project_root = []
+let g:gutentags_file_list_command = {
+                \ 'markers': {
+                    \ '.git': 'git ls-files',
+                    \ '.hg': 'hg files',
+                    \ '.svn': 'svn list',
+                \ },
+            \ }
+let g:gutentags_project_root = ['.git', '.hg', '.svn']
+let g:gutentags_resolve_symlinks = 1
+"}}}
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" highlightedyank & searchant                                 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" highlightedyank, searchant{{{
+" General configuration{{{
 let g:highlightedyank_highlight_duration = 600
 let g:highlightedyank_max_lines = 10000
 let g:highlightedyank_timeout = 500
+"}}}
+" Highlight groups{{{
+function! SearchantHighlightedYankHi()
+    hi HighlightedyankRegion cterm=bold gui=bold guifg=#51C0E1 guibg=#00313D
+    hi SearchCurrent         cterm=bold gui=bold guifg=#41FF1A guibg=#00313D
+endfunction
 
-" Clear searchant highlighting before leaving buffer
-augroup SearchantAutoClear
+call SearchantHighlightedYankHi()
+
+" Clear searchant on buffer leave, update highlight after loading colorscheme
+augroup SearchantHighlightedYankUpdate
     autocmd!
     autocmd BufLeave * :execute "normal \<Plug>SearchantStop"
+    autocmd ColorScheme * :call SearchantHighlightedYankHi()
 augroup end
+"}}}
+"}}}
 
-" Appearance
-hi HighlightedyankRegion cterm=bold gui=bold guifg=#51C0E1 guibg=NONE
-hi SearchCurrent         cterm=bold gui=bold guifg=#41FF1A guibg=NONE
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" highlighter                                                 "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" highlighter{{{
+" General configuration{{{
 let g:highlighter#auto_update = 2
-let g:highlighter#project_root_signs = ['.git']
+let g:highlighter#project_root_signs =  g:gutentags_project_root
 let g:highlighter#syntax_python = [
       \ { 'hlgroup'       : 'HighlighterPythonFunction',
       \   'hlgroup_link'  : 'Function',
@@ -710,54 +686,69 @@ let g:highlighter#syntax_python = [
       \   'hlgroup_link'  : 'Type',
       \   'tagkinds'      : 'c',
       \ }]
+"}}}
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" indentLine                                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
-let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_default_mapping = 0
+" indent-guides{{{
+" General configuration{{{
 let g:indent_guides_auto_colors = 0
+let g:indent_guides_default_mapping = 0
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_exclude_filetypes = ['qf', 'tagbar', 'startify',
+            \ 'nerdtree', 'help', 'Mundo']
+let g:indent_guides_guide_size = 1
 let g:indent_guides_indent_levels = 6   " 16
-let g:indent_guides_exclude_filetypes = ['startify', 'nerdtree', 'help']
+let g:indent_guides_start_level = 2
+"}}}
+" Highlight groups{{{
+function! IndentGuidesHi()
+    if !has('gui_running') && get(g:, 'solarized_termtrans', 0)
+        hi IndentGuidesEven ctermfg=242 ctermbg=0 guifg=NONE guibg=#004D61
+        hi IndentGuidesOdd  ctermfg=242 ctermbg=0 guifg=NONE guibg=#004052
+    else
+        hi IndentGuidesEven ctermfg=242 ctermbg=0 guifg=#80C5C7 guibg=#004557
+        hi IndentGuidesOdd  ctermfg=242 ctermbg=0 guifg=#003947 guibg=#003B4B
+    endif
+endfunction
 
+call IndentGuidesHi()
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-json                                                    "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup IndentGuidesUpdate
+    autocmd!
+    autocmd ColorScheme * call IndentGuidesHi()
+augroup end
+"}}}
+"}}}
+
+" vim-json{{{
+" Disable conceal {{{
 let g:vim_json_syntax_conceal = 0
+"}}}
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" matchmaker                                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:matchmaker_enable_startup = 1
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" mundo                                                       "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" mundo{{{
+" General configuration{{{
+let g:mundo_auto_preview = 0
+let g:mundo_inline_undo = 1
+let g:mundo_playback_delay = 20
 let g:mundo_preview_bottom = 1
 let g:mundo_preview_height = 25
-let g:mundo_auto_preview = 0
 let g:mundo_verbose_graph = 0
-let g:mundo_playback_delay = 20
-let g:mundo_inline_undo = 1
-
-" Use CursorHold to run diffs to avoid diffing every node in the tree
+"}}}
+" Better automatic preview{{{
 set updatetime=400
+
+nnoremap <silent> <F7> :MundoToggle<CR>
+
 augroup mundo_auto_preview
     autocmd!
     autocmd CursorHold __Mundo__ :call feedkeys('r','t')
 augroup end
+"}}}
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" neosnippet                                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Disable builtin python snippets. _ is all types.
+" neosnippet{{{
+" General configuration{{{
 let g:neosnippet#disable_runtime_snippets = {
         \   'python' : 1,
         \ }
@@ -766,34 +757,38 @@ let g:neosnippet#expand_word_boundary = 1
 let g:neosnippet#enable_snipmate_compatibility = 0
 let g:neosnippet#snippets_directory = $HOME .
             \ '/.config/nvim/plugged/vim-snippets/snippets'
-
-" Key mappings
+"}}}
+" Key mappings{{{
 imap <C-k> <Plug>(neosnippet_expand_or_jump)
 smap <C-k> <Plug>(neosnippet_expand_or_jump)
-
-" Details
+"}}}
+" Details{{{
 let g:snips_author = g:username
 let g:snips_email = g:email
 let g:snips_github = g:github
 let g:snips_license = g:license
+"}}}
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" neoyank                                                     "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:neoyank#limit = 20
-if s:saveYanks | let g:neoyank#file = s:savedYanksPath | else |
-            \ let g:neoyank#disable_write = 1 | let g:neoyank#file = '' | endif
+" neoyank{{{
+let g:neoyank#limit = 128
 let g:neoyank#save_registers = ['"']
 
+" Persistent yank history
+if s:saveYanks
+    let g:neoyank#file = s:savedYanksPath
+else
+    let g:neoyank#disable_write = 1
+    let g:neoyank#file = ''
+endif
+
+" Alt+p to paste from yank history
 nnoremap <silent> <M-p> :Denite neoyank -auto-resize -mode=normal<CR>
 xnoremap <silent> <M-p> <esc>:Denite neoyank -auto-resize -mode=normal<CR>gv
 inoremap <silent> <M-p> <C-o>:Denite neoyank -auto-resize -mode=normal<CR>
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" NERDTree                                                    "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" NERDTree{{{
 " Apearance
 if s:useEmojis
     let g:NERDTreeDirArrowExpandable = '📁'
@@ -855,6 +850,7 @@ let g:NERDTreeMinimalUI = 1
 
 " Toggle nerdtree sidebar
 nmap <Leader>o :NERDTreeToggle<CR>
+nnoremap <silent> <F5> :NERDTreeToggle<CR>
 
 augroup NERDTreeAutoClose
     autocmd!
@@ -862,17 +858,13 @@ augroup NERDTreeAutoClose
     autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") &&
                                         \ b:NERDTree.isTabTree()) | q | endif
 augroup end
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" python-syntax                                               "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" python-syntax{{{
 let g:python_highlight_all = 1
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Rainbow                                                     "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Rainbow{{{
 " Enable by default
 let g:rainbow_active = 1
 let g:rainbow_conf = {
@@ -937,11 +929,9 @@ func! RainbowSetBold()
     hi rainbow_o8 ctermfg=NONE guifg=#782FDA gui=NONE,bold
     hi rainbow_o9 ctermfg=NONE guifg=#B62072 gui=NONE,bold
 endfunc
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Signature                                                   "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Signature{{{
 let g:SignatureEnabledAtStartup = 1
 let g:SignatureWrapJumps = 0
 let g:SignatureIncludeMarkers = ')🚩@#$%^&*('
@@ -985,11 +975,9 @@ hi SignatureMarkText ctermfg=166 ctermbg=NONE guifg=#51FF4C guibg=NONE guisp=NON
             \ cterm=bold gui=bold
 hi SignatureMarkerText ctermfg=166 ctermbg=NONE guifg=#4CFFE2 guibg=NONE guisp=NONE
             \ cterm=bold gui=bold
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Signify                                                     "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Signify{{{
 let g:signify_realtime = 0
 let g:signify_vcs_list = ['git' , 'hg', 'svn']
 let g:signify_vcs_cmds = {
@@ -1006,19 +994,15 @@ let g:signify_sign_delete            = '󱅛'
 let g:signify_sign_delete_first_line = '󱅎'
 let g:signify_sign_change            = '󱅐'
 let g:signify_sign_changedelete      = g:signify_sign_change
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" SimpylFold                                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" SimpylFold{{{
 let g:SimpylFold_docstring_preview = 0
 let g:SimpylFold_fold_docstring = 1
 let g:SimpylFold_fold_import = 1
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Smartpairs                                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Smartpairs{{{
 " Select word if there are no smartpairs regions
 let g:smartpairs_start_from_word = 1
 
@@ -1030,18 +1014,16 @@ function! SmartPairsN()
     exec 'normal! v' | NextPairs
 endfunction
 function! SmartPairsV()
-    exec 'normal! gv'
-    NextPairs
+    exec 'normal! gv' | NextPairs
 endfunction
 
-nnoremap <M-v> :call SmartPairsN()<CR>
-xnoremap <M-v> <esc>:call SmartPairsV()<CR>
-nnoremap <M-V> }V{
-xnoremap <M-V> <esc>}V{
+nnoremap <silent> <M-v> :call SmartPairsN()<CR>
+xnoremap <silent> <M-v> <esc>:call SmartPairsV()<CR>
+nnoremap <silent> <M-V> }kV{j
+xnoremap <silent> <M-V> <esc>}kV{j
+"}}}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Splitjoin                                                   "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Splitjoin{{{
 let g:splitjoin_split_mapping = '<M-s>'
 let g:splitjoin_join_mapping = '<M-S>'
 let g:splitjoin_normalize_whitespace = 1
@@ -1059,11 +1041,9 @@ let g:splitjoin_python_brackets_on_separate_lines = 1
 let g:splitjoin_handlebars_closing_bracket_on_same_line = 0
 let g:splitjoin_handlebars_hanging_arguments = 0
 let g:splitjoin_html_attributes_bracket_on_new_line = 0
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" schlepp                                                     "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" schlepp{{{
 let g:Schlepp#allowSquishingLines = 1
 let g:Schlepp#allowSquishingBlocks = 1
 let g:Schlepp#reindent = 1
@@ -1079,11 +1059,9 @@ vmap <silent> <F11>zk <Plug>SchleppUp
 vmap <silent> <F11>zj <Plug>SchleppDown
 vmap <silent> <F11>zh <Plug>SchleppLeft
 vmap <silent> <F11>zl <Plug>SchleppRight
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Startify                                                    "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Startify{{{
 " Rebind Ctrl+T to open Startify
 map <C-t> :tabnew ./<CR>:Startify<cr>
 
@@ -1094,16 +1072,12 @@ augroup StartifyInit
 augroup end
 
 let g:startify_list_order = [
-            \ ['   Recently used files:'],
-            \ 'files',
-            \ ['   Recently used files from the current directory:'],
-            \ 'dir',
-            \ ['   Previous sessions: (:SDelete - delete, :SClose - close, <Leader>+SS - save'],
-            \ 'sessions',
-            \ ['   Bookmarks:'],
-            \ 'bookmarks',
-            \ ['   Commands:'],
-            \ 'commands',
+            \ ['   Recently used files:'], 'files',
+            \ ['   Recently used files from the current directory:'], 'dir',
+            \ ['   Previous sessions: (:SDelete - delete, :SClose - close,' .
+            \ '<Leader>+SS - save'], 'sessions',
+            \ ['   Bookmarks:'], 'bookmarks',
+            \ ['   Commands:'], 'commands',
             \ ]
 let g:startify_list_order = ['sessions', 'files', 'dir', 'bookmarks', 'commands']
 let g:startify_session_dir = '~/.config/nvim/sessions'
@@ -1428,45 +1402,39 @@ endfunction
 
 let g:startify_custom_footer = map(['', plugins#getRandomStartifyFooter()],
             \ '"   ".v:val')
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" submode                                                     "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:submode_timeout = 0
+" submode{{{
+let g:submode_timeout = 0  "{{{
 let g:submode_always_show_submode = 0
+"}}}
+"}}}
 
+" Tabularize{{{
+" Mappings taken from spf13 with some modifications
+nnoremap <Leader>T&       :Tabularize /&<CR>
+xnoremap <Leader>T&       :Tabularize /&<CR>
+nnoremap <Leader>T=       :Tabularize /^[^=]*\zs=<CR>
+xnoremap <Leader>T=       :Tabularize /^[^=]*\zs=<CR>
+nnoremap <Leader>T=>      :Tabularize /=><CR>
+xnoremap <Leader>T=>      :Tabularize /=><CR>
+nnoremap <Leader>T:       :Tabularize /:<CR>
+xnoremap <Leader>T:       :Tabularize /:<CR>
+nnoremap <Leader>T::      :Tabularize /:\zs<CR>
+xnoremap <Leader>T::      :Tabularize /:\zs<CR>
+nnoremap <Leader>T,       :Tabularize /,<CR>
+xnoremap <Leader>T,       :Tabularize /,<CR>
+nnoremap <Leader>T,,      :Tabularize /,\zs<CR>
+xnoremap <Leader>T,,      :Tabularize /,\zs<CR>
+nnoremap <Leader>T<Bar>   :Tabularize /<Bar><CR>
+xnoremap <Leader>T<Bar>   :Tabularize /<Bar><CR>
+nnoremap <Leader>T<Space> :Tabularize /\S\+<CR>
+xnoremap <Leader>T<Space> :Tabularize /\S\+<CR>
+nnoremap <M-Space>        :Tabularize /[              ][^ ]\+/l0<CR>
+xnoremap <M-Space>        :Tabularize /[              ][^ ]\+/l0<CR>gv=gv
+"}}}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Tabularize                                                  "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" from spf13, modified
-nmap  <Leader>T&         :Tabularize   /&<CR>
-vmap  <Leader>T&         :Tabularize   /&<CR>
-nmap  <Leader>T=         :Tabularize   /^[^=]*\zs=<CR>
-vmap  <Leader>T=         :Tabularize   /^[^=]*\zs=<CR>
-nmap  <Leader>T=>        :Tabularize   /=><CR>
-vmap  <Leader>T=>        :Tabularize   /=><CR>
-nmap  <Leader>T:         :Tabularize   /:<CR>
-vmap  <Leader>T:         :Tabularize   /:<CR>
-nmap  <Leader>T::        :Tabularize   /:\zs<CR>
-vmap  <Leader>T::        :Tabularize   /:\zs<CR>
-nmap  <Leader>T,         :Tabularize   /,<CR>
-vmap  <Leader>T,         :Tabularize   /,<CR>
-nmap  <Leader>T,,        :Tabularize   /,\zs<CR>
-vmap  <Leader>T,,        :Tabularize   /,\zs<CR>
-nmap  <Leader>T<Bar>     :Tabularize   /<Bar><CR>
-vmap  <Leader>T<Bar>     :Tabularize   /<Bar><CR>
-nmap  <Leader>T<Space>   :Tabularize   /\S\+<CR>
-vmap  <Leader>T<Space>   :Tabularize   /\S\+<CR>
-
-nmap <M-Space> :Tabularize /[    ][^     ]\+/<CR>
-vmap <M-Space> :Tabularize /[    ][^     ]\+/<CR>gv
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vim-table-mode                                              "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" vim-table-mode{{{
 " Enabled for markdown only, see filetypes.vim
 let g:table_mode_corner = '|'
 let g:table_mode_separator = '|'
@@ -1481,7 +1449,6 @@ let g:table_mode_update_time = 500
 
 " Mappings
 nnoremap <Leader><bar> :TableModeToggle<CR>
-inoremap <Leader><bar> <C-o>:TableModeToggle<CR>
 xnoremap <Leader><bar> <esc>:TableModeToggle<CR>gv
 
 " Custom status indicator
@@ -1491,11 +1458,9 @@ function! plugins#TableModeStatus()
     endif
     return ''
 endfunction
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Tagbar                                                      "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Tagbar{{{
 let g:tagbar_expand = 1
 let g:tagbar_foldlevel = 1
 let g:tagbar_indent = 1
@@ -1524,6 +1489,8 @@ let g:tagbar_type_markdown = {
     \ ]
 \ }
 
+nnoremap <silent> <F6> :call UpdateTagbarOptions()<CR>:TagbarToggle<CR>
+
 " Show tagbar and don't close it automatically if we have enough space for it.
 function! UpdateTagbarOptions(...)
     let l:twidth = nvim_win_get_width(nvim_get_current_win())
@@ -1536,11 +1503,9 @@ function! UpdateTagbarOptions(...)
         endif
     endif
 endfunction
+"}}}
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Templates                                                   "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Templates{{{
 call assert_true(exists(':Template'))
 
 " Configure templates
@@ -1563,25 +1528,16 @@ endfunction
 function! TemplateFileHeadingUnderline()
     return repeat('=', len(expand('%:p:t')))
 endfunction
+"}}}
 
+" vissort{{{
+" Alt+Shift+s - Sort visual selection
+xmap <M-S> :Vissort<CR>
+"}}}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" vissort                                                     "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-xmap <M-S> :<C-U>Vissort<CR>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" wipeout                                                     "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" wipeout{{{
+" <Leader>+Esc+Esc - Clear background buffers
 nnoremap <leader><Esc><Esc> :Wipeout<CR>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Function keys
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <silent> <F5> :NERDTreeToggle<CR>
-nnoremap <silent> <F6> :call UpdateTagbarOptions()<CR>:TagbarToggle<CR>
-nnoremap <silent> <F7> :MundoToggle<CR>
-nnoremap <silent> <F9> :call DeleteTrailingWS()<CR>
-nnoremap <F12> :ALEFix<CR>:echom 'Running ALE fixers...'<CR>
+"}}}
+"}}}
+" vim: set ts=4 sw=4 tw=79 fdm=marker et :
