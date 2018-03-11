@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 # -*- coding: UTF-8 -*-
 ###############################################################################
-# pip-install-all
-# ===============
+# pip-uninstall-all
+# =================
 #
-# Version:               1.1.0
+# Version:               1.0.0
 # Author:                Michael De Pasquale <shaggyrogers>
-# Creation Date:         2018-01-28
+# Creation Date:         2018-02-26
 # Modification Date:     2018-02-26
 # License:               MIT
 #
 # Description
 # -----------
-# Installs a package in Python2.7, 3.5 and 3.6.
+# Removes a package from Python 2.7, 3.5 and 3.6.
 #
 ###############################################################################
 
@@ -22,8 +22,8 @@ if [ -z $1 ]; then
 fi
 
 # Install in all python versions
-python -m pip install --user $1
-python3 -m pip install --user $1
-python3.6 -m pip install --user $1
+python -m pip uninstall --user $1
+python3 -m pip uninstall --user $1
+python3.6 -m pip uninstall --user $1
 
 exit 0

@@ -1,24 +1,19 @@
 #!/bin/sh
 # -*- coding: UTF-8 -*-
 ###############################################################################
-# kitty
-# =====
+# color-pick-desktop
+# ==================
 #
-# Description:           Wrapper for kitty terminal emulator
+# Description:           Select a visible color to 'type' the hex code for it.
 # Author:                Michael De Pasquale <shaggyrogers>
 # Creation Date:         2018-03-07
-# Modification Date:     2018-03-11
+# Modification Date:     2018-03-07
 # License:               MIT
 #
 ###############################################################################
 
-# Ensure directory exists {{{
-if [ ! -d ~/.local/kitty/ ]; then
-    echo 'Failed to launch kitty: Could not find ~/.local/kitty.'
-    exit 1
-fi # }}}
-
-# Run kitty, passing on arguments
-exec python3 $HOME/.local/kitty/ "$@"
+ACTIVE_WINDOW=$(xdotool getactivewindow)
+PICK_COLOR="$(gpick --pick --single --output --no-newline)"
+xdotool type --window "$ACTIVE_WINDOW" --delay 1 --clearmodifiers "$PICK_COLOR"
 
 # vim: set ts=4 sw=4 tw=79 fdm=marker et :

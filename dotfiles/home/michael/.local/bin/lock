@@ -4,16 +4,18 @@
 # lock
 # ====
 #
-# Version:               1.0.0
-# Author:                Michael De Pasquale
+# Description:           Runs i3lock with a set configuration.
+# Author:                Michael De Pasquale <shaggyrogers>
 # Creation Date:         2017-11-28
-# License:               None
-#
-# Description
-# -----------
-# Runs i3lock with a set configuration.
+# Modification Date:     2018-03-03
+# License:               MIT
 #
 ###############################################################################
+
+if pgrep 'i3lock'; then
+    echo 'Error: i3lock is already running. '
+    exit 1;
+fi
 
 i3lock -k --timepos='x+0.5*w-0.5*cw:y+0.5*h-0.5*ch' \
           --timecolor='#FFFFFFCC' \
@@ -38,18 +40,21 @@ i3lock -k --timepos='x+0.5*w-0.5*cw:y+0.5*h-0.5*ch' \
           --bshlcolor='#FF1111CC' \
           -i $HOME'/.config/i3/lockimg.png' &
 
-sleep 1.0
-i3lockpid=$!
-winid=`xwininfo -name "i3lock" | grep "Window id" | grep -oE "0x[0-9a-f]+"`
-
-if [ -z "$winid" ]; then
-    echo "Could not find i3lock window"
-    exit 1
-fi
-
-conky -w "$winid" &
-conkypid=$!
-wait $i3lockpid
-kill $conkypid
+# Commented this out for now - does not work
+#sleep 1.0
+#i3lockpid=$!
+#winid=`xwininfo -name "i3lock" | grep "Window id" | grep -oE "0x[0-9a-f]+"`
+#
+#if [ -z "$winid" ]; then
+#    echo "Could not find i3lock window"
+#    exit 1
+#fi
+#
+#conky -w "$winid" &
+#conkypid=$!
+#wait $i3lockpid
+#kill $conkypid
 
 exit 0
+
+# vim: set ts=4 sw=4 tw=79 fdm=marker et :

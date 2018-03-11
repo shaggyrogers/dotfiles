@@ -1,0 +1,205 @@
+#!/bin/sh
+# -*- coding: UTF-8 -*-
+###############################################################################
+# kitty-nvim
+# ===================
+#
+# Description:
+# Author:                Michael De Pasquale <shaggyrogers>
+# Creation Date:         2018-03-07
+# Modification Date:     2018-03-11
+# License:               MIT
+#
+###############################################################################
+
+
+help () { # {{{
+    echo "" 1>&2
+    echo "  ${__usage:-No usage available}" 1>&2
+    echo "" 1>&2
+    echo " ${__help}" 1>&2
+    echo "" 1>&2
+
+    exit 1
+}
+
+ __usage="$(cat <<- 'EOF'
+   Usage: kitty-nvim [options] <file(s)>
+EOF
+)"
+
+__help="$(cat <<- 'EOF'
+    Options
+        --help                  Display this message.
+
+        -w, --wait              DOES NOT WORK
+                                Block until the nvim instance exits. Will not
+                                block when using an existing instance.
+
+
+        -n, --new-instance      [<arg>]
+                                If arg is '0', a new instance will not be
+                                created under any circumstances. If arg is any
+                                nonzero value or is not provided, a new
+                                instance will always be created.
+
+        -i, --instance-index    <index>
+                                Attempt to connect to an existing instance with
+                                the given index. Will create a new instance if
+                                one is not found unless -n 0 prevents this.
+
+        If both -i and -n are given, a new instance will be created with an
+        index greater than or equal to the supplied index.
+
+    The only WM currently supported is i3.
+EOF
+)" # }}}
+
+parse_arguments() { # {{{
+    # Source: /usr/share/doc/util-linux/examples/getopt-parse.bash
+    TEMP=$(getopt -o 'wn::i:' -l 'help,wait,new-instance::,instance-index:' \
+        -n 'nvim-kitty' -- "$@")
+
+    if [ $? -ne 0 ]; then
+        help
+        exit 1
+    fi
+
+    eval set -- "$TEMP"
+    unset TEMP
+
+    # Set defaults
+    WAIT='0'
+    NEW_INSTANCE=''
+    INSTANCE_INDEX=''
+
+    # Parse options
+    while true; do
+        case "$1" in
+            '--help')
+                help
+                shift
+                continue
+            ;;
+            '-w'|'--wait')
+                WAIT='1'
+                shift
+                continue
+            ;;
+            '-i'|'--instance-index')
+                INSTANCE_INDEX="$2"
+                shift 2
+                continue
+            ;;
+            '-n'|'--new-instance')
+                case "$2" in
+                    '')
+                        NEW_INSTANCE="1"
+                    ;;
+                    *)
+                        NEW_INSTANCE="$2"
+                    ;;
+                esac
+                shift 2
+                continue
+            ;;
+            '--')
+                shift
+                break
+            ;;
+            *)
+                echo 'Error: Could not parse_arguments.' 1>&2
+                exit 1
+            ;;
+        esac
+    done
+
+    ARGS_REMAINING="$@"
+} # }}}
+
+i3_focused_workspace_info() { # {{{
+    local WS_INFO="$(python3 -B -bb -OO -W error -c \
+"$(cat <<-'PYTHON'
+#!/usr/bin/env python3
+import sys
+import json
+ws = [d for d in json.loads(sys.argv[1]) if d['focused']][0]
+num, name, r = ws['num'], ws['name'], ws['rect']
+rx, ry, rw, rh = r['x'], r['y'], r['width'], r['height']
+print(f'{num}\n{name}\n{rx} {ry} {rw} {rh}')
+sys.exit(0)
+PYTHON
+)" "$(i3-msg -t get_workspaces)")"
+
+    if [ $? -ne 0 ]; then
+        echo 'Error: Failed to parse i3 workspace information.' 1>&2
+        exit 1
+    fi
+
+    WS_NUMBER="$(echo "$WS_INFO" | sed -e '1q;d')"
+    WS_NAME="$(echo "$WS_INFO" | sed -e '2q;d')"
+    local WS_RECT="$(echo "$WS_INFO" | sed -e '3q;d')"
+    WS_X="$(echo "$WS_RECT" | cut -d' ' -f1)"
+    WS_Y="$(echo "$WS_RECT" | cut -d' ' -f2)"
+    WS_W="$(echo "$WS_RECT" | cut -d' ' -f3)"
+    WS_H="$(echo "$WS_RECT" | cut -d' ' -f4)"
+} # }}}
+
+# Parse arguments, get workspace information {{{
+if ! [ "$XDG_CURRENT_DESKTOP" = "i3" ]; then
+    echo "Error: WM '$XDG_CURRENT_DESKTOP' not supported." 1>&2
+    exit 1
+fi
+
+parse_arguments "$@"
+i3_focused_workspace_info
+# }}}
+
+# Build class string {{{
+CLASS_NAME="kitty-nvim-${WS_NUMBER:-0}-${INSTANCE_INDEX:-0}"
+X_WIN="$(xdotool search --class "$CLASS_NAME")"
+INSTANCE_INDEX="${INSTANCE_INDEX:-0}"
+
+if [ "$NEW_INSTANCE" = "1" ]; then
+    while [ -n "$X_WIN" ]; do
+        INSTANCE_INDEX="$((INSTANCE_INDEX+1))"
+        CLASS_NAME="kitty-nvim-${WS_NUMBER:-0}-$INSTANCE_INDEX"
+        X_WIN="$(xdotool search --class "$CLASS_NAME")"
+    done
+fi
+# }}}
+
+# Create instance or open in existing instance {{{
+export NVIM_LISTEN_ADDRESS="/tmp/$CLASS_NAME.socket"
+export NVIM_INSTANCE_INDEX="${INSTANCE_INDEX:-0}"
+
+# TODO: Fix this; wait does not work
+OPTIONS_VAR="--remote-tab"
+DETATCH='--detach'
+if [ "$WAIT" = '1' ]; then OPTIONS_VAR="$OPTIONS_VAR-wait"; DETACH=''; fi
+if [ "$NEW_INSTANCE" = "0"  ]; then OPTIONS_VAR="$OPTIONS_VAR --nostart"; fi
+
+# Leave terminal input mode - seems to prevent new tabs
+if [ -n "$X_WIN" ]; then
+    xdotool windowactivate --sync "$X_WIN"
+    xdotool key --clearmodifiers --window "$X_WIN" ctrl+backslash ctrl+n
+fi
+
+$(exec python3 $HOME/.local/kitty/ \
+--config=$HOME/.config/kitty/kitty.nvim.conf \
+$DETATCH \
+--class="$CLASS_NAME" \
+nvr \
+$OPTIONS_VAR -s ${ARGS_REMAINING:+"$ARGS_REMAINING"})
+# }}}
+
+# Focus existing instance {{{
+if [ -n "$X_WIN" ]; then
+    echo 'found instance, focusing...'
+    xdotool windowactivate --sync "$X_WIN"
+fi
+# }}}
+
+exit 0
+
+# vim: set ts=4 sw=4 tw=79 fdm=marker et :
