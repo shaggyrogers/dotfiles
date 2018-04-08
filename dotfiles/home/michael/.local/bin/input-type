@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# -*- coding: UTF-8 -*-
+###############################################################################
+# input-type
+# ==========
+#
+# Description:           Emulates typing in text for the given type.
+# Author:                Michael De Pasquale <shaggyrogers>
+# Creation Date:         2018-03-07
+# Modification Date:     2018-03-18
+# License:               MIT
+#
+###############################################################################
+
+[ -z "$1" ] &&
+
+WIN="$(xdotool getactivewindow)"
+
+case "$1" in
+    'c')
+        INPUT="$(gpick --pick --single --output --no-newline)"
+    ;;
+    'f')
+        INPUT="$(zenity --file-selection)"
+    ;;
+    's')
+        INPUT="$(xsel)"
+    ;;
+    'p')
+        keepass2 --auto-type
+        exit 0
+    ;;
+    *)
+        echo 'Error: Invalid type, accepted values include:' 1>&2
+        echo '        c        Color on desktop' 1>&2
+        echo '        f        File path' 1>&2
+        echo '        s        X11 selection' 1>&2
+        echo '        p        keepass2 password' 1>&2
+        exit 1
+    ;;
+esac
+
+xdotool type --window "$WIN" --delay 1 --clearmodifiers "$INPUT"
+exit 0
+
+# vim: set ts=4 sw=4 tw=79 fdm=marker et :

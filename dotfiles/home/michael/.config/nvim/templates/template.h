@@ -1,15 +1,21 @@
-/* %FILEHEADING%
- * %FILEHEADINGULINE%
- *
- * Version:               1.0.0
- * Author:                %USER%
- * Creation Date:         %DATE%
- * License:               %LICENSE%
- */
+/*
+  %FILEHEADING%
+  %FILEHEADINGULINE%
+ 
+  Description:           %HERE%
+  Version:               1.0.0
+  Author:                %USER% <%GITHUBUSER%>
+  Creation Date:         %DATE%
+  Modification Date:     %DATE%
+  License:               %LICENSE%
+*/
+
 
 #ifndef __%GUARD%_H_
 #define __%GUARD%_H_
 
-%HERE%
+
 
 #endif //__%GUARD%_H_
+
+/* vim: set ts=4 sw=4 tw=79 fdm=manual et :*/

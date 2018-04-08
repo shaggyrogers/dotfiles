@@ -2,21 +2,16 @@
 # distutils: sources = %FFILE%
 # -*- coding: UTF-8 -*-
 """
-%FILEHEADING%
-%FILEHEADINGULINE%
+  %FILEHEADING%
+  %FILEHEADINGULINE%
 
+  Description:           %HERE%
   Version:               1.0.0
-  Author:                %USER%
+  Author:                %USER% <%GITHUBUSER%>
   Creation Date:         %DATE%
+  Modification Date:     %DATE%
   License:               %LICENSE%
 
-  Description
-  -----------
-  A short summary of the contents of this file and their purpose.
-
-  Usage
-  -----
-  Usage instructions for common use cases.
 """
 
 

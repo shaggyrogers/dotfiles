@@ -1,31 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 """
-%FILEHEADING%
-%FILEHEADINGULINE%
+  %FILEHEADING%
+  %FILEHEADINGULINE%
 
+  Description:           %HERE%
   Version:               1.0.0
-  Author:                %USER%
+  Author:                %USER% <%GITHUBUSER%>
   Creation Date:         %DATE%
+  Modification Date:     %DATE%
   License:               %LICENSE%
 
-  Description
-  -----------
-  What this script does.
-
-  Usage
-  -----
-  Usage instructions for common use cases.
 """
 
 import sys
 
 
 def main(*args):
-    """Entry point. Returns 0 for success or a nonzero exit code otherwise"""
+    """ TODO """
+
     return 0
 
 
-# Allow importing without execution
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
+
+# vim: set ts=4 sw=4 tw=79 fdm=manual et :

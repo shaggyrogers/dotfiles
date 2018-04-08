@@ -19,31 +19,39 @@ hi link pyNiceOperator Operator
 hi link pyNiceStatement Statement
 hi link Conceal Operator
 "}}}
+
 " Buffer-local options{{{
 setlocal define=^\s*\\(def\\\\|class\\)
+setlocal foldmethod=marker
 "}}}
+
 " Highlight lines exceeding textwidth{{{
-call ftcommon#HighlightTextWidth()
+call rccommon#HighlightTextWidth()
 " }}}
+
 " Update Tagbar{{{
-call ftcommon#UpdateTagbarOptions()
+call rccommon#UpdateTagbarOptions()
 "}}}
+
 " Load a dictionary for this filetype, if one exists{{{
-call ftcommon#LoadFiletypeDictionary()
+call rccommon#LoadFiletypeDictionary()
 "}}}
+
 " Delete trailing whitespace and replace tab characters{{{
-call ftcommon#DeleteTrailingWS()
+call rccommon#DeleteTrailingWS()
 retab
 "}}}
+
 " Autocommands{{{
 augroup PythonFiletypeConfig
     autocmd!
     autocmd BufEnter *.py,*.pyx,*.pyd,*.pyw,*.pxi,*.pyi
                 \ hi link Conceal Operator
     autocmd BufWrite *.py,*.pyx,*.pyd,*.pyw,*.pxi,*.pyi
-                \ call ftcommon#DeleteTrailingWS() | retab
+                \ call rccommon#DeleteTrailingWS() | retab
     autocmd VimResized *.py,*.pyx,*.pyd,*.pyw,*.pxi,*.pyi
-                \ call ftcommon#UpdateTagbarOptions()
+                \ call rccommon#UpdateTagbarOptions()
 augroup end
 "}}}
+
 " vim: set ts=4 sw=4 tw=79 fdm=marker et :

@@ -1,53 +1,55 @@
 #!/usr/bin/env bash
 # -*- coding: UTF-8 -*-
-# ~/.profile: executed by the command interpreter for login shells.
+###############################################################################
+# .profile
+# ========
+#
+# Description:           Executed by bash for login shells.
+# Author:                Michael De Pasquale <shaggyrogers>
+# Creation Date:         2018-03-01
+# Modification Date:     2018-03-01
+# License:               MIT
+#
+# Note
+# ----
 # This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
 # exists.
-# see /usr/share/doc/bash/examples/startup-files for examples.
-# the files are located in the bash-doc package.
-# the default umask is set in /etc/profile; for setting the umask
-# for ssh logins, install and configure the libpam-umask package.
-#umask 022
+#
+###############################################################################
 
-# Set GOPATH
-if [ -z GOPATH ]; then
-    export GOPATH="$HOME/.local/go/"
-fi
+function pathmunge () { # {{{
+    local newdir="$1"
+    local after="${$2:-0}"
 
-# Set TASKDDATA
-if [ -z TASKDATA ]; then
-    export TASKDATA="/var/taskd"
-fi
-
-# source .bashrc
-if [ -n "$BASH_VERSION" ] && [ -f "$HOME/.bashrc" ]; then
-    source "$HOME/.bashrc"
-fi
-
-# Add user binary dirs
-if [[ ! {"$PATH" =~ "$HOME/.local/bin"} && -d "$HOME/.local/bin" ]]; then
-    PATH="$HOME/.local/bin:$PATH"
-fi
-
-if [[ ! {"$PATH" =~ "$HOME/bin"} && -d "$HOME/bin" ]]; then
-    PATH="$HOME/bin:$PATH"
-fi
-
-# Graphical sessions only:
-if xhost >& /dev/null; then
-
-    # Run unified remote server
-    if [ ! "$(pgrep 'urserver')" ]; then
-        /opt/urserver/urserver-start --no-manager &
+    if  [ ! -z "$newdir" ] || [ ! -d "$newdir" ]; then
+        echo 'WARN: path "'$newdir'" is invalid or does not exist.'
+        exit 1;
     fi
 
-    # Lock screen
-    if [ "$(uptime | grep -Po ':\d\d:' | tr -d ':\n' | wc -m)" == 1 ]; then
-        . $HOME/.local/bin/lock
+    if [ "${PATH/$value}" != "$PATH" ]; then
+        if [ $after == "0" ]; then
+            export PATH="$PATH:$1"
+        else
+            export PATH="$1:$PATH"
+        fi
     fi
+}
+# }}}
 
-    # # Mount VPS
-    # if [ ! "$(ls -A /home/michael/aws_vps)" ]; then
-    #     sshfs aws_vps:/ /home/michael/aws_vps/ &
-    # fi
-fi
+# Add directories to PATH {{{
+pathmunge="$HOME/.local/bin"
+pathmunge="$HOME/bin"
+# }}}
+
+
+# Export environment variables {{{
+if [ -z "$EDITOR" ];then export EDITOR=nvim; fi
+if [ -z "$FILEBROWSER" ];then export FILEBROWSER=ranger; fi
+if [ -z "$GOPATH" ]; then export GOPATH="$HOME/.local/go"; fi
+if [ -z "$TASKDATA" ]; then export TASKDATA="/var/taskd"; fi
+if [ -z "$XDG_CACHE_HOME" ]; then export XDG_CACHE_HOME="$HOME/.cache"; fi
+if [ -z "$XDG_CONFIG_HOME" ]; then export XDG_CONFIG_HOME="$HOME/.config"; fi
+if [ -z "$XDG_DATA_HOME" ]; then export XDG_DATA_HOME="$HOME/.local/share"; fi
+# }}}
+
+# vim: set ts=4 sw=4 tw=79 fdm=marker et :

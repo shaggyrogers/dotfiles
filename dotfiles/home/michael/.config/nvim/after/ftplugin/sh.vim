@@ -12,16 +12,16 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Highlight lines exceeding textwidth{{{
-call ftcommon#HighlightTextWidth()
+call rccommon#HighlightTextWidth()
 " }}}
 " Delete trailing whitespace and replace tab characters{{{
-call ftcommon#DeleteTrailingWS()
+call rccommon#DeleteTrailingWS()
 retab
 "}}}
 " Autocommands{{{
 augroup BashFiletypeConfig
     autocmd!
-    autocmd BufWrite *.sh call ftcommon#DeleteTrailingWS()
+    autocmd BufWrite *.sh call rccommon#DeleteTrailingWS()
 augroup end
 "}}}
 " vim: set ts=4 sw=4 tw=79 fdm=marker et :

@@ -19,7 +19,6 @@
 # criterion, quotes in "<string>" are not escaped properly. This is a problem
 # with the output of `xprop`, reported upstream: https://bugs.freedesktop.org/
 # show_bug.cgi?id=66807
-#
 ###############################################################################
 
 PROGNAME=`basename "$0"`

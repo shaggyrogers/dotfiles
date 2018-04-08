@@ -10,6 +10,11 @@
 " python syntax tweaks
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TODO:
+" Remove lookbehind from comments and use containedin instead
+
+" finish later
+finish
 
 " Clear syntax groups if they exist{{{
 try
@@ -25,7 +30,7 @@ endtry
 "}}}
 
 " Create syntax groups{{{
-syn match pythonOperator '\V=\|*\|-\|/\|+\|@\|%\|&\||\|^\|~\|<\|>\|!='
+syn match pythonOperator '\V\[=*-/+@%&|^~<>]\|!='
 syn keyword pythonOperator is or and
 
 syntax keyword pyNiceBuiltin all conceal cchar=∀
@@ -34,27 +39,26 @@ syntax keyword pyNiceOperator sum conceal cchar=∑
 syntax keyword pyNiceStatement lambda conceal cchar=λ
 syntax match pyNiceKeyword "\m\<\%(math\.\)\?pi\>" conceal cchar=
 syntax match pyNiceKeyword "\m\<\%(math\.\)\?sqrt\>" conceal cchar=√
-syntax match pyNiceOperator "\m\%(if \)\@<!\<not\%( \|\>\)" conceal cchar=¬
-syntax match pyNiceOperator "\m\%(is \)\@<!\<not\%( \|\>\)" conceal cchar=¬
+syntax match pyNiceOperator "\m\%(if \)\@3<!\<not\%( \|\>\)" conceal cchar=¬
+syntax match pyNiceOperator "\m\%(is \)\@3<!\<not\%( \|\>\)" conceal cchar=¬
 syntax match pyNiceOperator "\m\( \|\)\*\*\( \|\)2\>" conceal cchar=²
 syntax match pyNiceOperator "\m\( \|\)\*\*\( \|\)3\>" conceal cchar=³
 syntax match pyNiceOperator "\m\( \|\)\*\*\( \|\)n\>" conceal cchar=ⁿ
 syntax match pyNiceOperator "\m\<in\>" conceal cchar=∈
 syntax match pyNiceOperator "\m\<not in\>" conceal cchar=∉
-
 syntax match pyNiceComment
-            \ '\m\(^\s*#\s*\([*\-+][^*\-+]\)\?\s*\)\@<=\[ \?\]'
+            \ '\m\(^\s\{0,4}#\s\{0,4}\([*\-+][^*\-+]\)\?\s*\)<=\[ \?\]'
             \ contained conceal cchar=☐
 syntax match pyNiceComment
-            \ '\m\(^\s*#\s*\([*\-+][^*\-+]\)\?\s*\)\@<=\[[*x+]\]'
+            \ '\m\(^\s\{0,4}#\s\{0,4}\([*\-+][^*\-+]\)\?\s*\)<=\[[*x+]\]'
             \ contained conceal cchar=☑
 syntax match pyNiceComment
-            \ '\m\(^\s*#\s*\)\@<=[*+]\([^*\-+]\|$\)\@=' contained
+            \ '\m\(^\s\{0,4}#\s\{0,4}\)\@16<=[*+]\([^*\-+]\|$\)=' contained
             \ conceal cchar=•
 syntax match pyNiceComment
-            \ '\m\(^\s*#\s*\)\@<=[\-]\([^*\-+]\|$\)\@=' contained
+            \ '\m\(^\s\{0,4}#\s\{0,4}\)\@16<=[\-]\([^*\-+]\|$\)=' contained
             \ conceal cchar=
 syn cluster pyNiceCommentGroup contains=pythonTodo,pyNiceComment,@spell
-syn match pythonComment "#.*$" contains=pythonTodo,@pyNiceCommentGroup
+syn match pythonComment "\m#\s\{0,79}$" contains=pythonTodo,@pyNiceCommentGroup
 "}}}
 " vim: set ts=4 sw=4 tw=79 fdm=marker et :

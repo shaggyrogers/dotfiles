@@ -1,5 +1,12 @@
 #!/bin/sh
-#Changes X settings. Executed by xinit when logging in.                   
+#########################################################################################
+# .xinitrc                                                                              #
+#                                                                                       #
+# Version:               1.0.0                                                          #
+# Author:                Michael De Pasquale                                            #
+# Description:                                                                          #
+#   Changes X settings. Executed by xinit when logging in.                              #
+#########################################################################################
 
 /home/michael/.xsessionrc
 
@@ -8,4 +15,5 @@ if ! pgrep "i3$"; then
     exec i3
 fi
 
+# Return exit code 0 for succeess
 exit 0

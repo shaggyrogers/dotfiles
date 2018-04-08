@@ -11,6 +11,8 @@
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+"finish
+
 " Clear syntax groups if they exist{{{
 try
     syntax clear mkdBold
@@ -35,33 +37,35 @@ endtry
 "}}}
 
 " Create syntax groups{{{
-syntax match mkdListItem '\m\(^\s\{0,3}\)\@<=[*+]\([*\-+]\)\@!' conceal
+syntax match mkdListItem '\m\(^\s\{0,4}\)\@3<=[*+]\([*\-+]\)\@1!' conceal
         \ cchar=•
-syntax match mkdListItem '\m\(^\s\{0,3}\)\@<=[\-]\([*\-+]\)\@!' conceal
+syntax match mkdListItem '\m\(^\s\{0,4}\)\@3<=[\-]\([*\-+]\)\@1!' conceal
         \ cchar=
 syntax match mkdGitCheckBox
-        \ '\m\(^\s\{0,3\}\([*\-+]\([*\-+]\)\@<!\)\?\s\?\)\@<=\[ \?\]'
+        \ '\m\(^\s\{0,16\}\([*\-+]\([*\-+]\)\@1<!\)\?\s\?\)\@32<=\[ \?\]'
         \ conceal cchar=☐
 syntax match mkdGitCheckBoxChecked
-        \ '\m\(^\s\{0,3\}\([*\-+]\([*\-+]\)\@<!\)\?\s\?\)\@<=\[x\]'
+        \ '\m\(^\s\{0,16\}\([*\-+]\([*\-+]\)\@1<!\)\?\s\?\)\@32<=\[x\]'
         \ conceal cchar=☑
-syn match mkdTableSep "\(^\s\{0,3\}\)\@<=|:\?-\(:\?-\+:\?|\)\+"
+syn match mkdTableSep "\(^\s\{0,16\}\)\@16<=|[: ]\?-\([: ]\?-\+[: ]\?|\)\+"
         \ contains=mkdTableVHL,mkdTableVHLR,mkdTableVHR,
         \ mkdTable
-syn match mkdTable "\(^\s\{0,3\}\)\@<=|\([^\-|][^|]*|\)\+"
+syn match mkdTable "\(^\s\{0,16\}\)\@16<=|\([^\-|]\s\?[^|]*|\)\+"
         \ contains=mkdTableV,markdownBoldItalic,markdownBold,
         \ markdownItalic,markdownLinkText,markdownIdDeclaration,
         \ githubFlavoredMarkdownMention,
         \ githubFlavoredMarkdownIssueNumber,
         \ githubFlavoredMarkdownStrikethrough,
         \ githubFlavoredMarkdownEmoji
-syn match mkdTableVHLR '\([-]\)\@<=|\(-\)\@=' contained
+syn match mkdTableVHLR '\(-\s\?\)\@2<=|\(\s\?-\)\@2=' contained
         \ containedin=mkdTableSep conceal cchar=╋
-syn match mkdTableVHR '\(^\s\{0,3\}\)\@<=|\(-\)\@=' contained
+syn match mkdTableVHR '\(^\s\{0,16\}\)\@16<=|\(\s\?-\)\@2=' contained
         \ containedin=mkdTableSep conceal cchar=┣
-syn match mkdTableVHL '\([-]\)\@<=|$' contained containedin=mkdTableSep
+syn match mkdTableVHL '\(-\s\?\)\@2<=|$' contained containedin=mkdTableSep
         \ conceal cchar=┫
 syn match mkdTableH '-' contained containedin=mkdTableSep conceal cchar=━
 syn match mkdTableV '|' contained containedin=mkdTable conceal cchar=┃
-"}}}
+
+hi! link Conceal Identifier
+hi! link mkdBold Question "}}}
 " vim: set ts=4 sw=4 tw=79 fdm=marker et :

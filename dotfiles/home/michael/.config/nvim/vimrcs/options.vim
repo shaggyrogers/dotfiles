@@ -2,29 +2,39 @@
 " options.vim
 " ===========
 "
-" Author:                Michael De Pasquale
+" Author:                Michael De Pasquale <shaggyrogers>
+" Description:           Sets vim options for all filetypes.
 " Creation Date:         2017-12-02
-"
-" Description
-" -----------
-" Sets global options.
+" Modification Date:     2018-02-26
+" License:               MIT
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TODO: tweak formatting options
 
 " General{{{
+" Memory Usage
+set maxmem=2000000
+set maxmempattern=200000
+set maxmemtot=2400000
+set mkspellmem=900000,10000,1000
+" }}
+
 " Enable filetype plugins{{{
 filetype plugin indent on
 set cpoptions=aABceFs_
 "}}}
+
 " Encoding{{{
 set encoding=utf8
 set fileformats=unix,dos,mac
 "}}}
+
 " Spell checking{{{
 set nospell
 set spelllang=en_au
 "}}}
-" Configure mouse{{{
+
+" Mouse support{{{
 set mouse=ar
 set mousehide
 set mousemodel=popup
@@ -37,123 +47,157 @@ set mouseshape=i:beam,r:beam,s:updown,sd:cross,m:no,ml:up-arrow,v:rightup-arrow
 set autoread
 set hidden
 "}}}
-" Command / undo history{{{
+
+" Persistent command / undo history{{{
 set history=4096
-set undolevels=2048
+set undolevels=4096
 "}}}
-" Persistent undo / sessions / backups / swap files{{{
+
+" Persistence, sessions / backups / swap files{{{
 set nobackup
-set noswapfile
-set undodir=~/.config/nvim/temp_data/undo
+set updatetime=16000
+set updatecount=256
+set swapfile
 set undofile
 set undoreload=0
-set viewdir=~/.config/nvim/temp_data/view
 set viewoptions=cursor,curdir,folds,options
+set sessionoptions=blank,buffers,curdir,folds,globals,help
+set sessionoptions+=localoptions,options,tabpages,winsize
+
+" Persistent file directories
+exec 'set directory='.rccommon#TempDir().'/swap'
+exec 'set undodir='.rccommon#TempDir().'/undo'
+exec "let $NVIM_RPLUGIN_MANIFEST='".rccommon#TempDir()."/rplugin.vim'"
+exec 'set viewdir='.rccommon#TempDir().'/view'
+exec "set shada=!,s8096,h,%," .
+            \ "'" . string(&history) . ',' .
+            \ 'r/dev,' .
+            \ 'r/media,' .
+            \ 'r/mnt,' .
+            \ 'r/proc,' .
+            \ 'r/run,' .
+            \ 'r/sys,' .
+            \ 'r/tmp,' .
+            \ 'r/var/cache,' .
+            \ 'r/var/crash,' .
+            \ 'r/var/log,' .
+            \ 'r/var/tmp,' .
+            \ 'r~/.cache,' .
+            \ 'r~/.local/share/Trash,' .
+            \ 'r~/tmp,' .
+            \ 'n'.rccommon#TempDir().'/shada'
 "}}}
+
 " Bell{{{
 set belloff=all
 set noerrorbells
 "}}}
+
 " Modelines{{{
 set modeline
 set modelines=5
 "}}}
+
 " Maximum function call depth, timouts for key codes/mappings/key sequences{{{
 set maxfuncdepth=300
 set timeoutlen=750
 set ttimeoutlen=30
 "}}}
+
 " Jump to the first open window or tab for a buffer, or make a new tab{{{
 set switchbuf=useopen,usetab,newtab
 "}}}
+
 " Always echo the number of lines changed.{{{
 set report=0
 "}}}
 "}}}
 
+" Search & Patterns {{{
 " Patterns {{{
-" Case sensitivity{{{
 set ignorecase
 set smartcase
 "}}}
-" Search/replace{{{
-set hlsearch
+
+" Visual {{{
+set nohlsearch
 set inccommand=nosplit
 set incsearch
-"}}}
-" Pair matching{{{
 set matchpairs=(:),{:},[:],<:>,{:}
 set matchtime=3
 set showmatch
 "}}}
-" tags{{{
+
+" File Search {{{
 set tags=.tags
-"}}}
+" }}}
 " }}}
 
 " Navigation {{{
 " Movement restrictions/jumps
-set virtualedit=block,onemore
 set backspace=eol,start,indent
+set selection=inclusive
+set virtualedit=block,onemore
 set whichwrap=h,l,<,>,[,]
-
-" When editing a file, always jump to the last cursor position
-augroup LastFileLocation
-    au!
-    autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-                        \ | exe "normal! g'\"" | endif
-augroup end
-
 " }}}
 
 " UI{{{
-" Enable syntax highlighting{{{
+" Syntax highlighting / redrawing{{{
 syntax enable
-"}}}
-" Don't show mode text, don't redraw unless necessary{{{
-set noshowmode
+set concealcursor=nc
+set conceallevel=2
 set lazyredraw
+set matchtime=2
+set noshowmode
+set redrawtime=150
+set synmaxcol=140
+
+" Disable matchparen plugin in favour of parenmatch
+let g:loaded_matchparen = 1
 "}}}
+
 " Truecolor support{{{
-if exists('+termguicolors')
-    set termguicolors
-elseif exists('+guicolors')
-    set guicolors
+if exists('+termguicolors') | set termguicolors |
+elseif exists('+guicolors') | set guicolors |
 endif
 "}}}
+
 " Colorscheme{{{
 set background=dark
-let g:solarized_cursor_ul = 1
+set cursorline
+"set cursorcolumn
+let g:solarized_cursorline_linenr = 1
 let g:solarized_diffmode = 'normal'
 let g:solarized_extra_hi_groups = 1
 let g:solarized_term_italics = 1
-let g:solarized_termtrans = 1
+let g:solarized_termtrans = 0
+if $TERM == 'xterm-kitty' | let g:solarized_termtrans = 1 | endif
 let g:solarized_visibility = 'high'
 colorscheme solarized8_flat_fork
 "}}}
+
 " Tab/status line{{{
 set showtabline=2
 set laststatus=2
 set ruler
 set number
 "}}}
-" Window{{{
-set previewheight=8
+
+" Windows{{{
+set cmdheight=2
+set cmdwinheight=8
 set fillchars=vert:█,diff:-,fold:…
-set guioptions-=r
+set guioptions-=L
 set guioptions-=R
 set guioptions-=l
-set guioptions-=L
-set cmdheight=2
+set guioptions-=r
 set nosplitbelow
+set previewheight=8
 set splitright
 set title
 "}}}
-" Conceal{{{
-set concealcursor=nc
-set conceallevel=2
-"}}}
-" Wildmenu{{{
+
+" Wild menu{{{
 set wildmenu
 set wildmode=full
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store,*.o,*.so,*.md,*~,*.pyc
@@ -161,25 +205,34 @@ set wildignore+=*.pyo,*.swp,*.bak,*.class,*.sln,*.pdb,*.dll,*.tmp
 set wildignore+=tags,.tags,ctags,.ctags
 set wildignore+=*.jpg,*.gif,*.mp3,*.flac,*.mkv,*.mp4,*.avi,*.pdf
 "}}}
+
 " Scroll{{{
 set scroll=0
-set scrolloff=12
 set scrollback=999
-set scrollopt=ver,jump
+set scrolljump=1
+set scrolloff=12
+set scrollopt=ver,hor,jump
 "}}}
-" List{{{
-set listchars=eol:⏎,tab:␉⇥,space:⸳,extends:⋙,precedes:⋘,nbsp:␠
-set nolist
-"}}}
+
 " Folding{{{
-set foldtext=FoldTextCustom()
-set foldopen=hor,mark,percent,quickfix,search,tag,undo
 set foldclose=
 set foldcolumn=2
+set foldlevelstart=0
+set foldlevel=0
+set foldnestmax=8
 set foldmethod=manual
+set foldopen=hor,mark,percent,quickfix,search,tag,undo
+set foldtext=FoldTextCustom()
+
+if &ft == 'vim'
+    setlocal foldmethod=marker
+    execute 'normal zx'
+endif
 "}}}
-" Lines{{{
-set cursorline
+
+" Misc{{{
+set listchars=eol:⏎,tab:␉⇥,space:⸳,extends:⋙,precedes:⋘,nbsp:␠
+set nolist
 set showbreak==>
 set wrap
 "}}}
@@ -191,6 +244,7 @@ set complete=.,w,b,t,k,kspell,s,i
 set completeopt=menu,menuone,preview
 set pumheight=10
 "}}}
+
 " Indentation{{{
 set autoindent
 set copyindent
@@ -201,9 +255,11 @@ set smarttab
 set softtabstop=4
 set tabstop=4
 "}}}
+
 " Automatic formatting{{{
 set formatoptions=tcqjr
 "}}}
+
 " Lines{{{
 set textwidth=79
 set linebreak
@@ -212,56 +268,76 @@ set linebreak
 "}}}
 "}}}
 
-" Autocommands{{{
-augroup CursorlineToggle
-    au!
-    " Hide cursorline in insert mode
-    autocmd InsertLeave,WinEnter * set cursorline
-    autocmd InsertEnter,WinLeave * set nocursorline
+" Autocommands"{{{
+augroup VimrcOptions
+    autocmd!
 
-    " Window title
-    autocmd BufEnter * set title
-                \ titlestring=nvim%=-%=%<%{expand(\"%:~:.:t\")}%=[%l/%L]%=(%P) titlelen=70
-
-    " Move quickfix to the bottom of the screen on open
+    " Set buffer options
     autocmd FileType qf wincmd J
-augroup end
+    autocmd TermOpen * call s:InitialiseTerminal()
+    autocmd BufEnter *
+                \ execute 'set title titlestring=nvim%' .
+                \ '=-%=%<%{expand(\"%:~:.:t\")}%=[%l/%L]%=(%P)' .
+                \ 'titlelen=70' |
+                \ execute 'set scrolloff=' . string(winheight(0) / 4)
 
-" Disable built-in matchparen plugin in favour of autoload/parenmatch
-let g:loaded_matchparen = 1
+    " Go to last cursor position and open folds
+    autocmd BufReadPost *
+                \ if line("'\"") > 0 && line("'\"") <= line("$") |
+                    \ exe "normal! g'\"" |
+                    \ exe "normal! zx"
+                \ | endif
+augroup end
 "}}}
 
 " Functions{{{
-" GetBufferColumns : Get the visible buffer columns for the current window{{{
-" Assumes the sign column has width 2.
-function! GetBufferColumns()
-    if !&number | return winwidth(0) - &foldcolumn - 2 | endif
-    let lln = max([&nuw - 1, strlen(string(line('$'))), 0])
-    return winwidth(0) - &foldcolumn - lln - 2
-endfunction
-"}}}
 " FoldTextCustom : Builds a string to display for a closed fold{{{
 function! FoldTextCustom()
     let fchr = matchstr(&fillchars, 'fold:\zs.')
-    let flev = foldlevel(v:foldstart)
+    let level = foldlevel(v:foldstart)
     let fcnt = v:foldend - v:foldstart
     let line = getline(v:foldstart)
 
     if &foldmarker != ''
         let fm = escape(matchstr(&foldmarker, '[^,]\+'), '\')
-        let line = substitute(line, '\V'.fm , repeat(fchr, strchars(fm)), 'g')
+        let line = substitute(line, '\V'.fm , '', 'g')
     endif
 
     " Assumes the sign column has width 2 and line numbers are enabled.
-    let cols = GetBufferColumns()
-    let level =  repeat(fchr, 5 - strchars(string(flev))) . '[' .
-                \ string(flev) . ']' . repeat(fchr, 2)
-    let linestr = repeat(fchr, 4) . string(fcnt) . ' lines' . level
-    let line = substitute(strcharpart(line, 0, cols - strchars(linestr)),
-                \ '\s\+$', '', '')
-    return line . repeat(fchr, cols - strchars(line) - strchars(linestr)) .
-                \ linestr
+    let cols = rccommon#BufferColumns()
+    let cmtl = escape(matchstr(&commentstring, '.*\ze%s', '\'), '')
+    let linestart = ' ' " . repeat(fchr, level - 1)
+    let lineend = repeat(fchr, 4) . string(fcnt).' lines'.repeat(fchr,
+                \ 5 - strchars(string(level))).'['.string(level).']'.fchr.fchr
+
+    let line = substitute(line, '\V' . cmtl , '', '')
+"    let line = substitute(line, '^\V\s\{0,8}' . cmtl  . '\s\{0,8}', '', '')
+"    let line = substitute(line, '\V\s\{0,8}' . cmtl . '\s\{0,8}\$', '', '')
+    let ftag = matchstr(line, '\m\[\zs[^\[]\+\ze]$', 0, 1)
+
+    if ftag != ''
+        let lineend = repeat(fchr, 4) . ftag . lineend
+        let line = substitute(line, '\V\s\*['.escape(ftag,'\').']\$', '', '')
+    endif
+
+    let addlen = strchars(linestart) + strchars(lineend)
+    let line = substitute(strcharpart(line, 0, cols - addlen), '\s\+$', '', '')
+    return linestart.line . repeat(fchr, cols-strchars(line)-addlen) . lineend
+endfunction
+"}}}
+
+" InitialiseTerminal : Load bash prompt and set terminal buffer options{{{
+" Should be called in a TermOpen autocommand.
+function! s:InitialiseTerminal()
+    if &buftype != 'terminal' || get(b:, '_term_configured', 0)
+        return
+    endif
+
+    call feedkeys("asource ~/.config/bash/bash_prompt.sh\<CR>clear\<CR>", 't')
+    setlocal foldcolumn=0 signcolumn=no nonumber
+    let b:_term_configured = 1
 endfunction
 "}}}
 "}}}
-" vim: set ts=4 sw=4 tw=79 fdm=manual et :
+
+" vim: set ts=4 sw=4 tw=79 fdm=marker et :

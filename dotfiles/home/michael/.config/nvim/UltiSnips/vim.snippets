@@ -1,0 +1,92 @@
+priority -50
+
+###########################################################################
+#                            SnipMate Snippets                            #
+###########################################################################
+snippet gvar "Global / configuration variable" b
+if !exists("g:${1:`!v substitute(substitute(expand('%:t:r'), '[^A-Z0-9a-z_]', '', 'g'), '^[^A-Za-z_]', '', '')`}")
+	let g:$1 = ${2}
+endif
+
+endsnippet
+
+snippet sanity "Plugin sanity checking" b
+" Set this to 1 to disable sanity checking.
+let s:debug = get(g:, '`!v substitute(substitute(expand('%:t:r'), '[^A-Z0-9a-z_]', '', 'g'), '^[^A-Za-z_]', '', '')`_debug${1}, 0)
+
+" SanityCheck(actual_value, expected_value, [error_message]) " {{{
+" If actual_value != expected_value, display error (if provided) and abort
+function! SanityCheck(actual, expected, ...) 
+	if a:actual != a:expected && !s:debug
+		if a:0 > 0
+			echoerr '%FILENAMEVAR%: '.a:1
+		endif
+
+		finish
+	endif
+endf "}}}
+
+" Perform sanity checks {{{
+call s:SanityCheck(get(g:, '`!v substitute(substitute(expand('%:t:r'), '[^A-Z0-9a-z_]', '', 'g'), '^[^A-Za-z_]', '', '')`_loaded${2}', 0), 0)
+call s:SanityCheck(v:version > 700${3}', 1), 'Vim Version not supported.') 
+" }}}
+
+let g:'`!v substitute(substitute(expand('%:t:r'), '[^A-Z0-9a-z_]', '', 'g'), '^[^A-Za-z_]', '', '')`_loaded = 1
+endsnippet
+
+snippet "(^|\s)fun(c(tion)?)?\s?" "function" r
+" $2($3) {{{ ${4:`!v "\n\" "`}
+function ${2:name}(${3})
+endfunction " }}}
+endsnippet
+
+snippet for "for loop" w
+for ${1:needle} in ${2:haystack}
+	${3:" code}
+endfor
+endsnippet
+
+snippet "wh(ile)?\s?" "while loop" r
+while ${1:condition}
+	${2:" code}
+endw
+endsnippet
+
+snippet "if\s?" "if block" r
+if ${1:condition}
+	${2:" code}
+endif
+endsnippet
+
+snippet "ife(lse)?\s?" "if-else block" r
+if ${1:condition}
+	${2}
+else
+	${3}
+endif
+endsnippet
+
+snippet "let\s?" "variable assignment" r
+let ${1:l}:${2:var_name} = ${3:value}
+$0
+endsnippet
+
+snippet "try\s?" "try-catch block" r
+try 
+	${1}
+catch ${2}
+	${3:${VISUAL:echoerr 'Failed with exception' v:exception}}
+endtry
+endsnippet
+
+snippet "tryf\s?" "try-catch-finally block" r
+try 
+	${1}
+catch ${2}
+	${3:${VISUAL:echoerr 'Failed with exception' v:exception}}
+finally
+	${4:${VISUAL:" _Always_ executed before leaving block}}
+endtry
+endsnippet
+
+# vim:ft=snippets:

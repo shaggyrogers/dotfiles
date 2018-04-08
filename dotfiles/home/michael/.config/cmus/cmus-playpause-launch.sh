@@ -15,7 +15,7 @@
 ###############################################################################
 
 if ! pgrep -x cmus ; then
-  kitty --class=cmusmusicplayer --override background_opacity=0.7 \
+  ~/.local/bin/kitty --class=cmusmusicplayer --override background_opacity=0.65 \
                                 --override background='#202020' \
                                 'cmus' &
 else

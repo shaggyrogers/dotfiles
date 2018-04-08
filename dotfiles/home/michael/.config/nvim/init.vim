@@ -12,37 +12,44 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Configuration{{{
-let g:vimDir = resolve(expand('~/.config/nvim'))
-let g:vimrcDir = g:vimDir . '/vimrcs'
-execute 'set runtimepath+=' . g:vimDir
-let g:vimrcFiles = [
+" Folders
+let g:vim_dir = resolve(expand('~/.config/nvim'))
+let g:vim_dir_tmp = resolve(g:vim_dir.'/temp_data')
+let g:vim_dir_rc = resolve(g:vim_dir . '/vimrcs')
+
+" vimrc files and order of execution
+let g:vimrcs = [
+            \ 'rccommon.vim',
             \ 'options.vim',
             \ 'shortcuts.vim',
             \ 'plugins.vim',
+            \ 'SpeedSyntax.vim',
             \ ]
 "}}}
 
-" Load vimrcs{{{
-function! LoadVimrcs()
-    let l:errs = []
+" Initialise vim{{{
+execute 'set runtimepath+=' . g:vim_dir
+execute 'set runtimepath+=' . $VIMRUNTIME
+let s:errs = []
 
-    for cs in g:vimrcFiles
-        try | exec 'so '.g:vimrcDir . '/' . expand(cs)
-        catch | call add(l:errs,'Error "'.v:exception.'" during reload of '.cs)
-        endtry
+for cs in g:vimrcs
+    try
+        exec 'so '.g:vim_dir_rc.'/'.cs
+    catch
+        call add(s:errs,'Error "'.v:exception.'" during reload of '.cs)
+    endtry
+endfor
+
+" Display error message if any errors occured
+let numErrs = len(s:errs)
+
+if numErrs > 0
+    echo numErrs.' error'(numErrs==1?'':'s').' occured while executing .vimrc:'
+
+    for sn in s:errs
+        echomsg '➜ '.sn
     endfor
-
-    " Display error message if any errors occured
-    let numErrs = len(l:errs)
-
-    if numErrs > 0
-        echo numErrs.' error(s) occured while executing .vimrc:'
-        for sn in l:errs | echomsg '➜ '.sn | endfor
-        echomsg ' '
-    endif
-endfunction
-
-call LoadVimrcs()
+endif
 "}}}
 
 " Autocommands{{{
@@ -53,13 +60,12 @@ augroup ReloadVimScript
 augroup end
 "}}}
 
-" Functions{{{
-" GetLoadedScripts : Returns a list of all currently loaded scripts.{{{
-" Adapted from script 'getting the scriptnames in a Dictionary'
-" see :h scriptnames-dictionary
-function! GetLoadedScripts()
-    let scriptnames_output = '' | let scripts = []
-    redir => scriptnames_output | silent scriptnames | redir END
+function! GetLoadedScripts() " {{{
+    let [l:scriptnames_output, l:scripts] = ['', []]
+
+    redir => scriptnames_output
+        silent scriptnames
+    redir end
 
     for line in split(scriptnames_output, "\n")
         let nr = matchstr(line, '\d\+')
@@ -68,31 +74,31 @@ function! GetLoadedScripts()
     endfor
 
     return scripts
-endfunction
-"}}}
-" IsLoadedVimScript : Returns true if str is a loaded vim script{{{
-function! IsLoadedVimScript(str)
+endfunction " }}}
+
+function! IsLoadedVimScript(str) " {{{
     let l:str = resolve(expand(a:str))
     let l:scriptList = GetLoadedScripts()
-    if index(l:scriptList, l:str) != -1 | return 1 | endif
-    return 0
-endfunc
-"}}}
-" ReloadVimScript : Reloads the given script if necessary.{{{
-if !exists('*ReloadVimScript')
-    function! ReloadVimScript(path) abort
+    return index(l:scriptList, l:str) != -1
+endfunc " }}}
 
-        if IsLoadedVimScript(a:path)
-            try | execute 'source ' . a:path
-            catch
-                echom 'Failed to reload ' . a:path . ': ' v:exception
-                return
-            endtry
-
-            redraw | echom 'Reloaded ' . a:path | return
-        endif
-    endfunction
+if exists('*ReloadVimScript')
+    finish
 endif
-"}}}
-"}}}
-" vim: set ts=4 sw=4 tw=80 fdm=marker et :
+
+function! ReloadVimScript(path) " {{{
+    if IsLoadedVimScript(a:path)
+
+        try
+            execute 'source '.a:path
+        catch
+            echoerr 'Failed to reload '.a:path.': '.v:exception
+            return
+        endtry
+
+        redraw
+        echom 'Reloaded ' . a:path
+    endif
+endfunction " }}}
+
+" vim: set ts=4 sw=4 tw=79 fdm=marker et :

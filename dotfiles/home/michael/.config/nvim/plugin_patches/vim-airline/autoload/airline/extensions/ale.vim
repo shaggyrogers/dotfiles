@@ -1,8 +1,8 @@
 " MIT License. Copyright (c) 2013-2017 Bjorn Neergaard, w0rp
 " vim: et ts=2 sts=2 sw=2
 
-let s:error_symbol = get(g:, 'airline#extensions#ale#error_symbol', ' ')
-let s:warning_symbol = get(g:, 'airline#extensions#ale#warning_symbol', ' ')
+let s:error_symbol = get(g:, 'airline#extensions#ale#error_symbol', '❗')
+let s:warning_symbol = get(g:, 'airline#extensions#ale#warning_symbol', '❕')
 
 function! s:airline_ale_count(cnt, symbol)
   return a:cnt ? a:symbol. a:cnt : ''
@@ -50,8 +50,14 @@ function! airline#extensions#ale#get(type)
     let num = is_err ? counts[0] : counts[1]
   endif
 
-  return s:airline_ale_count(num, symbol)
-  " . <sid>airline_ale_get_line_number(num, a:type)
+  " Add line number
+  let l:result = s:airline_ale_count(num, symbol)
+
+  if get(g:, 'airline#extensions#ale#show_line_number', '1')
+    let l:result = l:result . <sid>airline_ale_get_line_number(num, a:type)
+  endif
+
+  return l:result
 endfunction
 
 function! airline#extensions#ale#get_warning()
@@ -63,8 +69,10 @@ function! airline#extensions#ale#get_error()
 endfunction
 
 function! airline#extensions#ale#init(ext)
-  call airline#parts#define_function('ale_error_count', 'airline#extensions#ale#get_error')
-  call airline#parts#define_function('ale_warning_count', 'airline#extensions#ale#get_warning')
+  call airline#parts#define_function('ale_error_count',
+        \ 'airline#extensions#ale#get_error')
+  call airline#parts#define_function('ale_warning_count',
+        \ 'airline#extensions#ale#get_warning')
   augroup airline_ale
     autocmd!
     autocmd CursorHold,BufWritePost * call <sid>ale_refresh()

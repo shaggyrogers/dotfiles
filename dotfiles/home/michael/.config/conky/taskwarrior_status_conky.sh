@@ -38,9 +38,9 @@ elif (( $activeMins > 49 )); then
 fi
 
 if (( $activeMins > 59 )); then
-    out="$icon $(( $activeMins / 60 )):$(( $activeMins % 60))"
+    out="$icon  $(( $activeMins / 60 )):$(( $activeMins % 60))"
 else
-    out="$icon ${activeMins}"
+    out="$icon  ${activeMins}"
 fi
 
 printf "%s %s" " $(taskwarrior-productivity active-name | tr -d '\n')" $out

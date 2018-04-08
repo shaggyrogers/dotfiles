@@ -1,20 +1,3 @@
-#!/usr/bin/env bash
-# -*- coding: UTF-8 -*-
-###############################################################################
-# i3LockScript.sh
-# ===============
-#
-# Version:               1.0.0
-# Author:                Michael De Pasquale
-# Creation Date:         2018-01-28
-# License:               None
-#
-# Description
-# -----------
-# Short script used to generate the lock screen
-#
-###############################################################################
-
 #!/bin/bash
 lockimg='/home/michael/Pictures/Wallpapers/orangemountain2560x1600.png'
 

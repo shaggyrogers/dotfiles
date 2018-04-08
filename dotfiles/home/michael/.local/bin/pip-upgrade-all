@@ -33,6 +33,5 @@ function pip_update {
 
 pip_update "pip"
 pip_update "pip3"
-pip_update "python3.6 -m pip"
 
 exit 0

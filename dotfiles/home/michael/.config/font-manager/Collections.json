@@ -1,0 +1,164 @@
+{
+    "entries" : {
+        "Display" : {
+            "name" : "Display",
+            "icon" : null,
+            "comment" : "Created : Fri 02 Mar 2018 02:04:20 AEDT",
+            "families" : [
+                "Waltograph UI",
+                "SF Collegiate",
+                "Avengeance",
+                "Parry Hotter"
+            ],
+            "index" : 3,
+            "active" : true,
+            "children" : {
+            }
+        },
+        "Math" : {
+            "name" : "Math",
+            "icon" : null,
+            "comment" : "Created : Fri 02 Mar 2018 02:43:19 AEDT",
+            "families" : [
+            ],
+            "index" : 8,
+            "active" : true,
+            "children" : {
+            }
+        },
+        "Sans" : {
+            "name" : "Sans",
+            "icon" : null,
+            "comment" : "Created : Fri 02 Mar 2018 02:04:05 AEDT",
+            "families" : [
+                "Poppins",
+                "Karla",
+                "Source Sans Variable",
+                "DejaVu Sans",
+                "IBM Plex Sans",
+                "Source Sans Pro",
+                "Assistant",
+                "Alegreya Sans",
+                "Ubuntu",
+                "Futura Std",
+                "Quicksand",
+                "PT Sans",
+                "Raleway",
+                "Lato",
+                "Roboto",
+                "Ubuntu Nerd Font",
+                "Pragmata Pro",
+                "GE Inspira",
+                "Rubik"
+            ],
+            "index" : 1,
+            "active" : true,
+            "children" : {
+            }
+        },
+        "Script" : {
+            "name" : "Script",
+            "icon" : null,
+            "comment" : "Created : Fri 02 Mar 2018 02:04:27 AEDT",
+            "families" : [
+                "Kaushan Script",
+                "Caveat",
+                "Grand Hotel",
+                "Dancing Script",
+                "Alex Brush"
+            ],
+            "index" : 4,
+            "active" : true,
+            "children" : {
+            }
+        },
+        "Serif" : {
+            "name" : "Serif",
+            "icon" : null,
+            "comment" : "Created : Fri 02 Mar 2018 02:04:08 AEDT",
+            "families" : [
+                "DejaVu Serif",
+                "BioRhyme",
+                "Habibi",
+                "Bitstream Charter",
+                "Tinos Nerd Font",
+                "Times New Roman",
+                "Source Serif Pro",
+                "IBM Plex Serif",
+                "Source Serif Variable",
+                "Abyssinica SIL",
+                "Garamond Premier Pro",
+                "Domine",
+                "Spectral"
+            ],
+            "index" : 2,
+            "active" : true,
+            "children" : {
+            }
+        },
+        "Programming" : {
+            "name" : "Programming",
+            "icon" : null,
+            "comment" : "Created : Fri 02 Mar 2018 02:07:13 AEDT",
+            "families" : [
+                "GoMono Nerd Font",
+                "FuraCode Nerd Font Mono",
+                "Hack",
+                "Operator Mono"
+            ],
+            "index" : 5,
+            "active" : true,
+            "children" : {
+            }
+        },
+        "Condensed" : {
+            "name" : "Condensed",
+            "icon" : null,
+            "comment" : "Created : Fri 02 Mar 2018 02:12:55 AEDT",
+            "families" : [
+                "Roboto Condensed",
+                "Futura Std",
+                "Oswald Regular",
+                "Archivo Narrow",
+                "UbuntuCondensed Nerd Font",
+                "Oswald"
+            ],
+            "index" : 6,
+            "active" : true,
+            "children" : {
+            }
+        },
+        "Emoji" : {
+            "name" : "Emoji",
+            "icon" : null,
+            "comment" : "Created : Fri 02 Mar 2018 02:43:05 AEDT",
+            "families" : [
+                "Twitter Color Emoji"
+            ],
+            "index" : 7,
+            "active" : true,
+            "children" : {
+            }
+        },
+        "Monospace" : {
+            "name" : "Monospace",
+            "icon" : null,
+            "comment" : "Created : Fri 02 Mar 2018 01:59:38 AEDT",
+            "families" : [
+                "DejaVu Sans Mono",
+                "Space Mono",
+                "UbuntuMono Nerd Font",
+                "Pragmata Pro Mono",
+                "Operator Mono",
+                "Courier New",
+                "Ubuntu Mono",
+                "Truetypewriter PolyglOTT",
+                "RobotoMono Nerd Font"
+            ],
+            "index" : 0,
+            "active" : true,
+            "children" : {
+            }
+        }
+    }
+}

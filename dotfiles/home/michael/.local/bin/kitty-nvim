@@ -2,18 +2,131 @@
 # -*- coding: UTF-8 -*-
 ###############################################################################
 # kitty-nvim
-# ===================
+# ==========
 #
-# Description:
+# Description:           Wrapper for neovim-remote that manages kitty instances
+#                        for each workspace and 
 # Author:                Michael De Pasquale <shaggyrogers>
 # Creation Date:         2018-03-07
-# Modification Date:     2018-03-11
+# Modification Date:     2018-03-14
 # License:               MIT
+# 
+# Notes
+# -----
+# Currrently only i3 is supported, but this can be used with any WM by use of 
+# the '-g' option.  Support for other WMs is not planned but may be added in 
+# future.
 #
 ###############################################################################
 
+# Help, usage, version info and other documentation {{{
+# Version information {{{
+# Given a version number MAJOR.MINOR.PATCH, increment the:
+#    1. MAJOR version when you make incompatible API changes,
+#    2. MINOR version when you add backwards-compatible functionality
+#    3. PATCH version when you make backwards-compatible bug fixes.
+# see https://semver.org/
+ __version="$(cat <<- 'EOF'
+   kitty-nvim 1.3.0
+EOF
+)" # }}}
 
-help () { # {{{
+# Usage information {{{
+ __usage="$(cat <<- 'EOF'
+    Usage: kitty-nvim [options] [<file(s)>]
+
+    A wrapper for neovim-remote that manages neovim instances for each
+    workspace. 
+    
+    By default, files will open in an existing instance for the current
+    workspace, or a new instance if none are found.
+
+    Usage Examples
+
+        Open file.txt in a new tab from within :terminal
+
+            kitty-nvim -o t 'file.txt'
+
+        Print the path to the file being edited
+            
+            kitty-nvim -c 'expand("%t")'
+     
+        
+        
+EOF
+)" # }}}
+
+# Help text {{{
+__help="$(cat <<- 'EOF'
+    Options
+        --version               Display version information.
+
+        -h, --help              Display this message.
+
+        -a, --command-after <neovim-command>
+                                Runs the given command in the target after
+                                running commands for the other options.
+
+        -b, --command-before <neovim-command>
+                                Runs the given command in the target before
+                                running commands for the other options.
+
+        -c --command-evaluate <neovim-command>
+                                Evaluates the given expression in an existing
+                                instance and prints the result. Cannot be
+                                combined with -k or -w. Note that this implies
+                                -e 2.
+
+        -e, --use-existing <arg>
+                                If arg is 0, a new instance will be created
+                                even if an existing instance is found.
+                                If arg is 1 (the default value) a new instance
+                                will only be created if an existing instance is
+                                not found.
+                                If arg is 2, a new instance will not be created
+                                even if no existing instances are found.
+
+        -g, --global            Manage global instances. These are treated
+                                separately to per-workspace instances.
+
+        -i, --instance-index <index>
+                                Attempt to connect to an existing instance with
+                                the given index. If none is found, a new 
+                                instance will be created using the given index,
+                                unless -e 0 prevents this.
+
+        -k --send-keys <neovim-keys>
+                                Sends the given key presses to an existing
+                                instance. Cannot be combined with -w or -c
+                                and prevents files from being opened.  Note
+                                that this implies -e 2.
+
+        -o, --open-in <arg>
+                                One of 'h', 'v' or 't', for horizontal
+                                window(s), vertical window(s) and new tab(s)
+                                respectively.
+
+        -w, --wait              Block until the nvim instance exits. Will not
+                                block when using an existing instance. Note
+                                that this implies -e 0.
+
+    Notes
+
+    The only WM currently supported is i3.
+EOF
+)" # }}}
+
+# version() : Diplay version info and exit {{{
+version () {
+    echo "" 1>&2
+    echo "  ${__version:-No version information available}" 1>&2
+    echo "" 1>&2
+
+    exit 0
+} # }}}
+
+# help() : Diplay help info and exit {{{
+help () {
     echo "" 1>&2
     echo "  ${__usage:-No usage available}" 1>&2
     echo "" 1>&2
@@ -21,44 +134,14 @@ help () { # {{{
     echo "" 1>&2
 
     exit 1
-}
-
- __usage="$(cat <<- 'EOF'
-   Usage: kitty-nvim [options] <file(s)>
-EOF
-)"
-
-__help="$(cat <<- 'EOF'
-    Options
-        --help                  Display this message.
-
-        -w, --wait              DOES NOT WORK
-                                Block until the nvim instance exits. Will not
-                                block when using an existing instance.
-
-
-        -n, --new-instance      [<arg>]
-                                If arg is '0', a new instance will not be
-                                created under any circumstances. If arg is any
-                                nonzero value or is not provided, a new
-                                instance will always be created.
-
-        -i, --instance-index    <index>
-                                Attempt to connect to an existing instance with
-                                the given index. Will create a new instance if
-                                one is not found unless -n 0 prevents this.
-
-        If both -i and -n are given, a new instance will be created with an
-        index greater than or equal to the supplied index.
-
-    The only WM currently supported is i3.
-EOF
-)" # }}}
+} # }}}
+# }}}
 
 parse_arguments() { # {{{
     # Source: /usr/share/doc/util-linux/examples/getopt-parse.bash
-    TEMP=$(getopt -o 'wn::i:' -l 'help,wait,new-instance::,instance-index:' \
-        -n 'nvim-kitty' -- "$@")
+    TEMP=$(getopt -o 'ha:b:c:e:gi:k:o:w' -l \
+        'version,help,command-before:,command-after:,command-evaluate:,\
+use-existing:,global,instance-index:,send-keys:open-in:,wait' -n 'nvim-kitty' -- "$@")
 
     if [ $? -ne 0 ]; then
         help
@@ -68,39 +151,120 @@ parse_arguments() { # {{{
     eval set -- "$TEMP"
     unset TEMP
 
-    # Set defaults
-    WAIT='0'
-    NEW_INSTANCE=''
-    INSTANCE_INDEX=''
+    # Set defaults {{{
+    COMMAND_AFTER=
+    COMMAND_BEFORE=
+    COMMAND_EVALUATE=
+    USE_EXISTING='1'
+    GLOBAL=
+    INSTANCE_INDEX=
+    SEND_KEYS=
+    OPEN_IN=
+    WAIT=
+    # }}}
 
-    # Parse options
+    # Parse options {{{
     while true; do
         case "$1" in
-            '--help')
+            '-h'|'--help')
                 help
-                shift
+            ;;
+
+            '--version')
+                version
+            ;;
+            '-a'|'--command-after')
+                if [ "$(echo -n "$2" | wc -m)" = '0' ]; then
+                    echo 'Error: Commands cannot be empty.' 1>&2
+                    exit 1
+                fi
+
+                COMMAND_AFTER="$2"
+                shift 2
                 continue
             ;;
-            '-w'|'--wait')
-                WAIT='1'
-                shift
+            '-b'|'--command-before')
+                if [ "$(echo -n "$2" | wc -m)" = '0' ]; then
+                    echo 'Error: Commands cannot be empty.' 1>&2
+                    exit 1
+                fi
+
+                COMMAND_BEFORE="$2"
+                shift 2
+                continue
+            ;;
+            '-c'|'--command-evaluate')
+                if [ "$(echo -n "$2" | wc -m)" = '0' ]; then
+                    echo 'Error: Commands cannot be empty.' 1>&2
+                    exit 1
+                fi
+
+                COMMAND_EVALUATE="$2"
+                USE_EXISTING=2
+                shift 2
+                continue
+            ;;
+            '-e'|'--use-existing')
+                if [ "$(echo -n "$2" | wc -m)" = '0' ]; then
+                    echo 'Error: --use-existing requires a value.' 1>&2
+                    exit 1
+                elif [ -n "$(echo "$2" | grep -oP '[^0-9]')" ]; then
+                    echo 'Error: Unrecognised value for --use-existing.' 1>&2
+                    exit 1
+                fi
+
+                USE_EXISTING="$2"
+                shift 2
+                continue
+            ;;
+            '-g'|'--global')
+                GLOBAL=1
+                shift 1
                 continue
             ;;
             '-i'|'--instance-index')
+                if [ "$(echo -n "$2" | wc -m)" = '0' ]; then
+                    echo 'Error: Index cannot be blank.' 1>&2
+                    exit 1
+                elif [ -n "$(echo "$2" | grep -oP '[^0-9]')" ]; then
+                    echo 'Error: index must be numeric.' 1>&2
+                    exit 1
+                fi
+
                 INSTANCE_INDEX="$2"
                 shift 2
                 continue
             ;;
-            '-n'|'--new-instance')
-                case "$2" in
-                    '')
-                        NEW_INSTANCE="1"
-                    ;;
-                    *)
-                        NEW_INSTANCE="$2"
-                    ;;
-                esac
+            '-k'|'--send-keys')
+                if [ "$(echo -n "$2" | wc -m)" = '0' ]; then
+                    echo 'Error: Keys cannot be empty.' 1>&2
+                    exit 1
+                fi
+
+                SEND_KEYS="$2"
+                USE_EXISTING=2
                 shift 2
+                continue
+            ;;
+            '-o'|'--open-in')
+                # Ensure argument is a single character in 'oOt'
+                if ! [ "$(echo -n "$2" | wc -m)" = '1' ]; then
+                    echo 'Error: --open-in requires a single character.' 1>&2
+                    exit 1
+                elif [ -n "$(echo -n "$2" | grep -oP '[^hvt]')" ]; then
+                    echo 'Error: --open-in argument unrecognised.' 1>&2
+                    echo 'Accepted values are h, v or t.' 1>&2
+                    exit 1
+                fi
+
+                OPEN_IN="$2"
+                shift 2
+                continue
+            ;;
+            '-w'|'--wait')
+                WAIT=1
+                USE_EXISTING=0
+                shift
                 continue
             ;;
             '--')
@@ -108,13 +272,39 @@ parse_arguments() { # {{{
                 break
             ;;
             *)
-                echo 'Error: Could not parse_arguments.' 1>&2
+                echo 'Error: Could not parse arguments.' 1>&2
                 exit 1
             ;;
         esac
-    done
+    done # }}}
 
-    ARGS_REMAINING="$@"
+    # Perform additional validation {{{
+    if [ -n "$WAIT" ] &&  ! [ "$USE_EXISTING" = '0' ]; then
+        echo "Error: Arguments conflict, '--w' implies '-e 0'." 1>&2
+        exit 1
+    fi
+    if [ -n "$COMMAND_AFTER" ] || [ -n "$COMMAND_BEFORE" ]; then
+        if [ -n "$COMMAND_EVALUATE" ]; then
+            echo "Error: '-c' cannot be combined with '-a' or '-b." 1>&2
+            exit 1
+        fi
+        if [ -n "$SEND_KEYS" ]; then
+            echo "Error: '-k' cannot be combined with '-a' or '-b." 1>&2
+            exit 1
+        fi
+    fi
+    if [ -n "$COMMAND_EVALUATE" ] && [ -n "$SEND_KEYS" ]; then
+        echo "Error: '-c' cannot be combined with '-k'." 1>&2
+        exit 1
+    fi
+    if ( [ -n "$COMMAND_EVALUATE" ] || [ -n "$SEND_KEYS" ] ) && \
+            ! [ "$USE_EXISTING" = '2' ]; then
+        echo "Error: Commands '-c' and '-k' imply -e 2." 1>&2
+        exit 1
+    fi
+    # }}}
+
+    ARGS_REMAINING="$#"
 } # }}}
 
 i3_focused_workspace_info() { # {{{
@@ -145,59 +335,167 @@ PYTHON
     WS_H="$(echo "$WS_RECT" | cut -d' ' -f4)"
 } # }}}
 
-# Parse arguments, get workspace information {{{
-if ! [ "$XDG_CURRENT_DESKTOP" = "i3" ]; then
+# Check WM, parse arguments, get remaining arguments, get workspace info {{{
+parse_arguments "$@"
+
+if [ -z "$GLOBAL" ] && ! [ "$XDG_CURRENT_DESKTOP" = "i3" ]; then
     echo "Error: WM '$XDG_CURRENT_DESKTOP' not supported." 1>&2
+    echo "Set '$XDG_CURRENT_DESKTOP' not supported." 1>&2
     exit 1
 fi
 
-parse_arguments "$@"
-i3_focused_workspace_info
+shift $(($# - $ARGS_REMAINING))
+
+[ -z "$GLOBAL" ] && i3_focused_workspace_info
 # }}}
 
-# Build class string {{{
-CLASS_NAME="kitty-nvim-${WS_NUMBER:-0}-${INSTANCE_INDEX:-0}"
-X_WIN="$(xdotool search --class "$CLASS_NAME")"
-INSTANCE_INDEX="${INSTANCE_INDEX:-0}"
+# Build class string and listen address for workspace and index {{{
+#X_WIN="$(xdotool search --class "$CLASS_NAME")"
+#INSTANCE_INDEX="${INSTANCE_INDEX:-0}"
 
-if [ "$NEW_INSTANCE" = "1" ]; then
-    while [ -n "$X_WIN" ]; do
-        INSTANCE_INDEX="$((INSTANCE_INDEX+1))"
+if [ -n "$INSTANCE_INDEX" ]; then
+    # Use specified index
+    CLASS_NAME="kitty-nvim-${WS_NUMBER:-0}-${INSTANCE_INDEX:-0}"
+    X_WIN="$(xdotool search --class "$CLASS_NAME")"
+
+    # If it doesn't exist and we can't create a new instance, abort
+    if [ -z "$X_WIN" ] && [ "$USE_EXISTING" = '2' ]; then
+        echo 'Error: Could not find an instance with the given index.' 1>&2
+        exit 1
+    fi
+
+    # If it does exist and we must create a new instance, abort
+    if [ -n "$X_WIN" ] && [ "$USE_EXISTING" = '0' ]; then
+        echo 'Error: Instance exists with the given index.' 1>&2
+        exit 1
+    fi
+else
+
+    if [ "$USE_EXISTING" = '0' ]; then
+        # Create a new instance
+        INSTANCE_INDEX=0
         CLASS_NAME="kitty-nvim-${WS_NUMBER:-0}-$INSTANCE_INDEX"
         X_WIN="$(xdotool search --class "$CLASS_NAME")"
-    done
+
+        # Get the lowest unique index
+        while [ -n "$X_WIN" ]; do
+            INSTANCE_INDEX="$((INSTANCE_INDEX+1))"
+            CLASS_NAME="kitty-nvim-${WS_NUMBER:-0}-$INSTANCE_INDEX"
+            X_WIN="$(xdotool search --class "$CLASS_NAME")"
+        done
+
+    elif [ "$USE_EXISTING" = '1' ] || [ "$USE_EXISTING" = '2' ]; then
+        # Find the existing instance with the lowest index
+        for i in `find /tmp/ -type s -name "kitty-nvim-${WS_NUMBER:-0}*" \
+                2>/dev/null | grep -Po 'kitty-nvim-[0-9]+-[0-9]+' | sort`; do
+            INSTANCE_INDEX="$(echo "$i" | \
+                    grep -oP '(?<=kitty-nvim-)[0-9]+-[0-9]+' | tr '-' ' ' | \
+                    cut -d' ' -f 2)"
+            CLASS_NAME="$i"
+            X_WIN="$(xdotool search --class "$CLASS_NAME")"
+
+            if [ -n "$X_WIN" ]; then
+                break
+            fi
+        done
+
+        # Not found
+        if [ -z "$X_WIN" ]; then
+            CLASS_NAME="kitty-nvim-${WS_NUMBER:-0}-0"
+            INSTANCE_INDEX='0'
+
+            if [ "$USE_EXISTING" = '2' ]; then
+                # Abort if we must use an existing instance
+                echo 'Error: Could not find any existing instances.' 1>&2
+                exit 1
+            fi
+        fi
+    fi
 fi
+
+# Set environment variables for socket, index
+export NVIM_LISTEN_ADDRESS="/tmp/$CLASS_NAME.socket"
+export NVIM_INSTANCE_INDEX="${INSTANCE_INDEX:-error}"
+
 # }}}
 
-# Create instance or open in existing instance {{{
-export NVIM_LISTEN_ADDRESS="/tmp/$CLASS_NAME.socket"
-export NVIM_INSTANCE_INDEX="${INSTANCE_INDEX:-0}"
+# Process options {{{
+KITTY_OPTS="--detach"
+NVR_OPTS="-s --remote"
 
-# TODO: Fix this; wait does not work
-OPTIONS_VAR="--remote-tab"
-DETATCH='--detach'
-if [ "$WAIT" = '1' ]; then OPTIONS_VAR="$OPTIONS_VAR-wait"; DETACH=''; fi
-if [ "$NEW_INSTANCE" = "0"  ]; then OPTIONS_VAR="$OPTIONS_VAR --nostart"; fi
+# Handle wait, send keys, evaluate command
+if [ -n "$COMMAND_EVALUATE" ]; then
+    COMMAND_EVALUATE="$(printf '%s' "$COMMAND_EVALUATE" | sed 's/\\/\\\\/g; s/"/\\"/g')"
+    NVR_OPTS="$NVR_OPTS-expr \"$COMMAND_EVALUATE\""
+    KITTY_OPTS=''
+elif [ -n "$SEND_KEYS" ]; then
+    SEND_KEYS="$(printf '%s' "$SEND_KEYS" | sed 's/\\/\\\\/g; s/"/\\"/g')"
+    NVR_OPTS="$NVR_OPTS-send \"$SEND_KEYS\""
+    KITTY_OPTS=''
+elif [ "$WAIT" = '1' ]; then
+    NVR_OPTS="$NVR_OPTS-wait"
+    KITTY_OPTS=''
+fi
 
-# Leave terminal input mode - seems to prevent new tabs
+# Handle -p / --previous
+if [ "$PREVIOUS" = '1' ]; then
+    NVR_OPTS="-l $NVR_OPTS"
+fi
+
+# Handle command options
+if [ -n "$COMMAND_BEFORE" ]; then
+    COMMAND_BEFORE="$(printf '%s' "$COMMAND_BEFORE" | sed 's/\\/\\\\/g; s/"/\\"/g')"
+    NVR_OPTS="-c \"$COMMAND_BEFORE\" $NVR_OPTS"
+fi
+
+if [ -n "$COMMAND_AFTER" ]; then
+    COMMAND_AFTER="$(printf '%s' "$COMMAND_AFTER" | sed 's/\\/\\\\/g; s/"/\\"/g')"
+    NVR_OPTS="-cc \"$COMMAND_AFTER\" $NVR_OPTS"
+fi
+
+# Handle -o / --open-in
+case "$OPEN_IN" in
+    'h')
+        NVR_OPTS="$NVR_OPTS -o"
+        break
+    ;;
+    'v')
+        NVR_OPTS="$NVR_OPTS -O"
+        break
+    ;;
+    't')
+        NVR_OPTS="$NVR_OPTS -p"
+        break
+    ;;
+esac
+
+# Add remaining arguments (assumed to be files)
+NVR_OPTS="$NVR_OPTS"' "$@"'
+# }}}
+
+# Use existing instance / run command in existing instance {{{
 if [ -n "$X_WIN" ]; then
+    # Leave terminal input mode - seems to prevent new tabs
     xdotool windowactivate --sync "$X_WIN"
     xdotool key --clearmodifiers --window "$X_WIN" ctrl+backslash ctrl+n
-fi
 
-$(exec python3 $HOME/.local/kitty/ \
---config=$HOME/.config/kitty/kitty.nvim.conf \
-$DETATCH \
---class="$CLASS_NAME" \
-nvr \
-$OPTIONS_VAR -s ${ARGS_REMAINING:+"$ARGS_REMAINING"})
-# }}}
+    if eval nvr --nostart "$NVR_OPTS"; then
+        # Focus existing instance if we opened files
+        if ! [ "$ARGS_REMAINING" = '0' ] && [ -n "$X_WIN" ]; then
+            xdotool windowactivate --sync "$X_WIN"
+        fi
 
-# Focus existing instance {{{
-if [ -n "$X_WIN" ]; then
-    echo 'found instance, focusing...'
-    xdotool windowactivate --sync "$X_WIN"
-fi
+        exit 0
+    fi
+
+    echo 'Warning: Could not connect to existing instance!' 1>&2
+fi # }}}
+
+# Create a new instance in kitty {{{
+export EDITOR="kitty-nvim -i $INSTANCE_INDEX -o t"
+eval python3 "$HOME/.local/kitty/" \
+--config="$HOME/.config/kitty/kitty.nvim.conf" \
+--class="$CLASS_NAME" "$KITTY_OPTS" nvr "$NVR_OPTS"
 # }}}
 
 exit 0

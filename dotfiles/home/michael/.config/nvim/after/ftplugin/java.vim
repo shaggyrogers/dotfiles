@@ -12,23 +12,23 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Highlight lines exceeding textwidth{{{
-call ftcommon#HighlightTextWidth()
+call rccommon#HighlightTextWidth()
 " }}}
 " Update Tagbar{{{
-call ftcommon#UpdateTagbarOptions()
+call rccommon#UpdateTagbarOptions()
 "}}}
 " Load a dictionary for this filetype, if one exists{{{
-call ftcommon#LoadFiletypeDictionary()
+call rccommon#LoadFiletypeDictionary()
 "}}}
 " Delete trailing whitespace and replace tab characters{{{
-call ftcommon#DeleteTrailingWS()
+call rccommon#DeleteTrailingWS()
 retab
 "}}}
 " Autocommands{{{
 augroup JavaFiletypeConfig
     autocmd!
-    autocmd BufWrite *.java call ftcommon#DeleteTrailingWS()
-    autocmd VimResized *.java call ftcommon#UpdateTagbarOptions()
+    autocmd BufWrite *.java call rccommon#DeleteTrailingWS()
+    autocmd VimResized *.java call rccommon#UpdateTagbarOptions()
 augroup end
 "}}}
 " vim: set ts=4 sw=4 tw=79 fdm=marker et :

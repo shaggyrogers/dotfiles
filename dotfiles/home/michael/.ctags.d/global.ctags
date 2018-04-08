@@ -1,0 +1,50 @@
+--_echo='Using user option file global.ctags.'
+
+## Default Options ##
+
+# Global
+--extras=+f
+--fields=+iS
+--recurse=yes
+--sort=no
+
+# Python
+--python-kinds=cfm
+
+
+## Exclude Patterns ##
+
+# Archive files
+--exclude=*.7z
+--exclude=*.rar
+--exclude=*.tar
+--exclude=*.tar.bz
+--exclude=*.tar.gz
+--exclude=*.zip
+
+# Git
+--exclude=.DS_Store
+--exclude=.git
+--exclude=.gitignore
+--exclude=.hg
+--exclude=.svn
+
+# Python
+--exclude=*.pyc
+--exclude=*.pyo
+--exclude=__pycache__
+
+# Java
+--exclude=*.class
+--exclude=*.jar
+
+# Markdown 
+--exclude=*.md
+--exclude=*.mkd
+
+# Misc
+--exclude=*.log
+--exclude=*.o
+--exclude=*.so
+--exclude=*.tmp
+--exclude=*.txt

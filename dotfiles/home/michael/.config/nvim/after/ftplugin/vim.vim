@@ -20,30 +20,25 @@ setlocal foldmethod=marker
 setlocal foldcolumn=2
 "}}}
 " Highlight lines exceeding textwidth{{{
-call ftcommon#HighlightTextWidth()
+call rccommon#HighlightTextWidth()
 " }}}
 " Update Tagbar{{{
-call ftcommon#UpdateTagbarOptions()
+call rccommon#UpdateTagbarOptions()
 "}}}
 " Load dictionary for filetype, if one exists{{{
-call ftcommon#LoadFiletypeDictionary()
+call rccommon#LoadFiletypeDictionary()
 "}}}
 " Delete trailing whitespace and replace tab characters{{{
-call ftcommon#DeleteTrailingWS()
+call rccommon#DeleteTrailingWS()
 retab
-"}}}
-" Abbreviations{{{
-iabbrev au autocmd
-iabbrev aug augroup
-iabbrev func function
 "}}}
 " Autocommands{{{
 augroup VimscriptFiletypeConfig
     autocmd!
     autocmd BufEnter *.vim
                 \ hi! link Conceal Operator
-    autocmd BufWrite *.vim call ftcommon#DeleteTrailingWS()
-    autocmd VimResized *.vim call ftcommon#UpdateTagbarOptions()
+    autocmd BufWrite *.vim call rccommon#DeleteTrailingWS()
+    autocmd VimResized *.vim call rccommon#UpdateTagbarOptions()
 augroup end
 "}}}
 " vim: set ts=4 sw=4 tw=79 fdm=marker et :

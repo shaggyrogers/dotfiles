@@ -11,20 +11,18 @@
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Highlight groups for syntax tweaks{{{
-hi! link Conceal Identifier
-hi! link mkdBold Question
-"}}}
 " Buffer-local settings{{{
 setlocal complete+=kspell
 setlocal dictionary+=/usr/share/dict/words
 setlocal spell
+setlocal concealcursor=c
+call rccommon#LoadFiletypeDictionary()
 "}}}
 " Highlight lines exceeding textwidth{{{
-call ftcommon#HighlightTextWidth()
+call rccommon#HighlightTextWidth()
 " }}}
 " Delete trailing whitespace and replace tab characters{{{
-call ftcommon#DeleteTrailingWS()
+call rccommon#DeleteTrailingWS()
 retab
 "}}}
 " Autocommands{{{
@@ -32,10 +30,14 @@ augroup MarkdownFiletypeConfig
     autocmd!
     autocmd BufEnter *.md
                 \ hi! link Conceal Identifier |
-                \ if exists(':TableModeEnable') | TableModeEnable | endif
+                \ if exists(':TableModeEnable') |
+                    \ silent exec 'TableModeEnable'
+                \ | endif
     autocmd BufLeave *.md
-                \ if exists(':TableModeDisable') | TableModeDisable | endif
-    autocmd BufWrite *.md call filetype#DeleteTrailingWS()
+                \ if exists(':TableModeDisable') |
+                    \ silent exec 'TableModeDisable'
+                \ | endif
+    autocmd BufWrite *.md call rccommon#DeleteTrailingWS()
 augroup end
 " }}}
 " vim: set ts=4 sw=4 tw=79 fdm=marker et :

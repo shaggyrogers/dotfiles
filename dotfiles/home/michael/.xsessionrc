@@ -6,16 +6,17 @@
 #
 # Version:               1.0.0
 # Author:                Michael De Pasquale
-# Creation Date:         2017-12-18
+# Creation Date:         2017-??-??
 # License:               None
 #
 # Description
 # -----------
-# Modifies X11 settings according to preference
+# Modifies X11 settings according to my preferences.
 #
 ###############################################################################
 
-# Define keycodes
+
+# Define keycodes {{{
 ESCAPE=9
 TAB=23
 CONTROL_L=37
@@ -42,23 +43,27 @@ F9=75
 F10=76
 F11=95
 F12=96
+ALT_R=108
 MENU=135 # between Fn and Ctrl
 CANCEL=136 # Fn+F9 [3]. Should be XF86Launch3?
 FIND=144 # Fn+F10 [4]. Should be XF86Launch4?
 XF86BACK=166 # Fn + F7 [1]. Should be XF86Launch1?
 XF86FORWARD=167 # Fn + F8 [2]. Should be XF86Launch2?
 XF86SCROLLUP=185 # Fn + F11 [5]. Should be XF86Launch5?
+# }}}
 
-# Set Caps_Lock to escape, Shift+Caps_Lock to Caps_Lock
-# Modifier | Keysyms
-xmodmap -e 'remove Lock = Caps_Lock'
+# Configure environment variables {{{
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+export EDITOR='kitty-nvim'
+export FILEBROWSER='ranger'
+export GOPATH="$HOME/.local/go"
+export TASKDATA='/var/taskd'
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+# }}}
 
-# Keycode | Key Shift+Key ModeSw+Key ModeSw+Shift+Key AltGr+Key AltGr+Shift+Key
-xmodmap -e "keycode $CAPS_LOCK = Escape Caps_Lock"
-
-# Disable mouse acceleration
-xset m 0 0
-
+# Configure keyboard {{{
 # Set a autorepeat rate and delay
 xset r rate 235 35
 
@@ -76,6 +81,24 @@ xset -r $F10
 xset -r $F11
 xset -r $F12
 
-# Set screen blanking time to 3 hours
+# Change modifiers
+# Modifier = Keysyms
+xmodmap -e 'remove Lock = Caps_Lock'
+
+# Change keysyms
+# Keysym = Key Shift+Key ModeSw+Key ModeSw+Shift+Key AltGr+Key AltGr+Shift+Key
+xmodmap -e "keycode $CAPS_LOCK = Escape Caps_Lock"
+#xmodmap -e "keycode $ALT_R = Mode_switch ISO_Level3_Shift"
+# }}}
+
+# Disable mouse acceleration {{{
+xset m 0 0
+# }}}
+
+# Set screen blanking time to 3 hours {{{
 xset s on
 xset s 10800 10800
+# }}}
+
+
+# vim: set ts=4 sw=4 tw=79 fdm=marker et :

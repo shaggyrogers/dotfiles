@@ -1,21 +1,16 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 """
-%FILEHEADING%
-%FILEHEADINGULINE%
+  %FILEHEADING%
+  %FILEHEADINGULINE%
 
+  Description:           Defines the entry point for this application.
   Version:               1.0.0
-  Author:                %USER%
+  Author:                %USER% <%GITHUBUSER%>
   Creation Date:         %DATE%
+  Modification Date:     %DATE%
   License:               %LICENSE%
 
-  Description
-  -----------
-  A short summary of the contents of this file and their purpose.
-
-  Usage
-  -----
-  Usage instructions for common use cases.
 """
 
 

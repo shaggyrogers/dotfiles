@@ -1,6 +1,11 @@
+#
+# IPv4
+#
+
 # loopback
 127.0.0.1 localhost
 127.0.1.1 michael michael.local michael-desktop.local me.local
+127.0.1.1 phabricator.local
 
 # router
 192.168.1.1 router.local router
@@ -8,7 +13,10 @@
 # raspberry pi
 192.168.1.70 pi pi.local
 
-### Default below ###
+#
+# IPv6
+#
+
 # The following lines are desirable for IPv6 capable hosts
 ::1     ip6-localhost ip6-loopback
 fe00::0 ip6-localnet

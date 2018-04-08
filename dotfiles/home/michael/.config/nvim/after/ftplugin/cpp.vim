@@ -1,5 +1,5 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" java.vim
+" cpp.vim
 " ========
 "
 " Author:                Michael De Pasquale
@@ -12,25 +12,25 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Highlight lines exceeding textwidth{{{
-call ftcommon#HighlightTextWidth()
+call rccommon#HighlightTextWidth()
 " }}}
 " Update Tagbar{{{
-call ftcommon#UpdateTagbarOptions()
+call rccommon#UpdateTagbarOptions()
 "}}}
 " Load a dictionary for this filetype, if one exists{{{
-call ftcommon#LoadFiletypeDictionary()
+call rccommon#LoadFiletypeDictionary()
 "}}}
 " Delete trailing whitespace and replace tab characters{{{
-call ftcommon#DeleteTrailingWS()
+call rccommon#DeleteTrailingWS()
 retab
 "}}}
 " Autocommands{{{
 augroup CPPFiletypeConfig
     autocmd!
     autocmd BufWrite *.c++,*.cpp,*.cxx,*.h++,*.hpp,*.hxx
-                \ call ftcommon#DeleteTrailingWS()
+                \ call rccommon#DeleteTrailingWS()
     autocmd VimResized *.c++,*.cpp,*.cxx,*.h++,*.hpp,*.hxx
-                \ call ftcommon#UpdateTagbarOptions()
+                \ call rccommon#UpdateTagbarOptions()
 augroup end
 "}}}
 " vim: set ts=4 sw=4 tw=79 fdm=marker et :

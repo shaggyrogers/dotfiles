@@ -22,8 +22,7 @@ if [ -z $1 ]; then
 fi
 
 # Install in all python versions
-python -m pip install --user $1
-python3 -m pip install --user $1
-python3.6 -m pip install --user $1
+pip install --user $1
+pip3 install --user $1
 
 exit 0

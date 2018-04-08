@@ -1,0 +1,218 @@
+priority -50
+
+global !p
+import vim
+
+# Tests for the existence of a variable declared by Vim's filetype detection
+# suggesting the type of shell script of the current file
+def testShell(scope, shell):
+	return vim.eval("exists('" + scope + ":is_" + shell + "')")
+
+# Loops over the possible variables, checking for global variables
+# first since they indicate an override by the user.
+def getShell():
+	for scope in ["g", "b"]:
+		for shell in ["bash", "posix", "sh", "kornshell"]:
+			if testShell(scope, shell) == "1":
+				if shell == "kornshell":
+					return "ksh"
+				if shell == "posix":
+					return "sh"
+				return shell
+	return "sh"
+endglobal
+
+###########################################################################
+#                            TextMate Snippets                            #
+###########################################################################
+snippet #!
+`!p snip.rv = '#!/bin/' + getShell() + "\n\n" `
+endsnippet
+
+snippet !env "#!/usr/bin/env (!env)"
+`!p snip.rv = '#!/usr/bin/env ' + getShell() + "\n\n" `
+endsnippet
+
+snippet safeopt "safe bash options"
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+`!p snip.rv ='\n\n' `
+endsnippet
+
+snippet temp "temp file"
+${1:TMPFILE}="$(mktemp -t ${3:--suffix=${4:.SUFFIX}} ${2:`!p
+snip.rv = re.sub(r'[^a-zA-Z]', '_', snip.fn) or "untitled"
+`}.XXXXXX)"
+${5:${6/(.+)/trap "/}${6:rm -f '$${1/.*\s//}'}${6/(.+)/" 0               # EXIT\n/}${7/(.+)/trap "/}${7:rm -f '$${1/.*\s//}'; exit 1}${7/(.+)/" 2       # INT\n/}${8/(.+)/trap "/}${8:rm -f '$${1/.*\s//}'; exit 1}${8/(.+)/" 1 15    # HUP TERM\n/}}
+
+endsnippet
+
+snippet case "case block"
+case ${1:word} in
+	${2:pattern} )
+		$0;;
+esac
+endsnippet
+
+snippet elif "elseif block"
+elif ${2:[[ ${1:condition} ]]}; then
+	${0:#statements}
+endsnippet
+
+snippet for "for loop"
+for (( i = 0; i < ${1:10}; i++ )); do
+	${0:#statements}
+done
+endsnippet
+
+snippet forin "foreach loop"
+for ${1:i}${2/.+/ in /}${2:words}; do
+	${0:#statements}
+done
+endsnippet
+
+snippet here "here document"
+<<-${2:'${1:TOKEN}'}
+	$0
+${1/['"`](.+)['"`]/$1/}
+endsnippet
+
+snippet if "if block"
+if ${2:[[ ${1:condition} ]]}; then
+	${0:#statements}
+fi
+endsnippet
+
+snippet ifp "POSIX if block"
+if ${2:[ ${1:condition} ]}; then
+	${0:#statements}
+fi
+endsnippet
+
+snippet until "until loop"
+until ${2:[[ ${1:condition} ]]}; do
+	${0:#statements}
+done
+endsnippet
+
+snippet while "while loop"
+while ${2:[[ ${1:condition} ]]}; do
+	${0:#statements}
+done
+endsnippet
+
+snippet dowhile "do-while loop"
+while true; do
+	${0:#statements}
+
+	if ${2:[[ ${1:condition} ]]}; then 
+		break
+	fi
+done
+endsnippet
+
+snippet func "function"
+function ${3:name}() {
+	${0:#statements}
+}
+endsnippet
+
+snippet arg "function argument"
+local ${0:arg} = "${${2}:-${1:default}}"
+endsnippet
+
+snippet help "usage/help text"
+function help () { # {{{
+	echo "" 1>&2
+	echo " ${*}" 1>&2
+	echo "" 1>&2
+	echo "  ${__usage:-No usage available}" 1>&2
+	echo "" 1>&2
+
+	if [[ "${__help:-}" ]]; then
+		echo " ${__help}" 1>&2
+		echo "" 1>&2
+	fi
+
+	exit 1
+} 
+
+__help="$(cat <<-'EOF'
+	${1:help text}
+EOF
+)"
+
+__usage="$(cat <<-'EOF'
+	${0:usage text}
+EOF
+)"
+# }}}
+endsnippet
+
+snippet logging "logging functions"
+LOG_LEVEL=5
+
+function alert ()     { [[ "${LOG_LEVEL:-0}" -ge 1 ]] && __log alert "${@}"; true; }
+function critical ()  { [[ "${LOG_LEVEL:-0}" -ge 2 ]] && __log critical "${@}"; true; }
+function error ()     { [[ "${LOG_LEVEL:-0}" -ge 3 ]] && __log error "${@}"; true; }
+function warning ()   { [[ "${LOG_LEVEL:-0}" -ge 4 ]] && __log warning "${@}"; true; }
+function notice ()    { [[ "${LOG_LEVEL:-0}" -ge 5 ]] && __log notice "${@}"; true; }
+function info ()      { [[ "${LOG_LEVEL:-0}" -ge 6 ]] && __log info "${@}"; true; }
+function debug ()     { [[ "${LOG_LEVEL:-0}" -ge 7 ]] && __log debug "${@}"; true; }
+
+function __b3bp_log () {
+	local log_level="${1}"
+	shift
+	
+	local color_debug="\x1b[35m"
+	local color_info="\x1b[32m"
+	local color_notice="\x1b[34m"
+	local color_warning="\x1b[33m"
+	local color_error="\x1b[31m"
+	local color_critical="\x1b[1;31m"
+	local color_alert="\x1b[1;33;41m"
+	local color_emergency="\x1b[1;4;5;33;41m"
+	local colorvar="color_${log_level}"
+	local color="${!colorvar:-${color_error}}"
+	local color_reset="\x1b[0m"
+	
+	# Don't use colors on pipes or non-recognized terminals
+	if [[ "${NO_COLOR:-}" = "true" ]] || ( [[ "${TERM:-}" != "xterm"* ]] && \
+			[[ "${TERM:-}" != "screen"* ]] ) || [[ ! -t 2 ]]; then
+		if [[ "${NO_COLOR:-}" != "false" ]]; then
+			color=""; color_reset=""
+		fi
+	fi
+	
+	# Print all remaining arguments
+	local log_line=""
+	
+	while IFS=$'\n' read -r log_line; do
+		echo -e "$(date -u +"%Y-%m-%d %H:%M:%S UTC") ${color}$(printf "[%9s]" \
+			"${log_level}")${color_reset} ${log_line}" 1>&2
+	done <<< "${@:-}"
+}
+endsnippet
+
+snippet confirm "y/n confirm prompt"
+function confirm {
+	read -sn 1 -p "$* [Y/N]? "
+	[[ ${REPLY:0:1} == [Yy] ]] && printf '\n'
+}
+endsnippet
+
+snippet python3 "embedded python3 script"
+	python3 -B -bb -OO -W error -c \
+"$(cat <<-'PYTHON'
+#!/usr/bin/env python3
+import sys
+$0
+print(f'{sys.argv[1]}')
+sys.exit(0)
+PYTHON
+)" "$(echo 'argument')"
+}
+endsnippet
+
+# vim:ft=snippets:

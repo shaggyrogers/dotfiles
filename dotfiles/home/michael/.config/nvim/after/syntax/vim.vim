@@ -20,16 +20,16 @@ endtry
 
 " Create syntax groups{{{
 syntax match vimNiceComment
-        \ '\m\(^\s*"\s*\([*\-+][^*\-+]\)\?\s*\)\@<=\[ \?\]' contained
+        \ '\m\(^\s*"\s*\([*\-+][^*\-+]\)\?\s*\)\@8<=\[ \?\]' contained
         \ conceal cchar=☐
 syntax match vimNiceComment
-        \ '\m\(^\s*"\s*\([*\-+][^*\-+]\)\?\s*\)\@<=\[[*x+]\]'
+        \ '\m\(^\s*"\s*\([*\-+][^*\-+]\)\?\s*\)\@8<=\[[*x+]\]'
         \ contained conceal cchar=☑
 syntax match vimNiceComment
-        \ '\m\(^\s*"\s*\)\@<=[*+]\([^*\-+]\|$\)\@=' contained conceal
+        \ '\m\(^\s*"\s*\)\@8<=[*+]\([^*\-+]\|$\)\@70=' contained conceal
         \ cchar=•
 syntax match vimNiceComment
-        \ '\m\(^\s*"\s*\)\@<=[\-]\([^*\-+]\|$\)\@='
+        \ '\m\(^\s*"\s*\)\@8<=[\-]\([^*\-+]\|$\)\@70='
         \ contained conceal cchar=
 syn cluster vimCommentGroup contains=vimNiceComment,vimTodo,@vimCommentGroup
 "}}}

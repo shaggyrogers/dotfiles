@@ -1,30 +1,20 @@
 /*
-%FILEHEADING%
-%FILEHEADINGULINE%
-
+  %FILEHEADING%
+  %FILEHEADINGULINE%
+ 
+  Description:           %HERE%
   Version:               1.0.0
-  Author:                %USER%
+  Author:                %USER% <%GITHUBUSER%>
   Creation Date:         %DATE%
+  Modification Date:     %DATE%
   License:               %LICENSE%
-
-  Description
-  -----------
-  A short summary of the contents of this file and their purpose.
-
-  Usage
-  -----
-  1. A short description of how to use some of the contents of this file.
 */
 
 
-public class %CLASS%{
-    /*
-    Short summary of this class' purpose.
+public class %CLASS% {
+    
 
-    Methods [Optional]
-    -------
-    */
-    public %CLASS%(){
-        %HERE%
-    }
+
 }
+
+/* vim: set ts=4 sw=4 tw=79 fdm=manual et :*/

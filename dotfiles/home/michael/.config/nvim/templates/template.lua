@@ -1,21 +1,17 @@
 -- -*- coding: UTF-8 -*-
-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- %FILEHEADING%
 -- %FILEHEADINGULINE%
 --
+-- Description:           %HERE%
 -- Version:               1.0.0
--- Author:                %USER%
+-- Author:                %USER% <%GITHUBUSER%>
 -- Creation Date:         %DATE%
+-- Modification Date:     %DATE%
 -- License:               %LICENSE%
 --
--- Description
--- -----------
--- A short summary of this script and its purpose.
---
--- Usage
--- -----
--- How to use this script. Can leave this out if there are no arguments.
---
-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 
-%HERE%
+
+
+-- vim: set ts=4 sw=4 tw=79 fdm=manual et :
