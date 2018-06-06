@@ -5,16 +5,16 @@
 # ==========
 #
 # Description:           Wrapper for neovim-remote that manages kitty instances
-#                        for each workspace and 
+#                        for each workspace.
 # Author:                Michael De Pasquale <shaggyrogers>
 # Creation Date:         2018-03-07
-# Modification Date:     2018-03-14
+# Modification Date:     2018-04-17
 # License:               MIT
-# 
+#
 # Notes
 # -----
-# Currrently only i3 is supported, but this can be used with any WM by use of 
-# the '-g' option.  Support for other WMs is not planned but may be added in 
+# Currrently only i3 is supported, but this can be used with any WM by use of
+# the '-g' option.  Support for other WMs is not planned but may be added in
 # future.
 #
 ###############################################################################
@@ -36,8 +36,8 @@ EOF
     Usage: kitty-nvim [options] [<file(s)>]
 
     A wrapper for neovim-remote that manages neovim instances for each
-    workspace. 
-    
+    workspace.
+
     By default, files will open in an existing instance for the current
     workspace, or a new instance if none are found.
 
@@ -48,11 +48,11 @@ EOF
             kitty-nvim -o t 'file.txt'
 
         Print the path to the file being edited
-            
+
             kitty-nvim -c 'expand("%t")'
-     
-        
-        
+
+
+
 EOF
 )" # }}}
 
@@ -91,7 +91,7 @@ __help="$(cat <<- 'EOF'
 
         -i, --instance-index <index>
                                 Attempt to connect to an existing instance with
-                                the given index. If none is found, a new 
+                                the given index. If none is found, a new
                                 instance will be created using the given index,
                                 unless -e 0 prevents this.
 

@@ -26,10 +26,8 @@ setopt sharehistory
 setopt incappendhistory
 setopt histignorealldups
 setopt histignorespace
-#HISTCONTROL=ignoreboth
-#HISTIGNORE='&:ls:ll:la:pwd:exit:clear:history'
-#set cmdhist
 
+# Misc. options
 setopt autocd
 setopt autopushd
 setopt pushdignoredups

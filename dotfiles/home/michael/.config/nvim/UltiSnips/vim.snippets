@@ -35,8 +35,7 @@ let g:'`!v substitute(substitute(expand('%:t:r'), '[^A-Z0-9a-z_]', '', 'g'), '^[
 endsnippet
 
 snippet "(^|\s)fun(c(tion)?)?\s?" "function" r
-" $2($3) {{{ ${4:`!v "\n\" "`}
-function ${2:name}(${3})
+function ${2:name}(${3}) "{{{
 endfunction " }}}
 endsnippet
 

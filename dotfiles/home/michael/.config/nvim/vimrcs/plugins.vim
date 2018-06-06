@@ -1,5 +1,5 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
+"
 " plugins.vim
 " ===========
 "
@@ -25,7 +25,7 @@ let s:saveYanks = 1
 
 " Details for templates & snippets
 let g:username = "Michael De Pasquale"
-let g:license = "None"
+let g:license = "MIT"
 let g:email = "miсkԁρ1 аt ցmаіl ԁоt ⅽօm"
 let g:github = "shaggyrogers"
 
@@ -94,6 +94,7 @@ Plug 'https://github.com/Shougo/neoyank.vim.git'
 Plug 'https://github.com/SirVer/ultisnips.git'
 Plug 'https://github.com/tpope/vim-speeddating'
 Plug 'https://github.com/tpope/vim-surround.git'
+Plug 'https://github.com/tpope/vim-unimpaired.git'
 Plug 'https://github.com/zirrostig/vim-schlepp'
 "}}}
 
@@ -114,6 +115,7 @@ Plug 'https://github.com/w0rp/ale.git'
 "}}}
 
 " Files / Buffers / Windows {{{
+Plug 'https://github.com/airblade/vim-rooter.git'
 Plug 'https://github.com/artnez/vim-wipeout.git'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 Plug 'https://github.com/DavidEGx/ctrlp-smarttabs.git'
@@ -122,6 +124,7 @@ Plug 'https://github.com/scrooloose/nerdtree.git'
 "}}}
 
 " Version Control "{{{
+"Plug 'https://github.com/simnalamburt/vim-mundo.git'
 Plug 'https://github.com/shaggyrogers/vim-mundo.git'
 Plug 'https://github.com/kshenoy/vim-signature.git'
 Plug 'https://github.com/Xuyuanp/nerdtree-git-plugin.git'
@@ -183,8 +186,6 @@ call deoplete#custom#source('dictionary', 'min_pattern_length', 3)
 "}}}
 "}}}
 " UltiSnips{{{
-" TODO:
-" * Add auto-expand toggle w/ airline icon
 " Configuration{{{
 let g:UltiSnipsUsePythonVersion = 3
 let g:UltiSnipsEditSplit = 'horizontal'
@@ -195,7 +196,7 @@ let g:snips_github = g:github
 let g:snips_license = g:license
 "}}}
 " Key mappings{{{
-let g:UltiSnipsExpandTrigger = '<c-k>'
+let g:UltiSnipsExpandTrigger = "<C-k>"
 let g:UltiSnipsListSnippets = '<c-j>'
 let g:UltiSnipsJumpForwardTrigger = '<c-l>'
 let g:UltiSnipsJumpBackwardTrigger = '<c-h>'
@@ -284,8 +285,6 @@ endfunction
 
 nnoremap <silent> <M-v> :call SmartPairsN()<CR>
 xnoremap <silent> <M-v> <esc>:call SmartPairsV()<CR>
-nnoremap <silent> <M-V> }kV{j
-xnoremap <silent> <M-V> <esc>}kV{j
 "}}}
 "}}}
 " Configuration{{{
@@ -682,6 +681,10 @@ let g:vim_json_syntax_conceal = 0
 "}}}
 
 " Files / Buffers / Windows {{{
+" Rooter{{{
+" Change to a non-project file's directory when opening it
+let g:rooter_change_directory_for_non_project_files = 'current'
+"}}}
 " CtrlP{{{
 call assert_true(exists(':CtrlP'))
 " Configuration{{{
@@ -794,12 +797,13 @@ nnoremap <leader><Esc><Esc> :Wipeout<CR>
 "}}}
 "}}}
 
-" Version Control "{{{
+" Version Control{{{
 " Mundo{{{
 call assert_true(exists('*MundoShow'))
+
 " General configuration{{{
 let g:mundo_auto_preview = 1
-let g:mundo_auto_preview_delay = 400
+let g:mundo_auto_preview_delay = 250
 let g:mundo_close_on_revert = 0
 let g:mundo_inline_undo = 1
 let g:mundo_enable_inline_delay = 1
@@ -807,15 +811,16 @@ let g:mundo_playback_delay = 5
 let g:mundo_prefer_python3 = 1
 let g:mundo_preview_bottom = 1
 let g:mundo_preview_height = 20
-let g:mundo_preview_statusline = 1
+let g:mundo_preview_statusline = 'Preview'
+let g:mundo_tree_statusline = 'Undo Tree'
 let g:mundo_return_on_revert = 0
 let g:mundo_verbose_graph = 0
-let g:mundo_width = 35
+let g:mundo_width = 40
 "}}}
 " UpdateMundoOptions : Changes options{{{
 function! UpdateMundoOptions(...)
-    if rccommon#BufferColumns() - g:mundo_width - 1 > &textwidth
-        let g:mundo_width = 35 | else | let g:mundo_width = 30
+    if rccommon#BufferColumns() - 41 > &textwidth
+        let g:mundo_width = 40 | else | let g:mundo_width = 30
     endif
     if a:0 > 0 && a:1 != 0 | call MundoToggleUpdate() | endif
 endfunction
@@ -890,6 +895,7 @@ hi SignatureMarkerText ctermfg=166 ctermbg=NONE guifg=#4CFFE2 guibg=NONE
 " Airline{{{
 call assert_true(exists(':AirlineRefresh'))
 let g:airline_skip_empty_sections = 1
+
 " Enable and configure extensions{{{
 let g:airline#extensions#keymap#enabled = 0
 let g:airline#extensions#hunks#enabled = 1
@@ -916,6 +922,7 @@ let g:airline#extensions#tabline#right_sep = ''
 let g:airline#extensions#tabline#right_alt_sep = ''
 let g:airline#extensions#tabline#show_close_button = 0
 "}}}
+
 " Appearance{{{
 let g:airline_powerline_fonts = 1
 let g:airline_mode_map = {
@@ -965,6 +972,7 @@ endif
 " Load theme
 let g:airline_theme = 'bubblegum'
 "}}}
+
 " Configure sections{{{
 let g:airline_section_a =
             \ '%{airline#util#wrap(airline#parts#mode(),0)}' .
@@ -975,8 +983,8 @@ let g:airline_section_a =
             \ '%{airline#util#append("",0)}%{airline#util#append("",0)}' .
             \ '%{airline#util#append(airline#parts#iminsert(),0)}' .
             \ '%{airline#util#append(plugins#TableModeStatus(),0)}' .
-            \ '%{airline#util#append(plugins#ALEJumpStatus(),0)}'
-"            \ '%{airline#util#append(airline#parts#paste(),0)}' .
+            \ '%{airline#util#append(plugins#ALEJumpStatus(),0)}' .
+            \ '%{airline#util#append(airline#parts#paste(),0)}'
 let g:airline_section_b =
             \ '%{airline#util#wrap(airline#extensions#branch#get_head(),0)} ' .
             \ '%{airline#util#wrap(airline#extensions#hunks#get_hunks(),0)}'
@@ -1041,7 +1049,8 @@ function! UpdateFunctionMenus()
         \ 'command_candidates': [
         \ [ 'Toggle Relative Line Numbers [' .
             \ {0:'OFF',1:'ON'}[&relativenumber] .']',
-            \ 'set invrelativenumber | call UpdateFunctionMenus() | Denite -resume' ],
+            \ 'set invrelativenumber | call UpdateFunctionMenus() | '
+            \ .'Denite -resume' ],
         \ [ 'Toggle Line Wrapping ' . '[' .
         \ {0:'OFF',1:'ON'}[&wrap] .']',
         \ 'set invwrap' ],
@@ -1065,6 +1074,12 @@ function! UpdateFunctionMenus()
     let s:menus.buffer_commands = {
         \ 'description': 'commands',
         \ 'command_candidates': [
+            \ [ '[           ] Expand template for filename',
+                \ 'Template '.expand('%') ],
+            \ [ '[           ] Unicode table (Note: Search with :UnicodeSearch!,'
+                \ .' autocomplete with Ctrl+x Ctrl+z)', ':UnicodeTable' ],
+            \ [ '[           ] Digraph table (Note: Autocomplete with Ctrl+x '
+                \.'Ctrl+z)', ':Digraphs' ],
             \ [ '[    <F12>  ] Run ALE Fixers', 'ALEFix' ],
             \ [ '[ \ + Space ] Fix Trailing Spaces',
                 \ 'call rccommon#DeleteTrailingWS()' ],
@@ -1075,6 +1090,7 @@ function! UpdateFunctionMenus()
 
     call denite#custom#var('menu', 'menus', s:menus)
 endfunction
+
 function! FunctionMenu(cmd)
     call UpdateFunctionMenus()
     let l:left = {'main_menu' : 'main_menu',
@@ -1218,7 +1234,7 @@ let g:signify_sign_changedelete      = g:signify_sign_change
 "}}}
 " Startify{{{
 " Rebind Ctrl+T to open Startify
-map <C-t> :tabnew ./<CR>:Startify<cr>
+"map <C-t> :tabnew ./<CR>:Startify<cr>
 
 let g:startify_list_order = [
             \ ['   Recently used files:'], 'files',
@@ -1566,6 +1582,23 @@ let g:submode_always_show_submode = 0
 " Plugin Autocommands{{{
 augroup VimrcPlugins
     autocmd!
+    " Clear marks / markers upon loading buffer
+    autocmd BufWinEnter *
+                \ if exists(':SignatureRefresh') &&
+                \ exists('g:SignatureDeleteConfirmation') |
+                    \ try |
+                        \ let DelConfirmBack = g:SignatureDeleteConfirmation |
+                        \ let PurgeConfirmBack = g:SignaturePurgeConfirmation |
+                        \ let g:SignatureDeleteConfirmation = 0 |
+                        \ let g:SignaturePurgeConfirmation = 0 |
+                        \ call signature#mark#Purge('all') |
+                        \ call signature#marker#Purge() |
+                        \ let g:SignatureDeleteConfirmation = DelConfirmBack |
+                        \ let g:SignaturePurgeConfirmation = PurgeConfirmBack |
+                    \ catch |
+                        \ echo 'err' v:exception |
+                    \ endtry |
+                \ endif
 
     " Automatically close the current tab if NERDTree is the only window
     autocmd BufEnter *
@@ -1578,13 +1611,10 @@ augroup VimrcPlugins
     autocmd BufLeave * execute "normal \<Plug>SearchantStop"
 
     " Filter quickfix output from other buffers
-    autocmd QuickfixCmdPost make
-                \ call QuickfixFilterBuffer()
+    autocmd QuickfixCmdPost make call QuickfixFilterBuffer()
 
     " ALE status indicator
-    autocmd User ALELintPost
-                \ let g:_ale_statusicon = '' |
-                \ AirlineRefresh
+    autocmd User ALELintPost let g:_ale_statusicon = '' | AirlineRefresh
     autocmd User ALELintPre
                 \ let g:_ale_statusicon = g:airline_symbols.errorlistload |
                 \ AirlineRefresh

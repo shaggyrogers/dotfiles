@@ -1,0 +1,50 @@
+[memory]
+exfalso_last_active_version = 4.1.-1
+exfalso_maximized = 0
+exfalso_paned_position = 0.22873194221508827
+exfalso_position = 1286 40
+exfalso_size_ = 1246 1378
+open_browsers = 
+plugin_prefs_maximized = 0
+plugin_prefs_position = 615 398
+plugin_prefs_size_ = 700 661
+plugin_selection = Regex Substitution
+
+[rename]
+spaces = false
+windows = true
+
+[__config__]
+version = 0
+
+[plugins]
+active_plugins = artwork-url-cover
+	lastfm-cover
+	refresh-songs
+	Convert Encodings
+	filterbrowser
+	ReplayGain
+	embedded_edit
+	Search artist in Wikipedia
+	musicbrainz-cover
+	Force Write
+	Search album in Wikipedia
+	MusicBrainz lookup
+	CustomCommands
+	Download Album Art
+	discogs-cover
+	FilterAll
+cover_edit = False
+cover_edit_cmd = gimp
+cover_engine_amazon = True
+cover_engine_discogs = True
+cover_filename = cover.jpg
+cover_fit = True
+cover_resultsmax = 8
+cover_searchraw = False
+titlecase_allow_all_caps = True
+titlecase_human_title_case = True
+
+[editing]
+alltags = true
+

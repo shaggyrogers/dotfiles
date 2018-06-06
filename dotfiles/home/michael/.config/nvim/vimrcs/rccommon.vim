@@ -24,11 +24,6 @@ function! rccommon#FixMarkers(...) " {{{
     exec '%s/\V\s\@<!\('.coms[0].'\s'.mrk[0].'\|'coms[1].'\s'.mrk[1].'\)/ \0/''
 endfunction " }}}
 
-function! TestRange() range
-    echom a:firstline
-    echom a:lastline
-endfunction
-
 " function! rccommon#GetVisual() : Returns a list of visual selection lines {{{
 " Source: https://github.com/SpaceVim/SpaceVim/blob/master/config/neovim.vim
 function! rccommon#GetVisual()
@@ -48,7 +43,9 @@ endfunction " }}}
 " Echo(msg, [hilight_group=None], [nonewline=0]) " {{{
 " Echo prints a newline before msg if necessary, unless nonewline is nonzero.
 function! rccommon#Echo(text, ...)
-    exec (a:0 >= 1 ? 'echohl '.a:1 : '')
+    exec 'echohl ' . a:higroup . ' | echomsg ' . '"' . escape(a:text, '"')
+                \ . '" | echohl None'
+    if  (a:0 >= 1 ? 'echohl '.a:1 : '')
     exec (a:0 >= 2 && a:2 ? 'echon ' : 'echo ').'"'.a:text.'"'
     echohl 'None'
 endfunction " }}}
@@ -80,7 +77,7 @@ function! rccommon#ConfirmYN(msg, ...) abort
         if match(l:answer, l:npattern) >= 0 | let l:result = 0  | break | endif
         if match(l:answer, l:cpattern) >= 0 | break | endif
 
-        echo printf('Response not recognised. %d attempt%s remaining.', 
+        echo printf('Response not recognised. %d attempt%s remaining.',
                     \ l:nr, (l:nr == 1 ? '' : 's'))
     endwhile
 

@@ -4,14 +4,14 @@
 # sanitise.sh
 # ===========
 #
-# Version:               1.0.0
 # Author:                Michael De Pasquale
 # Creation Date:         2018-01-28
-# License:               None
+# Modification Date:     2018-06-06
+# License:               MIT
 #
 # Description
 # -----------
-# Removes sensitive information.
+# Removes sensitive information from firefox preferences.
 #
 ###############################################################################
 
@@ -49,6 +49,7 @@ function sanitise {
 
     printf "%s\n" \
         "==================================================================="
+
     # prompt user to delete matches
     if confirm 'Delete matches?'; then
         sed -E "$DELETEMATCHES" -i "$FILEPATH"

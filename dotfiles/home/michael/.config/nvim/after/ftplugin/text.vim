@@ -1,10 +1,10 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" markdown.vim
-" ============
+" text.vim
+" ========
 "
-" Description:           Commands for markdown syntax buffers.
+" Description:           Commands for text buffers.
 " Author:                Michael De Pasquale <shaggyrogers>
-" Creation Date:         2018-02-19
+" Creation Date:         2018-05-11
 " Modification Date:     2018-05-11
 " License:               MIT
 "
@@ -28,18 +28,9 @@ retab
 "}}}
 
 " Autocommands{{{
-augroup MarkdownFiletypeConfig
+augroup TextFiletypeConfig
     autocmd!
-    autocmd BufEnter *.md
-                \ hi! link Conceal Identifier |
-                \ if exists(':TableModeEnable') |
-                    \ silent exec 'TableModeEnable'
-                \ | endif
-    autocmd BufLeave *.md
-                \ if exists(':TableModeDisable') |
-                    \ silent exec 'TableModeDisable'
-                \ | endif
-    autocmd BufWrite *.md call rccommon#DeleteTrailingWS()
+    autocmd BufWrite * if &ft == 'text' | call rccommon#DeleteTrailingWS() | fi
 augroup end
 " }}}
 

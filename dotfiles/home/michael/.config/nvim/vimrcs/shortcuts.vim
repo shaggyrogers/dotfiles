@@ -2,14 +2,13 @@
 " shortcuts.vim
 " =============
 "
-" Author:                Michael De Pasquale
+" Description:           Contains all non-plugin shortcuts.
+" Author:                Michael De Pasquale <shaggyrogers>
 " Creation Date:         2017-12-02
+" Modification Date:     2018-05-11
+" License:               MIT
 "
-" Description
-" -----------
-" All user-defined shortcuts and commands go here. Note that some commands
-" require a terminal configured to send different keys for certain key
-" combinations.
+" Note that some key combinations require kitty with a certain configuration.
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " TODO:
@@ -19,27 +18,34 @@
 " * Make Shift+j delete all but 1 of the blank lines below
 
 " Commands {{{
-" <Leader>s : show (S)yntax highight group under the cursor {{{
-nnoremap <leader>s :echo CursorSynInfo('name')<cr>
+function! RepeatCommandShortcut(shortcut) "{{{
+    exec a:shortcut . repeat('|'.a:shortcut, v:count1-1)
+endfunction " }}}
+" <Leader> + s : show (S)yntax highight group under the cursor {{{
+nnoremap <leader>s <cmd>:echo CursorSynInfo('name')<CR>
 "}}}
-" <Leader>w : (W)rite buffer {{{
-nnoremap <leader>w :w!<cr>
+" <Leader> + w : (W)rite buffer {{{
+nnoremap <leader>w <cmd>:w!<CR>
 "}}}
-" <Leader>Shift + w: (W)rite buffer using sudo {{{
+" <Leader> + Shift + w: (W)rite buffer using sudo {{{
 command! W w !sudo tee % > /dev/null
-nnoremap <leader><s-w> :W<cr>
+nnoremap <leader><s-w> <cmd>:W<CR>
 "}}}
-" <Leader>q : (Q)uit buffer {{{
-nnoremap <leader>q :q<cr>
+" <Leader> + q : (Q)uit buffer {{{
+nnoremap <leader>q :<cmd>call RepeatCommandShortcut('q')<CR>
+xnoremap <leader>q :<cmd>call RepeatCommandShortcut('q')<CR>
 "}}}
-" <Leader>Shift + q : (Q)uit buffer without saving {{{
-nnoremap <leader><s-q> :q!<cr>
+" <Leader> + Shift + q : (Q)uit buffer without saving {{{
+nnoremap <leader><s-q> <cmd>:call RepeatCommandShortcut('q!')<CR>
+xnoremap <leader><s-q> <cmd>:call RepeatCommandShortcut('q!')<CR>
 "}}}
-" <Leader>S : Save (S)ession {{{
-nnoremap <leader>SS :SSave<cr>
+" <Leader> + S : Save (S)ession {{{
+nnoremap <leader>SS <cmd>:SSave<CR>
+xnoremap <leader>SS <cmd>:SSave<CR>
 "}}}
-" <Leader>Esc : Save all buffers and exit vim {{{
-nnoremap <leader>w<Esc> :confirm wqall
+" <Leader> + End + End : Save all buffers and exit vim {{{
+nnoremap <leader><End><End> <cmd>:confirm wqall<CR>
+xnoremap <leader><End><End> <cmd>:confirm wqall<CR>
 "}}}
 "}}}
 
@@ -47,6 +53,8 @@ nnoremap <leader>w<Esc> :confirm wqall
 " j, k : Move screen lines unless a count is given, save  >5 lines as jump {{{
 nnoremap <expr> j v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'gj'
 nnoremap <expr> k v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'gk'
+xnoremap <expr> j v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'gj'
+xnoremap <expr> k v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'gk'
 " }}}
 " 0 : Move to the first non-blank character. {{{
 noremap 0 ^
@@ -107,6 +115,18 @@ inoremap <silent> <M-K> <esc>{i
 xnoremap <silent> <M-J> }
 xnoremap <silent> <M-K> {
 "}}}
+" Ctrl + Alt + Shift + h/l : Next error / Prev error {{{
+nnoremap <silent> <Char-0x10>HZ :ALEPreviousWrap<CR>
+nnoremap <silent> <Char-0x10>Hd :ALENextWrap<CR>
+"}}}
+" Ctrl + Alt + Shift + j/k : Go to definition / Jump to tag {{{
+nnoremap <silent> <Char-0x10>Hb :ptag<CR>
+nnoremap <silent> <Char-0x10>Hc gd
+"}}}
+" Ctrl + Alt + Shift + o/p : Next/prev git change {{{
+nnoremap <silent> <Char-0x10>Hg :call feedkeys('[c', 't')<CR>
+nnoremap <silent> <Char-0x10>Hh :call feedkeys(']c', 't')<CR>
+"}}}
 "}}}
 
 " Search {{{
@@ -128,15 +148,18 @@ vnoremap <silent> # :<C-U>
 " Ctrl+R in visual mode writes a search-replace command for the selected text
 vnoremap <C-r> <ESC>:call SearchReplaceVisualSelection()<CR>
 "}}}
+" Ctrl + n / Ctrl + Shift + n : Next / Previous match and update folds
+nmap <silent> <expr> <C-n> ':<C-u>execute "normal '.v:count1.'nzx"<CR>'
+nmap <silent> <expr> <Char-0x10>Ff ':<C-u>execute "normal '.v:count1.'Nzx"<CR>'
 "}}}
 
 " Editing {{{
 " Ctrl + Alt + p : Toggle paste (see 'Change put behaviour') {{{
 
-set pastetoggle=<Char-0x10>Fh
-nmap <silent> <Char-0x10>Fh :<C-u>set paste!<CR>
-xmap <silent> <Char-0x10>Fh <Esc>:<C-u>set paste!<CR>gv
-imap <silent> <Char-0x10>Fh <C-o>:<C-u>set paste!<CR>
+"set pastetoggle=<Char-0x10>Fh
+"nmap <silent> <Char-0x10>Fh :<C-u>set paste!<CR>
+"xmap <silent> <Char-0x10>Fh <Esc>:<C-u>set paste!<CR>gv
+"imap <silent> <Char-0x10>Fh <C-o>:<C-u>set paste!<CR>
 " }}}
 " <Leader> + P/p/y/Y : Put/yank from/to system clipboard, keep vis. selection {{{
 nnoremap <silent> <Leader>y "+y
@@ -161,20 +184,21 @@ xnoremap Y Ygv
 " * If paste is set, put will not keep visual selection
 " * Ctrl + Shift + p toggles copying when pasting visual selection
 function! s:GetPutRegister()
-    if &paste
+"    if &paste
         let @"=@0
-    endif
+"    endif
 
     return '"'
 endfunction
 
 function! PostPut()
-    if ! &paste
+"    if ! &paste
         let @" = @0
-    endif
+"    endif
 
     return ''
 endfunction
+
 nnoremap <silent> <expr> p '"'.<SID>GetPutRegister().'p`[@=PostPut()'."\<CR>"
 nnoremap <silent> <expr> P '"'.<SID>GetPutRegister().'P`[@=PostPut()'."\<CR>"
 xnoremap <silent> <expr> p '"'.<SID>GetPutRegister().'p'
@@ -210,18 +234,6 @@ nnoremap <S-c> Vc
 nnoremap <S-y> Vy
 nnoremap <S-d> Vd
 "}}}
-" Ctrl + Alt + Shift + h/l : Next error / Prev error {{{
-nnoremap <silent> <Char-0x10>HZ :ALEPreviousWrap<CR>
-nnoremap <silent> <Char-0x10>Hd :ALENextWrap<CR>
-"}}}
-" Ctrl + Alt + Shift + j/k : Go to definition / Jump to tag {{{
-nnoremap <silent> <Char-0x10>Hb :ptag<CR>
-nnoremap <silent> <Char-0x10>Hc gd
-"}}}
-" Ctrl + Alt + Shift + o/p : Next/prev git change {{{
-nnoremap <silent> <Char-0x10>Hg :call feedkeys('[c', 't')<CR>
-nnoremap <silent> <Char-0x10>Hh :call feedkeys(']c', 't')<CR>
-"}}}
 " Alt + u/i : Swap words left / right {{{
 " http://vim.wikia.com/wiki/Swapping_characters,_words_and_lines
 nnoremap <silent> <M-u> "_yiw?\w\+\_W\+\%#<CR>:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o><c-l>:nohlsearch<CR>
@@ -234,7 +246,7 @@ nnoremap <CR>  :<c-u>put =repeat(nr2char(10), v:count1)<cr>
 " Ctrl + Enter: Insert newline at cursor {{{
 nnoremap <Char-0x10>Ez i<CR><Esc>
 " }}}
-" Alt + Return : Create a copy of the current line below {{{
+" Alt + Enter : Create a copy of the current line below {{{
 nnoremap <expr> <M-CR> repeat(":\<C-u>t.\<CR>", v:count1)
 inoremap <expr> <M-CR> repeat("\<C-o>:\<C-u>t.\<CR>", v:count1)
 
@@ -244,14 +256,26 @@ augroup UpdateCRShorcut
 augroup end
 "}}}
 " <Leader> + Space : Delete trailing whitespace {{{
-nnoremap <Leader><Space> :<C-u>call rccommon#DeleteTrailingWS()<CR>
+nnoremap <Leader><Space> <cmd>:call rccommon#DeleteTrailingWS()<CR>
 " }}}
+" Alt + d / Alt + Shift + d : Convert decimal to hex / hex to decimal [X]{{{
+xnoremap <M-d> <cmd>:Dec2hex<CR>
+xnoremap <M-D> <cmd>:Hex2dec<CR>
+"}}}
 " }}}
 
 " Windows & Tabs / UI {{{
 " Space : Fold visual selection / toggle fold {{{
 nnoremap <silent> <space> za
-vnoremap <silent> <space> zf
+"vnoremap <silent> <expr> <space> "zfzngv:'<,'>s/\([ ]\{0,2\}\)# [{}]\{3\}/  \0<CR>zN"
+vnoremap <space> <cmd>call DoFold()<CR>
+
+function! DoFold()  "{{{
+    let l:back = &commentstring
+    let &commentstring = '  ' . substitute(&commentstring, '\m^[ ]\+', '', '')
+    execute 'normal! zf'
+    let &commentstring = l:back
+endfunction  "}}}
 "}}}
 " Ctrl + Space : Close other folds {{{
 " requires terminal configured to send the keys below for ctrl+alt+space
@@ -269,50 +293,49 @@ inoremap <Char-0x10>GA <esc>zia
 xnoremap <Char-0x10>GA <esc>zigv
 "}}}
 " Tab / Shift + Tab: Next tab/previous tab {{{
-nnoremap <silent> <Tab> :tabnext<cr>
-nnoremap <silent> <S-Tab> :tabprevious<cr>
+nnoremap <silent> <Tab> <cmd>:tabnext<cr>
+nnoremap <silent> <S-Tab> <cmd>:tabprevious<cr>
 "}}}
 " Ctrl + Tab / Ctrl + Shift + Tab: Move tab forward/backward {{{
-nnoremap <silent> <Char-0x10>E0 :tabmove +<cr>
-nnoremap <silent> <Char-0x10>F0 :tabmove -<cr>
-xnoremap <silent> <Char-0x10>E0 <esc>:tabmove -<cr>gv
-xnoremap <silent> <Char-0x10>F0 <esc>:tabmove +<cr>gv
-inoremap <silent> <Char-0x10>E0 <C-o>:tabmove -<cr>
-inoremap <silent> <Char-0x10>F0 <C-o>:tabmove +<cr>
+nnoremap <silent> <Char-0x10>E0 <cmd>:tabmove +<cr>
+nnoremap <silent> <Char-0x10>F0 <cmd>:tabmove -<cr>
+xnoremap <silent> <Char-0x10>E0 <cmd>:tabmove +<cr>gv
+xnoremap <silent> <Char-0x10>F0 <cmd>:tabmove -<cr>gv
+inoremap <silent> <Char-0x10>E0 <cmd>:tabmove -<cr>
+inoremap <silent> <Char-0x10>F0 <cmd>:tabmove +<cr>
 "}}}
 " CTRL + T : Open a new tab {{{
-let g:__new_tab_cmd = ":tabnew . / | Startify\<CR>"
-nnoremap <silent><expr><C-t> g:__new_tab_cmd
+"let g:__new_tab_cmd = ":tabnew . / | Startify\<CR>"
+"nnoremap <silent><expr><C-t> g:__new_tab_cmd
+nnoremap <silent> <C-t> <cmd>:tabe<CR>
 "}}}
 " Alt + Tab : Cycle selected window in current tab {{{
 nnoremap <M-Tab> <C-w>w
 "}}}
 " Ctrl + Alt + -/= : Resize window up/down {{{
-nnoremap <silent> <Char-0x10>GD :call NaturalWindowResize('j')<CR>:redraw<CR>
-vnoremap <silent> <Char-0x10>GD <esc>:call NaturalWindowResize('j')<CR>:redraw<CR>gv
-inoremap <silent> <Char-0x10>GD <C-o>:call NaturalWindowResize('j')<CR><C-o>:redraw<CR>
-nnoremap <silent> <Char-0x10>GR :call NaturalWindowResize('k')<CR>:redraw<CR>
-vnoremap <silent> <Char-0x10>GR <esc>:call NaturalWindowResize('k')<CR>:redraw<CR>gv
-inoremap <silent> <Char-0x10>GR <C-o>:call NaturalWindowResize('k')<CR><C-o>:redraw<CR>
+nnoremap <silent> <Char-0x10>GD <cmd>:call NaturalWindowResize('j')<CR><cmd>:redraw<CR>
+vnoremap <silent> <Char-0x10>GD <cmd>:call NaturalWindowResize('j')<CR><cmd>:redraw<CR>gv
+inoremap <silent> <Char-0x10>GD <cmd>:call NaturalWindowResize('j')<CR><C-o><cmd>:redraw<CR>
+nnoremap <silent> <Char-0x10>GR <cmd>:call NaturalWindowResize('k')<CR><cmd>:redraw<CR>
+vnoremap <silent> <Char-0x10>GR <cmd>:call NaturalWindowResize('k')<CR><cmd>:redraw<CR>gv
+inoremap <silent> <Char-0x10>GR <cmd>:call NaturalWindowResize('k')<CR><C-o><cmd>:redraw<CR>
 "}}}
 " Ctrl + Alt + _/+ : Resize window left/right {{{
-nnoremap <silent> <Char-0x10>HD :call NaturalWindowResize('h')<CR>:redraw<CR>
-vnoremap <silent> <Char-0x10>HD <esc>:call NaturalWindowResize('h')<CR>:redraw<CR>gv
-inoremap <silent> <Char-0x10>HD <C-o>:call NaturalWindowResize('h')<CR><C-o>:redraw<CR>
-nnoremap <silent> <Char-0x10>HR :call NaturalWindowResize('l')<CR>:redraw<CR>
-vnoremap <silent> <Char-0x10>HR <esc>:call NaturalWindowResize('l')<CR>:redraw<CR>gv
-inoremap <silent> <Char-0x10>HR <C-o>:call NaturalWindowResize('l')<CR><C-o>:redraw<CR>
+nnoremap <silent> <Char-0x10>HD <cmd>:call NaturalWindowResize('h')<CR><cmd>:redraw<CR>
+vnoremap <silent> <Char-0x10>HD <cmd>:call NaturalWindowResize('h')<CR><cmd>:redraw<CR>gv
+inoremap <silent> <Char-0x10>HD <cmd>:call NaturalWindowResize('h')<CR><C-o><cmd>:redraw<CR>
+nnoremap <silent> <Char-0x10>HR <cmd>:call NaturalWindowResize('l')<CR><cmd>:redraw<CR>
+vnoremap <silent> <Char-0x10>HR <cmd>:call NaturalWindowResize('l')<CR><cmd>:redraw<CR>gv
+inoremap <silent> <Char-0x10>HR <cmd>:call NaturalWindowResize('l')<CR><C-o><cmd>:redraw<CR>
 "}}}
 " Backspace : Switch to secondary buffer {{{
 nnoremap <BS> <C-^>
 " }}}
-"
 "}}}
 
 " Terminal {{{
-" Shift+Escape / Leader+Escape : Exit terminal edit mode {{{
+" Leader+Escape : Exit terminal edit mode {{{
 tnoremap <nowait> <Leader><Esc> <C-\><C-n>
-tnoremap <nowait> <F11>ESC <C-\><C-n>
  "}}}
  "}}}
 
@@ -321,14 +344,14 @@ tnoremap <nowait> <F11>ESC <C-\><C-n>
 nnoremap <M-q> @q
 nnoremap <M-w> @w
 "}}}
-" <Leader>m : Quick (M)acro edit {{{
+" <Leader> + m : Quick (M)acro edit {{{
 " Source: https://github.com/mhinz/vim-galore
 nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '.
             \ string(getreg(v:register))<cr><c-f><left>
 "}}}
 " Make macros / repeat work for each line in the visual selection {{{
-xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
-vnoremap . :normal . <CR>
+xnoremap @ <cmd>:call ExecuteMacroOverVisualRange()<CR>
+vnoremap . <cmd>:normal . <CR>
 "}}}
 "}}}
 
@@ -336,19 +359,55 @@ vnoremap . :normal . <CR>
 " Shift + q : NOP - disable ex mode shortcut {{{
 noremap <S-q> <Nop>
 "}}}
-" Alt + f : Print filename
-nmap <M-f> <Esc>:<C-u>echom expand('%:p')<CR>
-imap <M-f> <Esc>:<C-u>echom expand('%:p')<CR>
-xmap <M-f> <Esc>:<C-u>echom expand('%:p')<CR>
-
+" Alt + f : Print filename{{{
+nmap <M-f> <cmd>:echom expand('%:p')<CR>
+imap <M-f> <cmd>:echom expand('%:p')<CR>
+xmap <M-f> <cmd>:echom expand('%:p')<CR>
+"}}}
 " <Leader> + ml : Append modeline after last line in buffer. {{{
 " Source: http://vim.wikia.com/wiki/Modeline_magic
-nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
+nnoremap <silent> <Leader>ml <cmd>:call AppendModeline()<CR>
 "}}}
 "}}}
 
 " Functions {{{
 " Wrappers / Input {{{
+" http://vim.wikia.com/wiki/Convert_between_hex_and_decimal
+" Dec2hex / Hex2dec{{{
+command! -nargs=? -range Dec2hex call s:Dec2hex(<line1>, <line2>, '<args>')
+function! s:Dec2hex(line1, line2, arg) range
+  if empty(a:arg)
+    if histget(':', -1) =~# "^'<,'>" && visualmode() !=# 'V'
+      let cmd = 's/\%V\<\d\+\>/\=printf("0x%x",submatch(0)+0)/g'
+    else
+      let cmd = 's/\<\d\+\>/\=printf("0x%x",submatch(0)+0)/g'
+    endif
+    try
+      execute a:line1 . ',' . a:line2 . cmd
+    catch
+      echo 'Error: No decimal number found'
+    endtry
+  else
+    echo printf('%x', a:arg + 0)
+  endif
+endfunction
+command! -nargs=? -range Hex2dec call s:Hex2dec(<line1>, <line2>, '<args>')
+function! s:Hex2dec(line1, line2, arg) range
+  if empty(a:arg)
+    if histget(':', -1) =~# "^'<,'>" && visualmode() !=# 'V'
+      let cmd = 's/\%V0x\x\+/\=submatch(0)+0/g'
+    else
+      let cmd = 's/0x\x\+/\=submatch(0)+0/g'
+    endif
+    try
+      execute a:line1 . ',' . a:line2 . cmd
+    catch
+      echo 'Error: No hex number starting "0x" found'
+    endtry
+  else
+    echo (a:arg =~? '^0x') ? a:arg + 0 : ('0x'.a:arg) + 0
+  endif
+endfunction"}}}
 " ExecuteMacroOverVisualRange : Executes for lines in the visual selection {{{
 " https://github.com/robertmeta/vimfiles/blob/master/vimrc
 function! ExecuteMacroOverVisualRange()
@@ -670,7 +729,8 @@ nmap <Char-0x10>Fa <Nop>
 "nmap <Char-0x10>Fd <Nop>
 " Ctrl + Shift + l : Jump to next marked position
 nmap <Char-0x10>Fe <Nop>
-nmap <Char-0x10>Ff <Nop>
+"nmap <Char-0x10>Ff <Nop>
+" Ctrl + Shift + n : Jump to previous match and update folds
 nmap <Char-0x10>Fg <Nop>
 "nmap <Char-0x10>Fh <Nop>
 " Ctrl + Shift + p : Toggle paste mode

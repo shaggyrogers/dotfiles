@@ -61,6 +61,7 @@ bubblewrap
 build-essential
 busybox-initramfs
 busybox-static
+byobu
 bzip2
 caca-utils
 ca-certificates
@@ -222,6 +223,7 @@ gfortran-5
 ghc
 ghostscript
 ghostscript-x
+gimagereader
 gimp
 gir1.2-gdkpixbuf-2.0
 git
@@ -281,6 +283,7 @@ gzip
 hdparm
 hello
 highlight
+hollywood
 hostname
 htop
 hyphen-en-us
@@ -1420,6 +1423,8 @@ terminator
 termit
 tesseract-ocr-eng
 texi2html
+texlive
+texlive-full
 tickr
 tightvncserver
 time

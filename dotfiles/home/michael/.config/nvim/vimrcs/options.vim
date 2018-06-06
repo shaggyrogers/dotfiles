@@ -13,9 +13,9 @@
 
 " General{{{
 " Memory Usage
-set maxmem=2000000
+"set maxmem=2000000
 set maxmempattern=200000
-set maxmemtot=2400000
+"set maxmemtot=2400000
 set mkspellmem=900000,10000,1000
 " }}
 
@@ -49,26 +49,27 @@ set hidden
 "}}}
 
 " Persistent command / undo history{{{
-set history=4096
-set undolevels=4096
 "}}}
 
 " Persistence, sessions / backups / swap files{{{
+set history=4096
 set nobackup
-set updatetime=16000
-set updatecount=256
+set sessionoptions+=localoptions,options,tabpages,winsize
+set sessionoptions=blank,buffers,curdir,folds,globals,help
 set swapfile
 set undofile
+set undolevels=4096
 set undoreload=0
+set updatecount=256
+set updatetime=16000
 set viewoptions=cursor,curdir,folds,options
-set sessionoptions=blank,buffers,curdir,folds,globals,help
-set sessionoptions+=localoptions,options,tabpages,winsize
 
-" Persistent file directories
-exec 'set directory='.rccommon#TempDir().'/swap'
-exec 'set undodir='.rccommon#TempDir().'/undo'
-exec "let $NVIM_RPLUGIN_MANIFEST='".rccommon#TempDir()."/rplugin.vim'"
-exec 'set viewdir='.rccommon#TempDir().'/view'
+" Persistent file directories (// = use full path)
+let s:tempDir = rccommon#TempDir()
+exec 'set directory='.s:tempDir.'/swap//'
+exec 'set undodir='.s:tempDir.'/undo//'
+exec 'set viewdir='.s:tempDir.'/view//'
+exec "let $NVIM_RPLUGIN_MANIFEST='".s:tempDir."/rplugin.vim'"
 exec "set shada=!,s8096,h,%," .
             \ "'" . string(&history) . ',' .
             \ 'r/dev,' .
@@ -85,7 +86,7 @@ exec "set shada=!,s8096,h,%," .
             \ 'r~/.cache,' .
             \ 'r~/.local/share/Trash,' .
             \ 'r~/tmp,' .
-            \ 'n'.rccommon#TempDir().'/shada'
+            \ 'n'.s:tempDir.'/shada'
 "}}}
 
 " Bell{{{
@@ -114,12 +115,16 @@ set report=0
 "}}}
 
 " Search & Patterns {{{
-" Patterns {{{
+" Patterns{{{
 set ignorecase
 set smartcase
 "}}}
 
-" Visual {{{
+" Search behaviour{{{
+"set nowrapscan
+"}}}
+
+" Search appearance {{{
 set nohlsearch
 set inccommand=nosplit
 set incsearch
@@ -230,7 +235,7 @@ if &ft == 'vim'
 endif
 "}}}
 
-" Misc{{{
+" Text display{{{
 set listchars=eol:⏎,tab:␉⇥,space:⸳,extends:⋙,precedes:⋘,nbsp:␠
 set nolist
 set showbreak==>
@@ -268,7 +273,7 @@ set linebreak
 "}}}
 "}}}
 
-" Autocommands"{{{
+" Autocommands{{{
 augroup VimrcOptions
     autocmd!
 
@@ -287,6 +292,19 @@ augroup VimrcOptions
                     \ exe "normal! g'\"" |
                     \ exe "normal! zx"
                 \ | endif
+
+    " Disable cursorline for insert mode and on buffer leave
+    autocmd BufEnter * set cursorline
+    autocmd BufLeave * set nocursorline
+    autocmd InsertEnter *
+                \ set nocursorline |
+                \ execute 'set colorcolumn='.string(&textwidth + 1)
+    autocmd InsertLeave *
+                \ set cursorline |
+                \ execute 'set colorcolumn='
+
+    " F
+    autocmd VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\n" | endif
 augroup end
 "}}}
 

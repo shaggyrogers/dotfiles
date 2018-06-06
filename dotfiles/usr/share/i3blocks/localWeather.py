@@ -84,15 +84,16 @@ def getForecastIcon(weather, cloud):
     key = re.sub('mostly ', '', key)
 
     # Neither day nor night
-    icons = {'cloudy':          u'\ue853',  # wi-cloudy
-             'light showers':   u'\ue85a',  # wi-showers
-             'partly cloudy':   u'\ue881',  # wi-cloud
-             'showers':         u'\ue85a',  # wi-showers
-             'sunny':           u'\ue84d',  # wi-day-sunny
-             'clear':           u'\ue84d',  # wi-day-sunny
-             'wind':            u'\ue840',  # wi-day-cloudy-gusts
-             'storm':           u'\ue850',  # wi-day-thunderstorm
-             'light-rain':      u'\ue84b'}  # wi-day-sprinkle
+    icons = {'cloudy':         u'☁',  # u'\ue853',  # wi-cloudy
+             'light showers':  u'🌦',  # u'\ue85a',  # wi-showers
+             'partly cloudy':  u'⛅',  # u'\ue881',  # wi-cloud
+             'showers':        u'🌧',  # u'\ue85a',  # wi-showers
+             'sunny':          u'☀',  # u'\ue84d',  # wi-day-sunny
+             'clear':          u'☀',  # u'\ue84d',  # wi-day-sunny
+             'wind':           u'🌬',  # u'\ue840',  # wi-day-cloudy-gusts
+             'storm':          u'⛈',  # u'\ue850',  # wi-day-thunderstorm
+             'light-rain':     u'🌦',  # u'\ue84b'}  # wi-day-sprinkle
+            }
 
     if key not in icons:
         return u'\ue84d'  # wi-day-sunny

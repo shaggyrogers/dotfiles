@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 # -*- coding: UTF-8 -*-
 ###############################################################################
@@ -19,12 +20,12 @@
 #
 ###############################################################################
 
-SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 file="$(cmus-remote -C 'echo {}')"
 
-if [ -f "$file" ]; then
-    /usr/bin/env kitty -c=\
-        "from subprocess import call; call(['mp3info', '-i', '$file'])"
-else
+if ! [ -f "$file" ]; then
      echo "Could not find track $file." >&2
+     exit 1
 fi
+
+kitty -c="from subprocess import call; call(['exfalso', '$file'])"
+exit 0

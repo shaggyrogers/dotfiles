@@ -41,7 +41,7 @@ else
     hi SignColumn   guifg=fg      guibg=#002D38 gui=NONE
 endif "}}}
 
-hi ColorColumn   guifg=#C70B00 guibg=NONE    gui=NONE "{{{
+hi ColorColumn   guifg=#C70B00 guibg=#004052 gui=NONE "{{{
 hi Search        guifg=#FFF714 guibg=#083C4A gui=bold
 hi IncSearch     guifg=#FFB81A guibg=#083C4A gui=bold
 hi highlightedyankregion guifg=#51c0e1 guibg=#083C4A cterm=bold gui=bold
