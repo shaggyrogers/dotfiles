@@ -138,6 +138,13 @@ set tags=.tags
 " }}}
 " }}}
 
+" Misc  {{{
+" TOhtml
+let g:html_dynamic_folds = 1
+let g:html_prevent_copy = 'fn'
+let g:html_font = 'FuraCode Nerd Font Mono'
+"}}}
+
 " Navigation {{{
 " Movement restrictions/jumps
 set backspace=eol,start,indent
@@ -149,13 +156,17 @@ set whichwrap=h,l,<,>,[,]
 " UI{{{
 " Syntax highlighting / redrawing{{{
 syntax enable
-set concealcursor=nc
+"set concealcursor=nc
+set concealcursor=
 set conceallevel=2
 set lazyredraw
 set matchtime=2
 set noshowmode
 set redrawtime=150
 set synmaxcol=140
+
+" Highlight everything
+let python_highlight_all = 1
 
 " Disable matchparen plugin in favour of parenmatch
 let g:loaded_matchparen = 1
@@ -298,7 +309,9 @@ augroup VimrcOptions
     autocmd BufLeave * set nocursorline
     autocmd InsertEnter *
                 \ set nocursorline |
-                \ execute 'set colorcolumn='.string(&textwidth + 1)
+                \ if &textwidth > 0 |
+                    \ execute 'set colorcolumn='.string(&textwidth + 1) |
+                \ endif
     autocmd InsertLeave *
                 \ set cursorline |
                 \ execute 'set colorcolumn='

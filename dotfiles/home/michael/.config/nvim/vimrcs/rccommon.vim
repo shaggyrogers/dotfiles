@@ -5,12 +5,24 @@
 " Description:           Shared functions for vim scripts
 " Author:                Michael De Pasquale <shaggyrogers>
 " Creation Date:         2018-02-18
-" Modification Date:     2018-03-01
+" Modification Date:     2018-12-25
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Editing
+" Update modification date in file header in current buffer
+function! rccommon#UpdateModificationDate(...) " {{{
+    if line('$') < 10
+        return
+    endif
+
+    let pos = getpos(".")
+    1,10s/^\(.\?.\?\s*[Mm]odification [Dd]ate:\?\s*\)[0-9\-\\/]\{8,10}\s*$/\=submatch(1).strftime('%Y-%m-%d')/e
+    call cursor(pos[1], pos[2], pos[3])
+endfunc " }}}
+
+" Remove trailing whitespace in current buffer
 function! rccommon#DeleteTrailingWS(...) " {{{
     let pos = getpos(".")
     %s/\s\+$//e
@@ -43,10 +55,8 @@ endfunction " }}}
 " Echo(msg, [hilight_group=None], [nonewline=0]) " {{{
 " Echo prints a newline before msg if necessary, unless nonewline is nonzero.
 function! rccommon#Echo(text, ...)
-    exec 'echohl ' . a:higroup . ' | echomsg ' . '"' . escape(a:text, '"')
-                \ . '" | echohl None'
-    if  (a:0 >= 1 ? 'echohl '.a:1 : '')
-    exec (a:0 >= 2 && a:2 ? 'echon ' : 'echo ').'"'.a:text.'"'
+    execute  (a:0 >= 1 ? 'echohl '.a:1 : '')
+    execute (a:0 >= 2 && a:2 ? 'echon ' : 'echo ').'"'.a:text.'"'
     echohl 'None'
 endfunction " }}}
 
@@ -93,8 +103,10 @@ endfunction
 "}}}
 
 " Syntax / Filetypes
-function! rccommon#LoadFiletypeDictionary() abort " {{{
-    let l:path = rccommon#ConfigDir().'/dictionaries/'.&filetype.'.txt'
+" LoadFiletypeDictionary([filetype=&ft])
+function! rccommon#LoadFiletypeDictionary(...) abort " {{{
+    let l:filetype = get(a:, '1', &filetype)
+    let l:path = rccommon#ConfigDir() . '/dictionaries/' . l:filetype . '.txt'
 
     if !filereadable(path)
         return

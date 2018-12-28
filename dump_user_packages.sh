@@ -4,16 +4,15 @@
 # dump_user_packages.sh
 # =====================
 #
+# Description:           Dumps user-installed apt packages to a file.
 # Author:                jmiserez
 #
-# Description
-# -----------
-# Dumps user-installed apt packages to a file.
+# Notes
+# -----
+# Source:
 #
-# Source: https://askubuntu.com/questions/2389/generating-list-of-manually-
+#   https://askubuntu.com/questions/2389/generating-list-of-manually-
 #         installed-packages-and-querying-individual-packages
-#
-# Slightly modified.
 #
 ###############################################################################
 
@@ -25,4 +24,4 @@ printf "$(comm -23 <(apt-mark showmanual | sort -u) \
             sed -n 's/^Package: //p' | sort -u))" > $OUTFILE
 echo "Wrote $(cat $OUTFILE | wc -l) package names to $OUTFILE."
 
-exit 0
+# vim: set ts=4 sw=4 tw=79 fdm=manual et :

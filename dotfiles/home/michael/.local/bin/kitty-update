@@ -1,4 +1,4 @@
-#!/usr/sh
+#!sh
 # -*- coding: UTF-8 -*-
 ###############################################################################
 # kitty-update
@@ -36,12 +36,12 @@ git clone https://github.com/kovidgoyal/kitty.git kitty/
 # Run setup script and install.
 cd kitty
 
-if python3 setup.py build; then 
+if python3 setup.py build; then
     echo 'Update completed successfully.' 1&>2
     exit 0
 fi
 
-echo 'Update completed successfully.' 1&>2
+echo 'Update was unsuccessful!' 1&>2
 exit 1
 
 # vim: set ts=4 sw=4 tw=79 fdm=marker et :

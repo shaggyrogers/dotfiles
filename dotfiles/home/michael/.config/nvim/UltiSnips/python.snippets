@@ -5,25 +5,48 @@ priority -50
 ###########################################################################
 
 #! header
-snippet #! "Shebang header for python scripts" b
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+snippet header "Header for python3 scripts" b
+#!/usr/bin/env python3
+# -*- coding: UTF-8 -*-
+"""
+`!v '  ' . expand('%:t')`
+`!v '  ' . repeat('=', len(expand('%:t')))`
+
+`!v '  ' `Description:           ${1:TODO}
+`!v '  ' `Author:                `!v g:snips_author `
+`!v '  ' `Creation Date:         `!v strftime("%Y-%m-%d")`
+`!v '  ' `Modification Date:     `!v strftime("%Y-%m-%d")`
+
+"""
 $0
 endsnippet
 
 snippet ifmain "if script: exit(main())" b
 if __name__ == `!p snip.rv = get_quoting_style(snip)`__main__`!p snip.rv = get_quoting_style(snip)`:
-	sys.exit(${1:${VISUAL:main}}(${2:sys.argv}))
+	sys.exit(${1:${VISUAL:main}}(*sys.argv))
 endsnippet
 
 snippet main "script entry template" b
-def ${1:${VISUAL:main}}(*args):
-	""" TODO """
+import sys
+
+
+def ${1:${VISUAL:main}}(*args) -> int:
+	""" ${2:TODO}
+
+		Parameters
+		----------
+		TODO
+
+		Returns
+		-------
+		0 if successful, or a nonzero exit code otherwise.
+	"""
 	$0
 	return 0
 
+
 if __name__ == `!p snip.rv = get_quoting_style(snip)`__main__`!p snip.rv = get_quoting_style(snip)`:
-	sys.exit($1(${2:sys.argv}))
+	sys.exit($1(*sys.argv[1:]))
 endsnippet
 
 snippet with "with" b
@@ -35,6 +58,66 @@ endsnippet
 snippet for "for loop" b
 for ${1:item} in ${2:iterable}:
 	${3:${VISUAL:pass}}
+endsnippet
+
+#################
+# click Library #
+#################
+
+snippet clickmain "click library - script main() template" b
+import sys
+
+import click
+
+
+@click.command()
+def ${1:${VISUAL:main}}() -> int:
+	""" ${2:TODO} 
+
+		Returns 0 if successful, or a nonzero exit code otherwise.
+	"""
+	$0
+	return 0
+
+
+if __name__ == `!p snip.rv = get_quoting_style(snip)`__main__`!p snip.rv = get_quoting_style(snip)`:
+	sys.exit($1(*sys.argv[1:]${3:, standalone_mode=True}))
+endsnippet
+
+snippet clickarg "click library - generic argument"
+@click.argument(
+	`!p snip.rv = get_quoting_style(snip)`${1:argument}`!p snip.rv = get_quoting_style(snip)`,
+	nargs=${2:1},
+	type=${3:str},
+)
+endsnippet
+
+snippet clickargp "click library - path argument"
+@click.argument(
+	`!p snip.rv = get_quoting_style(snip)`${1:path}`!p snip.rv = get_quoting_style(snip)`,
+	nargs=${2:1},
+	type=click.Path(${3:exists=True})
+)
+endsnippet
+
+snippet clickopt "click library - generic option"
+@click.option(
+	`!p snip.rv = get_quoting_style(snip)`--${1:option}`!p snip.rv = get_quoting_style(snip)`,
+	help=`!p snip.rv = get_quoting_style(snip)`${2:TODO}`!p snip.rv = get_quoting_style(snip)`,
+	type=${3:str},
+	default=$0,
+	show_default=True
+)
+endsnippet
+
+snippet clickoptf "click library - boolean flag option"
+@click.option(
+	`!p snip.rv = get_quoting_style(snip)`--${1:option}/--no-$1`!p snip.rv = get_quoting_style(snip)`,
+	help=`!p snip.rv = get_quoting_style(snip)`${2:TODO}`!p snip.rv = get_quoting_style(snip)`,
+	is_flag=True,
+	default=${4:False},
+	show_default=True
+)
 endsnippet
 
 ##########
@@ -61,7 +144,9 @@ DOUBLE_QUOTES = '"'
 class Arg(object):
 	def __init__(self, arg):
 		self.arg = arg
-		self.name = arg.split('=')[0].strip()
+		self.name = arg.split('=')[0].split(':')[0].strip()
+		self.type = arg.split('=')[0].split(':')[1].strip() if ':' in arg else None
+		self.default = arg.split('=')[1].strip() if '=' in arg else None
 
 	def __str__(self):
 		return self.name
@@ -70,7 +155,10 @@ class Arg(object):
 		return self.name
 
 	def is_kwarg(self):
-		return '=' in self.arg
+		return self.default is not None
+
+	def has_typehint(self):
+		return self.type is not None
 
 
 def get_args(arglist):
@@ -82,14 +170,18 @@ def get_args(arglist):
 
 def get_quoting_style(snip):
 	style = snip.opt("g:ultisnips_python_quoting_style", "double")
+
 	if style == 'single':
 		return SINGLE_QUOTES
+
 	return DOUBLE_QUOTES
 
 def triple_quotes(snip):
 	style = snip.opt("g:ultisnips_python_triple_quoting_style")
+
 	if not style:
 		return get_quoting_style(snip) * 3
+
 	return (SINGLE_QUOTES if style == 'single' else DOUBLE_QUOTES) * 3
 
 def triple_quotes_handle_trailing(snip, quoting_style):
@@ -111,12 +203,14 @@ def triple_quotes_handle_trailing(snip, quoting_style):
 				nextc = line[col]
 			except IndexError:
 				break
+
 			if nextc == quoting_style and len(_ret):
 				_ret = _ret[1:]
 				col = col+1
 			else:
 				break
 		snip.rv = _ret
+
 	else:
 		snip.rv = snip.c
 
@@ -134,23 +228,33 @@ def get_style(snip):
 def format_arg(arg, style):
 	if style == DOXYGEN:
 		return "@param %s TODO" % arg
+
 	elif style == SPHINX:
 		return ":param %s: TODO" % arg
+
 	elif style == NORMAL:
 		return ":%s: TODO" % arg
+
 	elif style == GOOGLE:
 		return "%s (TODO): TODO" % arg
+
 	elif style == JEDI:
 		return ":type %s: TODO" % arg
+
 	elif style == NUMPY:
+		if arg.has_typehint():
+			return "{0} : {1}".format(arg.name, arg.type)
+
 		return "%s : TODO" % arg
 
 
 def format_return(style):
 	if style == DOXYGEN:
 		return "@return: TODO"
+
 	elif style in (NORMAL, SPHINX, JEDI):
 		return ":returns: TODO"
+
 	elif style == GOOGLE:
 		return "Returns: TODO"
 
@@ -161,13 +265,14 @@ def write_docstring_args(args, snip):
 		return
 
 	snip.rv += '\n' + snip.mkline('', indent='')
-
 	style = get_style(snip)
 
 	if style == GOOGLE:
 		write_google_docstring_args(args, snip)
+
 	elif style == NUMPY:
 		write_numpy_docstring_args(args, snip)
+
 	else:
 		for arg in args:
 			snip += format_arg(arg, style)
@@ -180,21 +285,26 @@ def write_google_docstring_args(args, snip):
 	if args:
 		snip += "Args:"
 		snip.shift()
+
 		for arg in args:
 			snip += format_arg(arg, GOOGLE)
+
 		snip.unshift()
 		snip.rv += '\n' + snip.mkline('', indent='')
 
 	if kwargs:
 		snip += "Kwargs:"
 		snip.shift()
+
 		for kwarg in kwargs:
 			snip += format_arg(kwarg, GOOGLE)
+
 		snip.unshift()
 		snip.rv += '\n' + snip.mkline('', indent='')
 
 
 def write_numpy_docstring_args(args, snip):
+	snip.shift()
 	if args:
 		snip += "Parameters"
 		snip += "----------"
@@ -205,10 +315,13 @@ def write_numpy_docstring_args(args, snip):
 	if args:
 		for arg in args:
 			snip += format_arg(arg, NUMPY)
+
 	if kwargs:
 		for kwarg in kwargs:
 			snip += format_arg(kwarg, NUMPY) + ', optional'
+
 	snip.rv += '\n' + snip.mkline('', indent='')
+	snip.unshift()
 
 
 def write_init_body(args, parents, snip):
@@ -241,19 +354,22 @@ def write_function_docstring(t, snip):
 	"""
 	snip.rv = ""
 	snip >> 1
-
 	args = get_args(t[2])
+
 	if args:
 		write_docstring_args(args, snip)
 
 	style = get_style(snip)
 
 	if style == NUMPY:
+		snip.shift()
 		snip += 'Returns'
 		snip += '-------'
 		snip += 'TODO'
+		snip.unshift()
 	else:
 		snip += format_return(style)
+
 	snip.rv += '\n' + snip.mkline('', indent='')
 	snip += triple_quotes(snip)
 
@@ -268,17 +384,18 @@ endglobal
 
 # Classes
 snippet class "class with docstrings" b
-class ${1:MyClass}(${2:object}):
-	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
+class ${1:MyClass}(${2:parent})$6:
+	`!p snip.rv = triple_quotes(snip)` ${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
 
-	def __init__(self$4):
-		`!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined1.}`!p
+	def __init__(self$4) -> None:
+		`!p snip.rv = triple_quotes(snip)` ${5:Initialises a $1 instance.}`!p
 snip.rv = ""
 snip >> 2
 
 args = get_args(t[4])
 
 write_docstring_args(args, snip)
+
 if args:
 	snip.rv += '\n' + snip.mkline('', indent='')
 	snip += '{0}'.format(triple_quotes(snip))
@@ -288,15 +405,15 @@ write_init_body(args, t[2], snip)
 		$0
 endsnippet
 snippet slotclass "class with slots and docstrings" b
-class ${1:MyClass}(${2:object}):
-	`!p snip.rv = triple_quotes(snip)`${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
+class ${1:MyClass}:
+	`!p snip.rv = triple_quotes(snip)` ${2:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
 `!p
 snip >> 1
 args = get_args(t[4])
 write_slots_args(args, snip)
 `
-	def __init__(self$4):
-		`!p snip.rv = triple_quotes(snip)`${5:TODO: to be defined.}`!p
+	def __init__(self$3) -> None:
+		`!p snip.rv = triple_quotes(snip)` ${4:Initialises a $1 instance.}`!p
 snip.rv = ""
 snip >> 2
 
@@ -312,61 +429,108 @@ write_init_body(args, t[2], snip)
 		$0
 endsnippet
 
+# Enum classes
+snippet enum "enum class with docstrings" b
+@enum.unique
+class ${1:MyEnum}(${2:enum.Enum}):
+	`!p snip.rv = triple_quotes(snip)` ${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
+	${5:FIRST} = $0
+endsnippet
+snippet enumi "enum int class with docstrings" b
+@enum.unique
+class ${1:MyEnum}(${2:enum.IntEnum}):
+	`!p snip.rv = triple_quotes(snip)` ${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
+	${5:FIRST} = $0
+endsnippet
+snippet enumf "enum flag class with docstrings" b
+@enum.unique
+class ${1:MyEnum}(${2:enum.Flag}):
+	`!p snip.rv = triple_quotes(snip)` ${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
+	${5:NONE} = 0
+	${6:FIRST} = 1 << 0
+	${7:SECOND} = 1 << 1
+	$0
+endsnippet
+snippet enumif "enum int flag class with docstrings" b
+@enum.unique
+class ${1:MyEnum}(${2:enum.IntFlag}):
+	`!p snip.rv = triple_quotes(snip)` ${3:Docstring for $1. }`!p snip.rv = triple_quotes(snip)`
+	${5:NONE} = 0
+	${6:FIRST} = 1 << 0
+	${7:SECOND} = 1 << 1
+	$0
+endsnippet
+
 # Containers
 snippet contain "methods for emulating a container type" b
-def __len__(self):
-	${1:pass}
-
-def __getitem__(self, key):
-	${2:pass}
-
-def __setitem__(self, key, value):
+def __len__(self) -> ${1:int}:
+	""" ${2:TODO} """
 	${3:pass}
 
-def __delitem__(self, key):
-	${4:pass}
-
-def __iter__(self):
-	${5:pass}
-
-def __reversed__(self):
+def __getitem__(self, key) -> ${4:object}:
+	""" ${5:TODO} """
 	${6:pass}
 
-def __contains__(self, item):
-	${7:pass}
+def __setitem__(self, key, value) -> ${7:None}:
+	""" ${8:TODO} """
+	${9:pass}
+
+def __delitem__(self, key) -> ${10:None}:
+	""" ${11:TODO} """
+	${12:pass}
+
+def __iter__(self) -> ${13:object}:
+	""" ${14:TODO} """
+	${15:pass}
+
+def __reversed__(self) -> ${16:object}:
+	""" ${17:TODO} """
+	${18:pass}
+
+def __contains__(self, item) -> ${19:bool}:
+	""" ${20:TODO} """
+	${21:pass}
 endsnippet
 snippet len "len container method" b
-def __len__(self):
+def __len__(self) -> ${1:int}:
+	""" ${2:TODO} """
 	${2:pass}
 endsnippet
 snippet getitem "getitem container method" b
-def __getitem__(self, key: Hashable):
-	${2:pass}
+def __getitem__(self, key: Hashable) -> ${1:object}:
+	""" ${2:TODO} """
+	${3:pass}
 endsnippet
 snippet setitem "setitem container method" b
-def __setitem__(self, key: Hashable, value: Any):
-	${2:pass}
+def __setitem__(self, key: Hashable, value: Any) -> ${1:None}:
+	""" ${2:TODO} """
+	${3:pass}
 endsnippet
 snippet delitem "delitem container method" b
-def __delitem__(self, key: Hashable):
-	${4:pass}
+def __delitem__(self, key: Hashable) -> ${1:None}:
+	""" ${2:TODO} """
+	${3:pass}
 endsnippet
 snippet reversed "reversed container method" b
-def __reversed__(self):
-	${4:pass}
+def __reversed__(self) -> ${1:object}:
+	""" ${2:TODO} """
+	${3:pass}
 endsnippet
 snippet contains "contains container method" b
-def __contains__(self, item: Any):
-	${4:pass}
+def __contains__(self, item: Any) -> ${1:bool}:
+	""" ${2:TODO} """
+	${3:pass}
 endsnippet
 
 # Context managers
 snippet context "context manager methods" b
-def __enter__(self):
-	${1:pass}
+def __enter__(self) -> ${1:object}:
+	""" ${2:TODO} """
+	${3:return self}
 
-def __exit__(self, exc_type, exc_value, traceback):
-	${2:pass}
+def __exit__(self, exc_type: Union[type, None], exc_value: Union[Exception, None], traceback: object) -> ${4:None}:
+	""" ${5:TODO} """
+	${6:pass}
 endsnippet
 
 # Attribute methods
@@ -407,25 +571,25 @@ endsnippet
 
 # Comparison methods
 snippet cmp "methods implementing rich comparison"
-def __eq__(self, other):
+def __eq__(self, other: object) -> bool:
 	${1:pass}
 
-def __ne__(self, other):
+def __ne__(self, other: object) -> bool:
 	${2:pass}
 
-def __lt__(self, other):
+def __lt__(self, other: object):
 	${3:pass}
 
-def __le__(self, other):
+def __le__(self, other: object):
 	${4:pass}
 
-def __gt__(self, other):
+def __gt__(self, other: object):
 	${5:pass}
 
-def __ge__(self, other):
+def __ge__(self, other: object):
 	${6:pass}
 
-def __cmp__(self, other):
+def __cmp__(self, other: object):
 	${7:pass}
 endsnippet
 
@@ -531,14 +695,14 @@ endsnippet
 
 # Functions / class methods
 snippet deff
-def ${1:fname}(`!p snip.rv = vim.eval('indent(".") ? "self" : ""')`$2):
+def ${1:fname}(`!p snip.rv = vim.eval('indent(".") ? "self" : ""')`$2) -> ${3:None}:
 	$0
 endsnippet
 snippet def "function with docstrings" b
 def ${1:function}(`!p
 if snip.indent:
-	snip.rv = 'self' + (", " if len(t[2]) else "")`${2:arg1}):
-	`!p snip.rv = triple_quotes(snip)`${4:TODO: Docstring for $1.}`!p
+	snip.rv = 'self' + (", " if len(t[2]) else "")`${2:arg1}) -> ${3:None}:
+	`!p snip.rv = triple_quotes(snip)` ${4:TODO: Docstring for $1.}`!p
 write_function_docstring(t, snip) `
 	${5:${VISUAL:pass}}
 endsnippet
@@ -546,15 +710,15 @@ snippet defc "class method with docstrings" b
 @classmethod
 def ${1:function}(`!p
 if snip.indent:
-	snip.rv = 'cls' + (", " if len(t[2]) else "")`${2:arg1}):
-	`!p snip.rv = triple_quotes(snip)`${4:TODO: Docstring for $1.}`!p
+	snip.rv = 'cls' + (", " if len(t[2]) else "")`${2:arg1}) -> ${3:None}:
+	`!p snip.rv = triple_quotes(snip)` ${4:TODO: Docstring for $1.}`!p
 write_function_docstring(t, snip) `
 	${5:${VISUAL:pass}}
 endsnippet
 snippet defs "static method with docstrings" b
 @staticmethod
-def ${1:function}(${2:arg1}):
-	`!p snip.rv = triple_quotes(snip)`${4:TODO: Docstring for $1.}`!p
+def ${1:function}(${2:arg1}) -> ${3:None}:
+	`!p snip.rv = triple_quotes(snip)` ${4:TODO: Docstring for $1.}`!p
 write_function_docstring(t, snip) `
 	${5:${VISUAL:pass}}
 endsnippet
@@ -575,8 +739,8 @@ endsnippet
 ##############
 snippet roprop "Read Only Property" b
 @property
-def ${1:name}(self):
-	${2:return self._$1}$0
+def ${1:name}(self) -> ${2:object}:
+	${3:return self._$1}$0
 endsnippet
 snippet rwprop "Read write property" b
 def ${1:name}():
@@ -710,6 +874,10 @@ snippet doc "doc block (triple quotes)"
 `!p snip.rv = triple_quotes(snip)`
 ${1:${VISUAL:doc}}
 `!p snip.rv = triple_quotes(snip)`
+endsnippet
+
+snippet log "get logger"
+log = logging.getLogger(__name__)
 endsnippet
 
 # vim: set ft=snippets fdl=0:

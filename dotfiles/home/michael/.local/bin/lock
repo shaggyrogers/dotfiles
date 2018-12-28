@@ -7,7 +7,7 @@
 # Description:           Runs i3lock with a set configuration.
 # Author:                Michael De Pasquale <shaggyrogers>
 # Creation Date:         2017-11-28
-# Modification Date:     2018-03-03
+# Modification Date:     2018-12-28
 # License:               MIT
 #
 ###############################################################################
@@ -17,43 +17,72 @@ if pgrep 'i3lock'; then
     exit 1;
 fi
 
-i3lock -k --timepos='x+0.5*w-0.5*cw:y+0.5*h-0.5*ch' \
-          --timecolor='#FFFFFFCC' \
-          --timesize=48 \
-          --datecolor='#FFFFFFCC' \
-          --datesize='24' \
-          --indicator \
-          --ring-width=8 \
-          --radius=36 \
-          --indpos='x+1.8*r:y+h-1.8*r' \
-          --veriftext='' \
-          --wrongtext='' \
-          --insidevercolor='#FFFFFF88' \
-          --insidewrongcolor='#FF111188' \
-          --insidecolor='#00000000' \
-          --ringvercolor='#FFFFFFCC' \
-          --ringwrongcolor='#FFFFFFCC' \
-          --ringcolor='#FFFFFFCC' \
-          --linecolor='#00000000' \
-          --separatorcolor='#00000000' \
-          --keyhlcolor='#11FF11CC' \
-          --bshlcolor='#FF1111CC' \
-          -i $HOME'/.config/i3/lockimg.png' &
+# Interior circle
+INSIDE_VERIFY_COLOR='#79849466'
+INSIDE_WRONG_COLOR='#FF463366'
+INSIDE_COLOR='#00000000'
 
-# Commented this out for now - does not work
-#sleep 1.0
-#i3lockpid=$!
-#winid=`xwininfo -name "i3lock" | grep "Window id" | grep -oE "0x[0-9a-f]+"`
-#
-#if [ -z "$winid" ]; then
-#    echo "Could not find i3lock window"
-#    exit 1
-#fi
-#
-#conky -w "$winid" &
-#conkypid=$!
-#wait $i3lockpid
-#kill $conkypid
+# Outside ring
+RING_VERIFY_COLOR='#AFCCDDCC'
+RING_WRONG_COLOR='#FF260FFF'
+RING_COLOR='#F1F5F8AA'
+ENTER_KEY_HL_COLOR='#47ED35FF'
+BACKSPACE_HL_COLOR='#D4493AFF'
+HL_SEPARATOR_COLOR='#00000000'
+CIRCLE_RADIUS=36
+RING_WIDTH=8
+
+# Separates interior and exterior
+LINE_COLOR='#00000000'
+
+# Time
+TIME_COLOR='#FFFFFFCC'
+TIME_FORMAT='%H:%M:%S'
+TIME_FONT='Roboto'
+TIME_FONT_SIZE=48
+
+# Date
+DATE_COLOR='#FFFFFFCC'
+DATE_FORMAT='%A, %m %B %Y'
+DATE_FONT_SIZE=24
+DATE_FONT=$TIME_FONT
+
+# Status text
+STATUS_TEXT_COLOR='#FFFFFFCC'
+VERIFY_TEXT=''
+WRONG_TEXT=''
+STATUS_TEXT_SIZE=48
+
+i3lock -k --timepos='x+0.5*w-0.5*cw:y+0.5*h-0.5*ch' \
+          --timesize=$TIME_FONT_SIZE \
+          --timestr="$TIME_FORMAT" \
+          --timecolor="$TIME_COLOR" \
+          --datecolor="$TIME_COLOR" \
+          --datestr="$DATE_FORMAT" \
+          --datesize=$DATE_FONT_SIZE \
+          --indicator \
+          --ring-width=$RING_WIDTH \
+          --radius=$CIRCLE_RADIUS \
+          --indpos='x+1.8*r:y+h-1.8*r' \
+          --tiling \
+          --screen=1 \
+          --force-clock \
+          --time-align=0 \
+          --date-align=0 \
+          --layout-align=0 \
+          --veriftext="$VERIFY_TEXT" \
+          --wrongtext="$WRONG_TEXT" \
+          --insidevercolor="$INSIDE_VERIFY_COLOR" \
+          --insidewrongcolor="$INSIDE_WRONG_COLOR" \
+          --insidecolor="$INSIDE_COLOR" \
+          --ringvercolor="$RING_VERIFY_COLOR" \
+          --ringwrongcolor="$RING_WRONG_COLOR" \
+          --ringcolor="$RING_COLOR" \
+          --linecolor="$LINE_COLOR" \
+          --separatorcolor="$HL_SEPARATOR_COLOR" \
+          --keyhlcolor="$ENTER_KEY_HL_COLOR" \
+          --bshlcolor="$BACKSPACE_HL_COLOR" \
+          -i $HOME'/.config/i3/lockimg.png' &
 
 exit 0
 

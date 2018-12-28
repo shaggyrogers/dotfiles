@@ -48,7 +48,9 @@ augroup PythonFiletypeConfig
     autocmd BufEnter *.py,*.pyx,*.pyd,*.pyw,*.pxi,*.pyi
                 \ hi link Conceal Operator
     autocmd BufWrite *.py,*.pyx,*.pyd,*.pyw,*.pxi,*.pyi
-                \ call rccommon#DeleteTrailingWS() | retab
+                \ call rccommon#DeleteTrailingWS() |
+                \ call rccommon#UpdateModificationDate() |
+                \ retab
     autocmd VimResized *.py,*.pyx,*.pyd,*.pyw,*.pxi,*.pyi
                 \ call rccommon#UpdateTagbarOptions()
 augroup end

@@ -12,6 +12,6 @@
 #
 ###############################################################################
 
-# Moved environment variable configuration to .xsessionrc
+# Moved environment variables to .xsessionrc
 
 #  vim: set ts=4 sw=4 tw=79 fdm=marker et : 

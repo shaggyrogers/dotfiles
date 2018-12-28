@@ -24,11 +24,15 @@ retab
 augroup i3FiletypeConfig
     autocmd!
     autocmd BufWrite *
-                \ if &ft == 'i3' | call rccommon#DeleteTrailingWS() | endif
-    autocmd BufWritePost * 
-                \ if &ft == 'i3' | 
+                \ if &ft == 'i3' |
+                \ call rccommon#DeleteTrailingWS() |
+                \ call rccommon#UpdateModificationDate() |
+                \ retab |
+                \ endif
+    autocmd BufWritePost *
+                \ if &ft == 'i3' |
                     \ if rccommon#ConfirmYN('Restart i3?', 2, 0, 0, 'Warning')
-                        \ | silent execute '!i3-msg restart' 
+                        \ | silent execute '!i3-msg restart'
                         \ | silent execute "!sleep 0.5; i3-msg [title='nvim '] focus"
                     \ | endif
                 \ | endif

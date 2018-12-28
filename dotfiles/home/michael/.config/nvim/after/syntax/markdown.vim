@@ -11,8 +11,6 @@
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"finish
-
 " Clear syntax groups if they exist{{{
 try
     syntax clear mkdBold
@@ -47,6 +45,8 @@ syntax match mkdGitCheckBox
 syntax match mkdGitCheckBoxChecked
         \ '\m\(^\s\{0,16\}\([*\-+]\([*\-+]\)\@1<!\)\?\s\?\)\@32<=\[x\]'
         \ conceal cchar=☑
+
+" Regular expressions are fine, but can't get this to work :\
 syn match mkdTableSep "\(^\s\{0,16\}\)\@16<=|[: ]\?-\([: ]\?-\+[: ]\?|\)\+"
         \ contains=mkdTableVHL,mkdTableVHLR,mkdTableVHR,
         \ mkdTable
@@ -67,5 +67,7 @@ syn match mkdTableH '-' contained containedin=mkdTableSep conceal cchar=━
 syn match mkdTableV '|' contained containedin=mkdTable conceal cchar=┃
 
 hi! link Conceal Identifier
+hi! link mkdHeading Title
 hi! link mkdBold Question "}}}
+
 " vim: set ts=4 sw=4 tw=79 fdm=marker et :

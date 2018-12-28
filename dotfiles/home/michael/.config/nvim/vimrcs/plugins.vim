@@ -1,14 +1,12 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
 " plugins.vim
 " ===========
-"
+
+" Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-"
-" Description
-" -----------
-"   All plugin-related options and shortcuts go here.
+" Modification Date:     2018-12-25
+" License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -23,15 +21,56 @@ let s:savedYanksPath = $HOME.'/.config/nvim/temp_data/yankhistory.txt'
 " Features
 let s:saveYanks = 1
 
-" Details for templates & snippets
+" Details for snippets
 let g:username = "Michael De Pasquale"
 let g:license = "MIT"
-let g:email = "miсkԁρ1 аt ցmаіl ԁоt ⅽօm"
+let g:email = ""
 let g:github = "shaggyrogers"
 
 " Paths to plugins and plugin patches folders, relative to neovimPath
 let s:patchesDir = '/plugin_patches'
 let s:pluginsDir = '/plugged'
+
+" Directories must end with / for rooter.
+let s:project_root_markers = [
+            \ '.projectroot',
+            \ '.git',
+            \ '.git/',
+            \ '.hg/',
+            \ '.svn/',
+            \ '_darcs/',
+            \ '_FOSSIL_/',
+            \ '.fslckout/',
+            \ '.bzr/',
+            \ 'CVS/',
+            \ '.gitignore',
+            \ '.hgignore',
+            \ '.travis.yml',
+            \ 'pom.xml',
+            \ 'tox.ini',
+            \ 'build.gradle',
+            \ 'rebar.config',
+            \ '.scrutinizer.yml',
+            \ '.readthedocs.yml',
+            \ 'codecov.yml',
+            \ 'Gemfile',
+            \ 'Pipfile.lock',
+            \ 'setup.py',
+            \ 'configure.in',
+            \ 'configure.ac',
+            \ 'CHANGELOG',
+            \ 'CHANGELOG.md',
+            \ 'CHANGELOG.markdown',
+            \ 'CHANGELOG.rst',
+            \ 'README',
+            \ 'README.md',
+            \ 'README.markdown',
+            \ 'README.rst',
+            \ 'LICENSE',
+            \ 'Makefile',
+            \ 'CMakeLists.txt',
+            \ 'Rakefile',
+            \ ]
 "}}}
 
 " Plugin patching{{{
@@ -82,19 +121,14 @@ Plug 'https://github.com/zchee/deoplete-jedi.git',
 "}}}
 
 " Editing{{{
-Plug 'https://github.com/AndrewRadev/splitjoin.vim'
-Plug 'https://github.com/aperezdc/vim-template.git'
-Plug 'https://github.com/chrisbra/unicode.vim.git'
 Plug 'https://github.com/dhruvasagar/vim-table-mode.git'
 Plug 'https://github.com/godlygeek/tabular.git'
-Plug 'https://github.com/gorkunov/smartpairs.vim.git'
 Plug 'https://github.com/itmammoth/doorboy.vim.git'
 Plug 'https://github.com/manasthakur/vim-commentor.git'
-Plug 'https://github.com/Shougo/neoyank.vim.git'
+Plug 'https://github.com/rhysd/clever-f.vim.git'
 Plug 'https://github.com/SirVer/ultisnips.git'
 Plug 'https://github.com/tpope/vim-speeddating'
 Plug 'https://github.com/tpope/vim-surround.git'
-Plug 'https://github.com/tpope/vim-unimpaired.git'
 Plug 'https://github.com/zirrostig/vim-schlepp'
 "}}}
 
@@ -109,6 +143,7 @@ Plug 'https://github.com/okcompute/vim-python-motions.git'
 Plug 'https://github.com/rhysd/vim-gfm-syntax.git'
 Plug 'https://github.com/sheerun/vim-polyglot.git'
 Plug 'https://github.com/tmhedberg/SimpylFold.git'
+Plug 'https://github.com/tweekmonster/impsort.vim.git'
 Plug 'https://github.com/vim-python/python-syntax.git'
 Plug 'https://github.com/Vimjas/vim-python-pep8-indent.git'
 Plug 'https://github.com/w0rp/ale.git'
@@ -116,20 +151,15 @@ Plug 'https://github.com/w0rp/ale.git'
 
 " Files / Buffers / Windows {{{
 Plug 'https://github.com/airblade/vim-rooter.git'
-Plug 'https://github.com/artnez/vim-wipeout.git'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim'
 Plug 'https://github.com/DavidEGx/ctrlp-smarttabs.git'
 Plug 'https://github.com/nixprime/cpsm.git'
-Plug 'https://github.com/scrooloose/nerdtree.git'
 "}}}
 
 " Version Control "{{{
 "Plug 'https://github.com/simnalamburt/vim-mundo.git'
 Plug 'https://github.com/shaggyrogers/vim-mundo.git'
 Plug 'https://github.com/kshenoy/vim-signature.git'
-Plug 'https://github.com/Xuyuanp/nerdtree-git-plugin.git'
-Plug 'https://github.com/tpope/vim-fugitive'
-Plug 'https://github.com/junegunn/gv.vim.git'
  "}}}
 
 " UI{{{
@@ -142,7 +172,6 @@ Plug 'https://github.com/vim-airline/vim-airline.git'
 Plug 'https://github.com/mhinz/vim-signify'
 Plug 'https://github.com/mhinz/vim-startify.git'
 Plug 'https://github.com/itchyny/vim-cursorword.git'
-Plug 'https://github.com/chrisbra/Colorizer.git'
 Plug 'https://github.com/luochen1990/rainbow.git'
 Plug 'https://github.com/machakann/vim-highlightedyank.git'
 Plug 'https://github.com/ryanoasis/vim-devicons.git'
@@ -150,7 +179,6 @@ Plug 'https://github.com/timakro/vim-searchant.git'
 "}}}
 
 " Miscellaneous {{{
-Plug 'https://github.com/kana/vim-submode.git'
 Plug 'https://github.com/tpope/vim-repeat.git'
 "}}}
 
@@ -168,8 +196,10 @@ endif
 " Configure plugins{{{
 
 " Autocomplete{{{
+
 " Deoplete{{{
 call assert_true(exists('*deoplete#initialize'))
+
 " General configuration{{{
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_camel_case = 1
@@ -180,12 +210,16 @@ let g:deoplete#max_menu_width = 50
 let g:deoplete#auto_complete_delay = 40
 let g:deoplete#file#enable_buffer_path = 1
 "}}}
+
 " Configure dictionary{{{
 call deoplete#custom#source('dictionary', 'matchers', ['matcher_head'])
 call deoplete#custom#source('dictionary', 'min_pattern_length', 3)
 "}}}
+
 "}}}
+
 " UltiSnips{{{
+
 " Configuration{{{
 let g:UltiSnipsUsePythonVersion = 3
 let g:UltiSnipsEditSplit = 'horizontal'
@@ -194,17 +228,26 @@ let g:snips_author = g:username
 let g:snips_email = g:email
 let g:snips_github = g:github
 let g:snips_license = g:license
+
+" Python
+let g:ultisnips_python_style = 'numpy'
+let g:ultisnips_python_quoting_style = 'single'
+let g:ultisnips_python_triple_quoting_style = 'double'
 "}}}
+
 " Key mappings{{{
 let g:UltiSnipsExpandTrigger = "<C-k>"
 let g:UltiSnipsListSnippets = '<c-j>'
 let g:UltiSnipsJumpForwardTrigger = '<c-l>'
 let g:UltiSnipsJumpBackwardTrigger = '<c-h>'
 "}}}
+
 "}}}
+
 " neco-ghc [Haskell] "{{{
 let g:necoghc_enable_detailed_browse = 1
 "}}}
+
 " deoplete-jedi [Python]{{{
 let g:deoplete#sources#jedi#server_timeout = 10
 let g:deoplete#sources#jedi#statement_length = 50
@@ -214,128 +257,75 @@ let g:deoplete#sources#jedi#python_path = '/usr/bin/python3.6'
 let g:deoplete#sources#jedi#debug_server = 0
 let g:deoplete#sources#jedi#extra_path =  []
 "}}}
+
 "}}}
 
 " Editing{{{
+
+" clever-f{{{
+let g:clever_f_across_no_line          = 1
+let g:clever_f_ignore_case             = 0
+let g:clever_f_use_migemo              = 0
+let g:clever_f_fix_key_direction       = 0
+let g:clever_f_show_prompt             = 1
+let g:clever_f_smart_case              = 1
+let g:clever_f_chars_match_any_signs   = ''
+let g:clever_f_mark_cursor             = 1
+let g:clever_f_hide_cursor_on_cmdline  = 1
+let g:clever_f_timeout_ms              = 0
+let g:clever_f_mark_char               = 1
+let g:clever_f_repeat_last_char_inputs = ["\<CR>"]
+
+" below variables must be set before loading this script
+let g:clever_f_mark_cursor_color       = 'Cursor'
+let g:clever_f_mark_char_color         = 'MatchParen'
+let g:clever_f_clean_labels_eagerly    = 1
+
+nnoremap <Esc> <Cmd>call clever_f#_reset_all()<CR>
+"}}}
+
 " doorboy{{{
 call assert_true(exists('g:loaded_doorboy'))
+
 " Configure for filetypes {{{
 let g:doorboy_additional_quotations = {
-      \ '*': ['@'],
-      \ 'coffee': ['/']
-  \ }
+        \ 'coffee': ['/']
+    \ }
 let g:doorboy_nomap_quotations = {
-      \ 'javascript': ['/']
-  \ }
+        \ 'javascript': ['/']
+    \ }
 let g:doorboy_additional_brackets = {
-      \ 'html': ['<>']
-  \ }
+        \ 'html': ['<>']
+    \ }
 "}}}
-"}}}
-" neoyank{{{
-call assert_true(exists('g:neoyank#limit'))
-" Configure{{{
-let g:neoyank#limit = 64
-let g:neoyank#save_registers = ['0']
 
-if s:saveYanks
-    let g:neoyank#file = s:savedYanksPath
-else
-    let g:neoyank#disable_write = 1
-    let g:neoyank#file = ''
-endif
 "}}}
-" Alt + p : paste from yank history{{{
-nnoremap <silent> <M-p> :Denite neoyank -auto-resize -mode=normal<CR>
-xnoremap <silent> <M-p> <esc>:Denite neoyank -auto-resize -mode=normal<CR>gv
-inoremap <silent> <M-p> <C-o>:Denite neoyank -auto-resize -mode=normal<CR>
-"}}}
-"}}}
+
 " schlepp{{{
+
 " Configuration{{{
 let g:Schlepp#allowSquishingLines = 1
 let g:Schlepp#allowSquishingBlocks = 1
-let g:Schlepp#reindent = 1
+let g:Schlepp#reindent = 0
 let g:Schlepp#useShiftWidthLines = 1
+let g:Schlepp#trimWS = 0
 "}}}
-" Mappings{{{
-nmap <silent> <Char-0x10>Gc Vzv<Plug>SchleppUp
-nmap <silent> <Char-0x10>Gb Vzv<Plug>SchleppDown
-nmap <silent> <Char-0x10>GZ Vzv<Plug>SchleppLeft
-nmap <silent> <Char-0x10>Gd Vzv<Plug>SchleppRight
-xmap <silent> <Char-0x10>Gc zv<Plug>SchleppUp
-xmap <silent> <Char-0x10>Gb zv<Plug>SchleppDown
-xmap <silent> <Char-0x10>GZ zv<Plug>SchleppLeft
-xmap <silent> <Char-0x10>Gd zv<Plug>SchleppRight
-"}}}
-"}}}
-" Splitjoin{{{
-" Smartpairs{{{
-" Configuration{{{
-let g:smartpairs_start_from_word = 1
-let g:smartpairs_maxdepth = 64
-"}}}
-" Mappings - Alt + v / Alt + Shift + v : Select word / paragraph{{{
-function! SmartPairsN()
-    exec 'normal! v' | NextPairs
-endfunction
-function! SmartPairsV()
-    exec 'normal! gv' | NextPairs
-endfunction
 
-nnoremap <silent> <M-v> :call SmartPairsN()<CR>
-xnoremap <silent> <M-v> <esc>:call SmartPairsV()<CR>
-"}}}
-"}}}
-" Configuration{{{
-let g:splitjoin_align = 0
-let g:splitjoin_coffee_suffix_if_clause = 1
-let g:splitjoin_curly_brace_padding = 0
-let g:splitjoin_handlebars_closing_bracket_on_same_line = 0
-let g:splitjoin_handlebars_hanging_arguments = 0
-let g:splitjoin_html_attributes_bracket_on_new_line = 0
-let g:splitjoin_normalize_whitespace = 1
-let g:splitjoin_perl_brace_on_same_line = 1
-let g:splitjoin_python_brackets_on_separate_lines = 1
-let g:splitjoin_ruby_curly_braces = 0
-let g:splitjoin_ruby_do_block_split = 1
-let g:splitjoin_ruby_hanging_args = 1
-let g:splitjoin_ruby_heredoc_type = '<<-'
-let g:splitjoin_ruby_trailing_comma = 0
-let g:splitjoin_trailing_comma = 0
-"}}}
 " Mappings{{{
-let g:splitjoin_join_mapping = '<M-S>'
-let g:splitjoin_split_mapping = '<M-s>'
+nmap <silent> <Char-0x10>Gc Vzn<Plug>SchleppUp<esc>zNzv
+nmap <silent> <Char-0x10>Gb Vzn<Plug>SchleppDown<esc>zNzv
+nmap <silent> <Char-0x10>GZ Vzn<Plug>SchleppLeft<esc>zNzv
+nmap <silent> <Char-0x10>Gd Vzn<Plug>SchleppRight<esc>zNzv
+xmap <silent> <Char-0x10>Gc zn<Plug>SchleppUp<esc>zNzvgv
+xmap <silent> <Char-0x10>Gb zn<Plug>SchleppDown<esc>zNzvgv
+xmap <silent> <Char-0x10>GZ zn<Plug>SchleppLeft<esc>zNzvgv
+xmap <silent> <Char-0x10>Gd zn<Plug>SchleppRight<esc>zNzvgv
 "}}}
+
 "}}}
-" Templates{{{
-call assert_true(exists(':Template'))
-" Configuration{{{
-let g:templates_fuzzy_start = 1
-let g:templates_directory = [ $HOME.'/.config/nvim/templates' ]
-let g:templates_search_height = 0
-let g:templates_global_name_prefix = 'template'
-let g:templates_no_builtin_templates = 1
-let g:templates_user_variables = [
-        \   ['FILEHEADING', 'plugins#TemplateFileHeading'],
-        \   ['FILEHEADINGULINE', 'plugins#TemplateFileHeadingUnderline'],
-        \   ['GITHUBUSER', 'plugins#TemplateGithubUser'],
-        \ ]
-"}}}
-" Functions{{{
-function! plugins#TemplateFileHeading()
-    return expand('%:p:t')
-endfunction
-function! plugins#TemplateFileHeadingUnderline()
-    return repeat('=', len(expand('%:p:t')))
-endfunction
-function! plugins#TemplateGithubUser()
-    return g:github
-endfunction
-"}}}
-"}}}
+
 " Table mode{{{
+
 " Configuration{{{
 let g:table_mode_corner = '|'
 let g:table_mode_separator = '|'
@@ -348,20 +338,26 @@ let g:table_mode_syntax = 0
 let g:table_mode_auto_align = 1
 let g:table_mode_update_time = 500
 "}}}
+
 " Mappings{{{
 nnoremap <Leader><bar> :TableModeToggle<CR>
 xnoremap <Leader><bar> <esc>:TableModeToggle<CR>gv
 "}}}
+
 " Custom status indicator{{{
 function! plugins#TableModeStatus()
     if exists(':TableModeEnable') && tablemode#IsActive()
         return printf('%s', g:airline_symbols.tablemode)
     endif
+
     return ''
 endfunction
 "}}}
+
 "}}}
+
 " Tabularize{{{
+
 " Mappings {{{
 " Source: spf13, with some modifications
 nnoremap <Leader>T&       :Tabularize /&<CR>
@@ -388,20 +384,25 @@ xnoremap <Leader>T<Space> :Tabularize /\S\+<CR>
 nnoremap <M-Space>        :Tabularize /[              ][^ ]\+/l0<CR>
 xnoremap <M-Space>        :Tabularize /[              ][^ ]\+/l0<CR>gv
 "}}}
+
 "}}}
+
 " Vissort{{{
 " Alt + s - Sort visual selection
 xmap <M-s> :Vissort<CR>
 "}}}
+
 "}}}
 
 " Syntax{{{
+
 " ALE{{{
 call assert_true(exists(':ALELint'))
+
+" Configuration{{{
 let g:ale_enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:ale_completion_enabled = 0
-" Configuration{{{
 let g:ale_cache_executable_check_failures = 0
 let g:ale_command_wrapper = ''
 let g:ale_echo_cursor = 1
@@ -417,6 +418,11 @@ let g:ale_fixers = {
             \       'add_blank_lines_for_python_control_statements',
             \       'isort',
             \       'yapf',
+            \   ],
+            \   'cpp': [
+            \       'clang-format',
+            \       'remove_trailing_lines',
+            \       'trim_whitespace',
             \   ],
             \}
 let g:ale_history_enabled = 1
@@ -447,25 +453,32 @@ let g:ale_set_signs = 1
 let g:ale_sign_column_always = 1
 let g:ale_sign_offset =  1000000
 let g:ale_type_map = { 'flake8': {'ES': 'WS', 'E': 'W'}  }
-let g:ale_virtualenv_dir_names = ['.env', 'env', 've-py3', 've', 'virtualenv',  'venv']
+let g:ale_virtualenv_dir_names = [
+            \ '.env',
+            \ 'env',
+            \ 've-py3',
+            \ 've',
+            \ 'virtualenv',
+            \ 'venv']
 let g:ale_warn_about_trailing_blank_lines = 1
 let g:ale_warn_about_trailing_whitespace = 1
 let g:ale_writegood_executable = 'writegood'
 let g:ale_writegood_options = ''
 let g:ale_writegood_use_global = 0
 "}}}
+
 " Appearance{{{
 let g:ale_change_sign_column_color = 0
 
 if s:useEmojis
     let g:ale_sign_error = '❗'
     let g:ale_sign_info = '💬'
-    let g:ale_sign_warning = '⚠' "❕
+    let g:ale_sign_warning = '⚠️' "❕
     let g:ale_sign_style_error = '❓'
     let g:ale_sign_style_warning = '❔'
 else
     let g:ale_sign_error = ''
-    let g:ale_sign_info = '󲀃'
+    let g:ale_sign_info = ''
     let g:ale_sign_warning = ''
     let g:ale_sign_style_error = '󲁰'
     let g:ale_sign_style_warning = '󲁱'
@@ -492,73 +505,27 @@ hi! link ALEInfo Info
 function! plugins#ALELintStatus()
     return printf('%s', g:_ale_statusicon)
 endfunction
-
-function! plugins#ALEJumpStatus()
-    if exists("*submode#current") && submode#current() == 'errorjump'
-        return printf('%s', g:airline_symbols.errorjump)
-    endif
-    return ''
-endfunction
 "}}}
-" Error submode{{{
-function! ErrJmpCmd(cmd)
-    try | execute a:cmd | catch /.*/ | endtry
-endfunction
 
-call submode#enter_with('errorjump', 'n', '', '<M-e>', ':cw<CR>')
-call submode#map('errorjump', 'n', '', 'h', ':silent cfirst<CR>zx')
-call submode#map('errorjump', 'n', '', 'j',
-            \ ':silent call ErrJmpCmd("cnext")<CR>zx')
-call submode#map('errorjump', 'n', '', '<Tab>',
-            \ ':silent call ErrJmpCmd("cnext")<CR>zx')
-call submode#map('errorjump', 'n', '', '<Space>',
-            \ ':silent call ErrJmpCmd("cnext")<CR>zx')
-call submode#map('errorjump', 'n', '', '<CR>',
-            \ ':silent call ErrJmpCmd("cnext")<CR>zx')
-call submode#map('errorjump', 'n', '', 'k',
-            \ ':silent call ErrJmpCmd("cprevious")<CR>zx')
-call submode#map('errorjump', 'n', '', '<BS>',
-            \ ':silent call ErrJmpCmd("cprevious")<CR>zx')
-call submode#map('errorjump', 'n', '', 'l', ':silent clast<CR>zx')
-
-" Other keys exit mode and close quickfix window. List is not exhaustive.
-let qfexitkeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'q', 'w',
-            \ 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'a', 's',
-            \ 'd', 'f', 'g', 'z', 'x', 'c', 'v', 'b', 'm',
-            \ '<Esc>', '<Bslash>', '<Bar>', '<lt>', '<gt>', ';',
-            \ '/', "'", '-', '=', '`', '<Delete>']
-
-for i in qfexitkeys
-    call submode#map('errorjump', 'n', '', i,
-                \ '<esc>:silent call submode#restore_options()<CR>:ccl<CR>')
-endfor
-
-function! QuickfixFilterBuffer(bufno)
-    let qflist = getqflist() | let newlist = []
-
-    for i in qflist
-        if i.bufno == a:bufno | newlist = newlist + [i] | endif
-    endfor
-
-    call setqflist(qflist)
-endfunction
-"}}}
 " Mappings{{{
-" Ctrl + Alt + Shift + h/l : ErrorJump next/prev{{{
-" Requires terminal configured to send corresponding keys
-nnoremap <silent> <Char-0x10>HZ :ALEPreviousWrap<CR>
-nnoremap <silent> <Char-0x10>Hd :ALENextWrap<CR>
+" Ctrl + Up / Down : ErrorJump next/prev{{{
+nnoremap <silent> <C-Up> <Cmd>ALEPreviousWrap<CR>
+nnoremap <silent> <C-Down> <Cmd>ALENextWrap<CR>
 "}}}
 " F12 : Run ALE fixers{{{
 nnoremap <F12> :ALEFix<CR>:echom 'Running ALE fixers...'<CR>
 "}}}
 "}}}
+
 " Autocommands{{{
 let g:_ale_statusicon = ''
 "}}}
+
 "}}}
+
 " Gutentags{{{
 call assert_true(exists('GutentagsToggleEnabled'))
+
 " General configuration{{{
 let g:gutentags_add_default_project_roots = 0
 let g:gutentags_ctags_tagfile = '.tags'
@@ -571,10 +538,36 @@ let g:gutentags_file_list_command = {
                     \ '.svn': 'svn list',
                 \ },
             \ }
-let g:gutentags_project_root = ['.git', '.hg', '.svn']
+let g:gutentags_project_root_finder = 'FindRootDirectoryGutentagsWrapper'
+
+" Wrapper for FindRootDirectory() that takes (and ignores) variable arguments
+function! FindRootDirectoryGutentagsWrapper(...)
+    "echom 'Find root dir called, cwd: ' . getcwd() . ' buffer: ' . buffer_name('')
+    let l:rootdir = FindRootDirectory()
+
+    if l:rootdir != ''
+        return l:rootdir
+    endif
+
+    return getcwd()
+endfunction
+
+"let g:gutentags_project_root = [
+"            \ '.projectroot',
+"            \ '.git',
+"            \ '.hg',
+"            \ '.svn',
+"            \ '_darcs',
+"            \ '_FOSSIL_',
+"            \ '.fslckout',
+"            \ '.bzr',
+"            \ 'CVS',
+"            \ ]
 let g:gutentags_resolve_symlinks = 1
 "}}}
+
 "}}}
+
 " gfm-syntax{{{
 call assert_true(exists('g:loaded_gfm_syntax'))
 let g:gfm_syntax_highlight_inline_code = 1
@@ -588,10 +581,11 @@ if s:useEmojis == 1
     let g:gfm_syntax_emoji_conceal = 1
 endif
 "}}}
+
 " highlighter{{{
 call assert_true(exists('HighlighterUpdate'))
 let g:highlighter#auto_update = 2
-let g:highlighter#project_root_signs =  g:gutentags_project_root
+let g:highlighter#project_root_signs = s:project_root_markers
 let g:highlighter#syntax_python = [
       \ { 'hlgroup'       : 'HighlighterPythonFunction',
       \   'hlgroup_link'  : 'Function',
@@ -610,16 +604,36 @@ let g:highlighter#syntax_python = [
       \   'tagkinds'      : 'c',
      \ }]
 " }}}
+
+" impsort{{{
+let g:impsort_override_formatexpr = 1
+let g:impsort_highlight_imported = 1
+let g:impsort_method_module = ['depth', 'alpha', 'length']
+let g:impsort_method_group = ['alpha', 'length']
+let g:impsort_start_nextline = 0
+let g:impsort_lines_after_imports = 1
+
+hi IdentifierSpecial ctermfg=14 ctermbg=NONE guifg=#42A5F5 guibg=NONE
+hi TypeSpecial ctermfg=121 ctermbg=NONE guifg=#C7A90C guibg=NONE
+hi link pythonImportedClassDef TypeSpecial
+hi link pythonImportedModule IdentifierSpecial
+hi link pythonImportedObject TypeSpecial
+
+" }}}
+
 " python-syntax{{{
 let g:python_highlight_all = 1
 "}}}
+
 " SimpylFold{{{
 call assert_true(exists('*SimpylFoldDocstrings'))
 let g:SimpylFold_docstring_preview = 0
 let g:SimpylFold_fold_docstring = 1
 let g:SimpylFold_fold_import = 1
 "}}}
+
 " Tagbar{{{
+
 " Configuration{{{
 let g:tagbar_foldlevel = 1
 let g:tagbar_indent = 1
@@ -646,9 +660,11 @@ let g:tagbar_type_markdown = {
     \ ]
 \ }
 "}}}
+
 " Mappings{{{
 nnoremap <silent> <F6> :call TagbarToggleUpdate()<CR>
 "}}}
+
 " Functions{{{
 " UpdateTagbarOptions : Update tagbar settings{{{
 function! UpdateTagbarOptions(...)
@@ -666,7 +682,6 @@ endfunction
 function! TagbarToggleUpdate(...)
     if &ft == 'tagbar' | TagbarClose
     else
-        NERDTreeClose
         MundoHide
         call UpdateTagbarOptions()
         TagbarOpen fj
@@ -674,39 +689,46 @@ function! TagbarToggleUpdate(...)
 endfunction
 "}}}
 "}}}
+
 "}}}
+
 " vim-json{{{
 let g:vim_json_syntax_conceal = 0
 "}}}
+
 "}}}
 
 " Files / Buffers / Windows {{{
+
 " Rooter{{{
 " Change to a non-project file's directory when opening it
 let g:rooter_change_directory_for_non_project_files = 'current'
+let g:rooter_patterns = s:project_root_markers
 "}}}
+
 " CtrlP{{{
 call assert_true(exists(':CtrlP'))
+
 " Configuration{{{
 let g:ctrlp_by_filename = 1
 let g:ctrlp_cache_clear_on_exit = 0
 let g:ctrlp_cache_dir = '~/.config/nvim/temp_data/ctrlp_cache'
-"let g:ctrlp_extensions = ['smarttabs']
 let g:ctrlp_map = '☺'
 let g:ctrlp_match_window = 'bottom, order:btt, min:1, max:20,results:20'
-"let g:ctrlp_max_files = 4096
-"let g:ctrlp_mruf_max = 512
 let g:ctrlp_regexp = 0
 let g:ctrlp_smarttabs_exclude_quickfix = 1
 let g:ctrlp_switch_buffer = 'ET'
 let g:ctrlp_working_path_mode = 'ra'
-
 let g:ctrlp_use_caching = 1
 
+" These do not apply, since g:ctrlp_user_command is set.
+"let g:ctrlp_max_files = 4096
+"let g:ctrlp_mruf_max = 512
+
+" Removed - not really necesary.
 "let ctrlpIgnoreList = [".cache", ".git", ".svn", ".hg" , ".DS_Store",
 "            \ "**/*.pyc",  "*.so"]
 
-"}}}
 
 " Use cpsm matcher
 let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
@@ -717,19 +739,23 @@ let g:ctrlp_user_command = {
 \ 'types': {
     \ 1: ['.git', 'cd %s && git ls-files'],
     \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+    \ 3: ['.svn', 'cd %s && svn list'],
     \ },
 \ 'fallback': 'find %s -type f'
 \ }
+"}}}
 
-" Use the silver searcher for faster search, fallback to grep{{{
+" Use the silver searcher for faster search, fallback to find
 " https://github.com/ggreer/the_silver_searcher
 if executable("ag")
     let g:ctrlp_user_command['fallback'] =
                 \ 'ag %s --files-with-matches --nocolor -g ""'.
                 \ ' --ignore "\.git$\|\.hg$\|\.svn$\|\.DS_Store$\|\.cache$"'
-    let g:ctrlp_use_caching = 512
+
+    " Disable caching, unless file count is above this limit:
+    let g:ctrlp_use_caching = 2048
 endif
-"}}}
+
 "Mappings{{{
 " Shortcuts - (f)iles, (b)uffers, (r)ecent files or (t)ags
 nnoremap <leader>b :CtrlPBuffer<cr>
@@ -744,60 +770,13 @@ nnoremap <leader>t :CtrlPBufTag<cr>
 nnoremap <leader>T :CtrlPTag<cr>
 nnoremap <leader><Tab> :CtrlPSmartTabs<CR>
 "}}}
-"}}}
-" NERDTree{{{
-call assert_true(exists('*NERDTreeToggle'))
-" Configuration{{{
-let g:NERDTreeNaturalSort = 1
-let g:NERDTreeQuitOnOpen = 0
-let g:NERDTreeShowBookmarks = 1
-let g:NERDTreeShowHidden = 1
-let g:NERDTreeShowLineNumbers = 1
-let g:NERDTreeSortHiddenFirst = 0
-let g:NERDTreeWinPos = "left"
-let g:NERDTreeWinSize = 35
-let g:NERDTreeIgnore = ['\.pyc$','__pycache__','\.pyc$','\.swp$','\.png$',
-            \ '\.jpg$','\.gif$','\.mp3$','\.flac$','\.ogg$','\.mp4$',
-            \ '\.avi$','.webm$','.mkv$','\.pdf$','\.zip$','\.tar.gz$','\.rar$']
 
-" Disable these Shortcuts
-let g:NERDTreeMapJumpNextSibling = "<NOP>"
-let g:NERDTreeMapJumpPrevSibling = "<NOP>"
 "}}}
-" Apearance{{{
-let g:NERDTreeHighlightCursorline = 1
-let g:NERDTreeMinimalUI = 1
 
-if s:useEmojis
-    let g:NERDTreeDirArrowExpandable = '📁'
-    let g:NERDTreeDirArrowCollapsible = '📂'
-else
-    let g:NERDTreeDirArrowExpandable = ''
-    let g:NERDTreeDirArrowCollapsible = ''
-endif
-
-hi! link NERDTreeOpenable Type
-hi! link NERDTreeClosable Type
-hi! link NERDTreeBookmark Constant
-"}}}
-" <Leader> + o : Toggle nerdtree sidebar{{{
-nnoremap <Leader>o :call NerdTreeUpdateToggle()<CR>
-nnoremap <silent> <F5> :call NerdTreeUpdateToggle()<CR>
-"}}}
-" Autocommands{{{
-"}}}
-function! NerdTreeUpdateToggle()
-    MundoHide
-    NERDTreeToggle
-endfunction
-"}}}
-" Wipeout{{{
-" <Leader> + Esc + Esc : Clear background buffers
-nnoremap <leader><Esc><Esc> :Wipeout<CR>
-"}}}
-"}}}
+" }}}
 
 " Version Control{{{
+
 " Mundo{{{
 call assert_true(exists('*MundoShow'))
 
@@ -817,32 +796,39 @@ let g:mundo_return_on_revert = 0
 let g:mundo_verbose_graph = 0
 let g:mundo_width = 40
 "}}}
+
 " UpdateMundoOptions : Changes options{{{
 function! UpdateMundoOptions(...)
-    if rccommon#BufferColumns() - 41 > &textwidth
-        let g:mundo_width = 40 | else | let g:mundo_width = 30
+    let g:mundo_width = (rccommon#BufferColumns() - 41 > &textwidth) ? 40 : 30
+
+    if a:0 > 0 && a:1 != 0
+        call MundoToggleUpdate()
     endif
-    if a:0 > 0 && a:1 != 0 | call MundoToggleUpdate() | endif
 endfunction
 "}}}
+
 " MundoToggleUpdate : Updates options and then toggles Mundo{{{
 function! MundoToggleUpdate()
-    NERDTreeClose
     TagbarClose
     call UpdateMundoOptions()
     MundoToggle
 endfunction
 "}}}
+
 " Mappings{{{
 nnoremap <silent> <F7> :call MundoToggleUpdate()<CR>
 "}}}
+
 "}}}
+
 " gv{{{
 call assert_true(exists('*GV'))
 nnoremap <F8> :GV!<CR>
 "}}}
+
 " Signature{{{
 call assert_true(exists('*SignatureRefresh'))
+
 " Configuration{{{
 " TODO: Set markers 🚩🔖󲁦🔧🚧📌📍⭐󰄿󰅂
 let g:SignatureEnabledAtStartup = 1
@@ -875,6 +861,7 @@ let g:SignatureMap = {
             \ 'ListBufferMarkers'  :  "m?"
             \ }
 "}}}
+
 " Ctrl + Shift + h/j/k/l : Jump to next marked position{{{
 " Requires terminal configured to send terminal F11 escape code
 map <silent> <Char-0x10>FZ m[=zx
@@ -882,16 +869,20 @@ map <silent> <Char-0x10>Fb m]`zx
 map <silent> <Char-0x10>Fc m[`zx
 map <silent> <Char-0x10>Fd m]=zx
 "}}}
+
 " Appearance{{{
 hi SignatureMarkText ctermfg=166 ctermbg=NONE guifg=#51FF4C guibg=NONE
             \ guisp=NONE cterm=bold gui=bold
 hi SignatureMarkerText ctermfg=166 ctermbg=NONE guifg=#4CFFE2 guibg=NONE
             \ guisp=NONE cterm=bold gui=bold
 "}}}
+
 "}}}
+
  "}}}
 
 " UI{{{
+
 " Airline{{{
 call assert_true(exists(':AirlineRefresh'))
 let g:airline_skip_empty_sections = 1
@@ -930,13 +921,13 @@ let g:airline_mode_map = {
                         \'i'    : 'I',
                         \'n'    : 'N',
                         \'R'    : 'R',
-                        \''   : 'S󰆵',
+                        \''   : 'S',
                         \'s'    : 'S',
-                        \'S'    : 'S󰓡',
+                        \'S'    : 'S',
                         \'t'    : 'T_',
                         \'v'    : 'V',
-                        \'V'    : 'V󰓡',
-                        \''   : 'V󰆵',
+                        \'V'    : 'V',
+                        \''   : 'V',
                         \'__'   : '---',
                         \}
 
@@ -950,11 +941,10 @@ let g:airline_symbols.linenr = ''
 let g:airline_symbols.linepercent = ''
 let g:airline_symbols.columnnr = ''
 let g:airline_symbols.branch = ''
-let g:airline_symbols.notexists = ' 󰝐'
+let g:airline_symbols.notexists = '+'
 let g:airline_symbols.spell = '󲃤󱗊'
-let g:airline_symbols.tablemode = '󰓯'
-let g:airline_symbols.errorjump = '󱡯󱗊'
-let g:airline_symbols.errorlistload = '󰓥᪽᪻‹›󱗊'
+let g:airline_symbols.tablemode = ''
+let g:airline_symbols.errorlistload = '‹›󱗊'
 let g:airline_symbols.tagsload = '󰓥󱕎'
 
 if s:useEmojis
@@ -963,10 +953,10 @@ if s:useEmojis
     let g:airline_symbols.paste = '📋'
     let g:airline_symbols.modified = '📝'
 else
-    let g:airline_symbols.crypt = '󰌽'
-    let g:airline_symbols.readonly = '󰏮'
-    let g:airline_symbols.paste = '󰆑'
-    let g:airline_symbols.modified = '󰏪'
+    let g:airline_symbols.crypt = ''
+    let g:airline_symbols.readonly = ''
+    let g:airline_symbols.paste = ''
+    let g:airline_symbols.modified = ''
 endif
 
 " Load theme
@@ -983,7 +973,6 @@ let g:airline_section_a =
             \ '%{airline#util#append("",0)}%{airline#util#append("",0)}' .
             \ '%{airline#util#append(airline#parts#iminsert(),0)}' .
             \ '%{airline#util#append(plugins#TableModeStatus(),0)}' .
-            \ '%{airline#util#append(plugins#ALEJumpStatus(),0)}' .
             \ '%{airline#util#append(airline#parts#paste(),0)}'
 let g:airline_section_b =
             \ '%{airline#util#wrap(airline#extensions#branch#get_head(),0)} ' .
@@ -1020,29 +1009,21 @@ function! plugins#AirlineCustomLoadIndicators()
 endfunction
 "}}}
 "}}}
-" Colorizer {{{
-let g:colorizer_auto_filetype = 'css,html'
-let g:colorizer_skip_comments = 1
-let g:colorizer_colornames = 0
-let g:colorizer_hex_pattern = ['#', '\%(\x\{3}\|\x\{6}\)', '']
-let g:colorizer_x11_names = 0
-nnoremap <Leader>C :ColorToggle<CR>
-"}}}
+
 " Denite{{{
 call assert_true(exists(':Denite'))
+
 " Add custom menus{{{
 function! UpdateFunctionMenus()
     let s:menus = {}
     let s:menus.main_menu = {
         \ 'description': 'misc',
         \ 'command_candidates': [
-            \ [ '[<M-p>] Put From Yank History... ',
-                \ 'Denite neoyank -auto-resize -mode=normal' ],
                 \ [ '[<M-r>] Put From Register...',
                 \ 'Denite register -mode=normal' ],
             \ [ '[<M-c>] Jump to Change...',
                 \ 'Denite change -auto-resize -mode=normal' ],
-            \ ],
+            \ ]
         \ }
     let s:menus.buffer_settings = {
         \ 'description': 'settings',
@@ -1063,7 +1044,6 @@ function! UpdateFunctionMenus()
     let s:menus.buffer_windows = {
         \ 'description': 'windows',
         \ 'command_candidates': [
-            \ [ '[<F5> ] Toggle File Browser', 'call NerdTreeUpdateToggle()' ],
             \ [ '[<F6> ] Toggle Tag Explorer', 'call TagbarToggleUpdate()' ],
             \ [ '[<F7> ] Toggle Undo Tree Explorer',
                 \ 'call MundoToggleUpdate()' ],
@@ -1074,12 +1054,6 @@ function! UpdateFunctionMenus()
     let s:menus.buffer_commands = {
         \ 'description': 'commands',
         \ 'command_candidates': [
-            \ [ '[           ] Expand template for filename',
-                \ 'Template '.expand('%') ],
-            \ [ '[           ] Unicode table (Note: Search with :UnicodeSearch!,'
-                \ .' autocomplete with Ctrl+x Ctrl+z)', ':UnicodeTable' ],
-            \ [ '[           ] Digraph table (Note: Autocomplete with Ctrl+x '
-                \.'Ctrl+z)', ':Digraphs' ],
             \ [ '[    <F12>  ] Run ALE Fixers', 'ALEFix' ],
             \ [ '[ \ + Space ] Fix Trailing Spaces',
                 \ 'call rccommon#DeleteTrailingWS()' ],
@@ -1093,18 +1067,24 @@ endfunction
 
 function! FunctionMenu(cmd)
     call UpdateFunctionMenus()
-    let l:left = {'main_menu' : 'main_menu',
+    let l:left = {
+                \ 'main_menu' : 'main_menu',
                 \ 'buffer_commands' : 'buffer_windows',
                 \ 'buffer_windows' : 'buffer_settings',
-                \ 'buffer_settings' : 'main_menu'}
-    let l:right = { 'main_menu' : 'buffer_settings',
-                \'buffer_commands' : 'buffer_commands' ,
+                \ 'buffer_settings' : 'main_menu'
+                \ }
+    let l:right = {
+                \ 'main_menu' : 'buffer_settings',
+                \ 'buffer_commands' : 'buffer_commands' ,
                 \ 'buffer_windows' : 'buffer_commands',
-                \ 'buffer_settings' : 'buffer_windows'}
-    let l:args = {'main_menu' : ' -auto-resize -mode=normal',
+                \ 'buffer_settings' : 'buffer_windows'
+                \ }
+    let l:args = {
+                \ 'main_menu' : ' -auto-resize -mode=normal',
                 \ 'buffer_commands' : ' -auto-resize -mode=normal' ,
                 \ 'buffer_windows' : ' -auto-resize -mode=normal',
-                \ 'buffer_settings' : ' -auto-resize -mode=normal'}
+                \ 'buffer_settings' : ' -auto-resize -mode=normal'
+                \ }
     call denite#custom#map('menu', 'h',
                 \ "\<Esc>:call FunctionMenu(" . l:left[a:cmd] . ")", 'noremap')
     call denite#custom#map('menu', 'l',
@@ -1112,6 +1092,7 @@ function! FunctionMenu(cmd)
     execute 'Denite menu:' . a:cmd  . args[a:cmd]
 endfunction
 "}}}
+
 " Mappings{{{
 nnoremap <F1> :call FunctionMenu('main_menu')<CR>
 nnoremap <F2> :call FunctionMenu('buffer_commands')<CR>
@@ -1120,26 +1101,43 @@ nnoremap <F4> :call FunctionMenu('buffer_settings')<CR>
 nnoremap <silent> <M-c> :Denite change -auto-resize -mode=normal<CR>
 nnoremap <silent> <M-r> :Denite register -mode=normal<CR>
 "}}}
+
 "}}}
+
 " devicons{{{
 call assert_true(exists('*webdevicons#version'))
+
 " General configuration{{{
+let g:webdevicons_enable = 1
+let g:webdevicons_enable_unite = 1
+let g:webdevicons_enable_airline_tabline = 1
+let g:webdevicons_enable_airline_statusline = 1
+let g:webdevicons_enable_ctrlp = 1
+let g:WebDevIconsUnicodeDecorateFileNodes = 1
+let g:webdevicons_enable_denite = 1
+
 if s:useEmojis
     let g:WebDevIconsUnicodeDecorateFolderNodesDefaultSymbol = '📁'
     let g:DevIconsDefaultFolderOpenSymbol = '📂'
 endif
 "}}}
+
 "}}}
+
 " highlightedyank{{{
 call assert_true(exists('*HighlightedyankOn'))
+
 " General configuration{{{
 let g:highlightedyank_highlight_duration = 600
 let g:highlightedyank_max_lines = 10000
 let g:highlightedyank_timeout = 500
 "}}}
+
 "}}}
+
 " indent-guides{{{
 call assert_true(exists('*IndentGuidesEnable'))
+
 " General configuration{{{
 let g:indent_guides_auto_colors = 0
 let g:indent_guides_default_mapping = 0
@@ -1150,7 +1148,9 @@ let g:indent_guides_guide_size = 1
 let g:indent_guides_indent_levels = 6   " 16
 let g:indent_guides_start_level = 2
 "}}}
+
 "}}}
+
 " Rainbow{{{
 call assert_true(exists('*RainbowToggle'))
 " Enable by default
@@ -1209,8 +1209,10 @@ let g:rainbow_conf = {
 "    syntax match rainbow_o9 '[\[\](){}:,]' contained containedin=rainbow_r8
 "endfunc
 "}}}
+
 " Signify{{{
 call assert_true(exists('*SignifyRefresh'))
+
 " Configuration{{{
 let g:signify_realtime = 0
 let g:signify_vcs_list = ['git' , 'hg', 'svn']
@@ -1224,6 +1226,7 @@ let g:signify_disable_by_default = 0
 let g:signify_update_on_bufenter = 1
 let g:signify_update_on_focusgained = 1
 "}}}
+
 " Appearance{{{
 let g:signify_sign_add               = '󱅅'
 let g:signify_sign_delete            = '󱅛'
@@ -1231,7 +1234,9 @@ let g:signify_sign_delete_first_line = '󱅎'
 let g:signify_sign_change            = '󱅐'
 let g:signify_sign_changedelete      = g:signify_sign_change
 "}}}
+
 "}}}
+
 " Startify{{{
 " Rebind Ctrl+T to open Startify
 "map <C-t> :tabnew ./<CR>:Startify<cr>
@@ -1523,7 +1528,8 @@ let g:all_oblique_strategies = [
     \ "Google it.",
     \ "Can you reuse an old idea or code from an earlier project?",
     \ "Sleep on it. Things will look different tomorrow.",
-    \ "Imagine what the world would look like if you had already solved the problem.",
+    \ "Imagine what the world would look like if you had already solved the ".
+        \ "problem.",
     \ "Are you using the right tools for the job?",
     \ "Do your names and abstractions correspond with the real world? Is ".
         \ "your code model driven?",
@@ -1568,18 +1574,37 @@ endfunction
 let g:startify_custom_footer = map(['', plugins#getRandomStartifyFooter()],
             \ '"   ".v:val')
 "}}}
-"}}}
 
-" Miscellaneous {{{
-" Submode{{{
-let g:submode_timeout = 0
-let g:submode_always_show_submode = 0
-"}}}
 "}}}
 
 "}}}
 
 " Plugin Autocommands{{{
+function! PrintCWDAndFile(...)
+    " Ignore non-file buffers
+    if &buftype != '' || &buflisted == 0
+        return
+    endif
+
+    " Get CWD, buffer file path
+    let l:cwd = getcwd()
+    let l:bufPath = expand('%:p')
+
+    " CWD is empty string? Not sure if this can happen, but would cause error.
+    if l:cwd == ''
+        call rccommon#Echo(' ' . l:bufPath, 'Title')
+        return
+    endif
+
+    " Strip CWD from buffer file path
+    if stridx(l:bufPath, l:cwd) == 0
+        let l:bufPath = strpart(l:bufPath, strlen(l:cwd))
+    endif
+
+    call rccommon#Echo(' ' . l:cwd, 'Directory')
+    call rccommon#Echo('   ' . l:bufPath, 'Title', 1)
+endfunction
+
 augroup VimrcPlugins
     autocmd!
     " Clear marks / markers upon loading buffer
@@ -1600,12 +1625,8 @@ augroup VimrcPlugins
                     \ endtry |
                 \ endif
 
-    " Automatically close the current tab if NERDTree is the only window
-    autocmd BufEnter *
-                \ if (winnr("$") == 1 && exists("b:NERDTree") &&
-                \ b:NERDTree.isTabTree()) |
-                    \ q |
-                \ endif
+    " Display file and working directory
+    autocmd BufEnter * call timer_start(20, 'PrintCWDAndFile')
 
     " Clear search highlighting when leaving buffers
     autocmd BufLeave * execute "normal \<Plug>SearchantStop"

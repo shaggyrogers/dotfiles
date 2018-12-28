@@ -4,19 +4,14 @@
 # enable_services.sh
 # ==================
 #
+# Description:           Enables systemd services.
 # Author:                Michael De Pasquale
 # Creation Date:         2018-01-27
 # License:               None
 #
-# Description
-# -----------
-# Enables the systemd services.
-#
 ###############################################################################
 
-echo 'Enabling user services...'
 systemctl --user enable psd.service
-
-echo 'Enabling system services...'
 sudo systemctl enable fstrim.timer
-exit 0
+
+# vim: set ts=4 sw=4 tw=79 fdm=manual et :

@@ -2,6 +2,19 @@
 
 priority -50
 
+snippet header "File header" b
+/*
+`!v '  ' . expand('%:t')`
+`!v '  ' . repeat('=', len(expand('%:t')))`
+
+`!v '  ' `Description:           ${1:TODO}
+`!v '  ' `Author:                `!v g:snips_author `
+`!v '  ' `Creation Date:         `!v strftime("%Y-%m-%d")`
+`!v '  ' `Modification Date:     `!v strftime("%Y-%m-%d")`
+
+*/
+endsnippet
+
 # when to abbriviate and when not?
 # b doesn't work here, because it ignores whitespace
 # optional local name?

@@ -1,0 +1,53 @@
+#!sh
+# -*- coding: UTF-8 -*-
+###############################################################################
+# i3-gaps-update
+# ==============
+#
+# Description:           Updates i3-gaps.
+# Author:                Michael De Pasquale <shaggyrogers>
+# Creation Date:         2018-09-28
+# Modification Date:     2018-12-28
+# License:               MIT
+#
+###############################################################################
+
+# Make sure the directory containing i3-gaps exists
+if [ -z $HOME ] || [ ! -d $HOME/.local/ ]; then
+    echo 'Failed to update i3-gaps: Could not find directory $HOME/.local/'
+    exit 1
+fi
+
+# Enter .local and check if any of the files in i3-gaps/ are being used
+cd $HOME/.local
+
+for file in `find i3-gaps/`
+do
+    if fuser -u $file; then
+        echo 'Failed to update i3-gaps: One or more files are in use!'
+        exit 2
+    fi
+done
+
+# Wipe i3-gaps folder and clone repository
+rm -rf i3-gaps/
+git clone https://www.github.com/Airblader/i3.git i3-gaps
+
+# https://github.com/Airblader/i3/wiki/Compiling-&-Installing
+cd i3-gaps
+
+# compile & install
+autoreconf --force --install
+rm -rf build/
+mkdir -p build && cd build/
+
+# Disabling sanitizers is important for release versions!
+# The prefix and sysconfdir are, obviously, dependent on the distribution.
+../configure --prefix=/usr --sysconfdir=/etc --disable-sanitizers
+make
+sudo make install
+
+echo 'Done.' 1&>2
+exit 1
+
+# vim: set ts=4 sw=4 tw=79 fdm=marker et :

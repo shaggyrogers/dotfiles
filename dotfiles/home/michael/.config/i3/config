@@ -6,11 +6,12 @@
 # Description:           i3-gaps configuration file
 # Author:                Michael De Pasquale <shaggyrogers>
 # Creation Date:         2017-11-01
-# Modification Date:     2018-03-03
+# Modification Date:     2018-12-28
 # License:               MIT
 ###############################################################################
 
 # Options{{{
+
 # Key configuration{{{
 # Super_L / Alt_L / Shift / Control_L
 set $down   j
@@ -26,7 +27,9 @@ set $right2 Right
 set $up     k
 set $up2    Up
 # }}}
+
 # Applications{{{
+
 # Per-application window settings{{{
 for_window [class="conky_time"]             floating enable
 for_window [class="conky_time"]             sticky enable
@@ -47,21 +50,27 @@ for_window [class="kittydropdownterm"] floating enable
 for_window [class="kittydropdownterm"] resize set 2544 480
 for_window [class="kittydropdownterm"] move position 8 -6
 # }}}
+
 # Media player commands{{{
+
 # Clementine{{{
 set $clementinePlay  "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 PlayPause"
 set $clementinePause "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 PlayPause"
 set $clementineNext  "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 Next"
 set $clementinePrev  "qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 Previous"
 # }}}
+
 # cmus{{{
 set $cmusPlay            "$HOME/.config/cmus/cmus-playpause-launch.sh"
 set $cmusPause           "$HOME/.config/cmus/cmus-playpause-launch.sh"
 set $cmusNext            "cmus-remote --next"
 set $cmusPrev            "cmus-remote --prev"
 # }}}
+
 # }}}
+
 # }}}
+
 # Workspaces{{{
 set $ws01 "1:work"
 set $ws02 "2:proj1"
@@ -80,14 +89,16 @@ set $ws14 "14:misc5"
 set $ws15 "15:misc6"
 set $ws16 "16:misc7"
 set $ws17 "17:misc8"
-set $ws18 "18:btc"
-set $ws19 "19:tor"
-set $ws20 "20:tails"
+set $ws18 "18:misc9"
+set $ws19 "19:misc10"
+set $ws20 "20:misc11"
 assign [class="google-chrome"]   $ws06
 assign [title="Taskwarrior"]     $ws07
 assign [class="cmusmusicplayer"] $ws08
 # }}}
+
 # Appearance{{{
+
 # General{{{
 default_orientation auto
 font pango:Arimo Nerd Font Bold 12
@@ -95,6 +106,7 @@ hide_edge_borders both
 new_window pixel 6
 workspace_layout default
 # }}}
+
 # Status bar{{{
 set $bar_background #00000000
 set $bar_separator #00000000
@@ -102,6 +114,7 @@ set $bar_statusline #4B5262
 set $bar_font pango:Arimo Nerd Font, Weather Icons
 set $bar_separator_symbol " "
 # }}}
+
 # Workspace indicator{{{
 set $focused_workspace_bg       #84AACD
 set $focused_workspace_border   #84AACD
@@ -115,6 +128,7 @@ set $urgent_workspace_bg        #00585C
 set $urgent_workspace_border    #005F88
 set $urgent_workspace_text      #005F88
 # }}}
+
 # Windows{{{
 set $focused_window_bg #E1E8F0
 set $focused_window_border #E1E8F0
@@ -129,12 +143,14 @@ set $urgent_window_bg #eb709b
 set $urgent_window_border #5B97CF
 set $urgent_window_text #FAFBFC
 # }}}
+
 # Configure windows{{{
 client.focused $focused_window_border $focused_window_bg $focused_window_text
 client.focused_inactive $inactive_window_border $inactive_window_bg $inactive_window_text
 client.unfocused $unfocused_window_border $unfocused_window_bg $unfocused_window_text
 client.urgent $urgent_window_border $urgent_window_bg $urgent_window_text
 # }}}
+
 # Configure Status bar{{{
 bar {
     font $bar_font
@@ -156,17 +172,25 @@ bar {
     }
 }
 # }}}
+
 # }}}
+
 # Misc{{{
 workspace_auto_back_and_forth yes
 focus_follows_mouse           no
 floating_modifier             $mod1
+# }}}
+
+# }}}
+
+# i3-gaps {{{
 gaps                          inner 12
 gaps                          outer 4
-# }}}
+smart_borders                 off
 # }}}
 
 # Shortcuts{{{
+
 # Application shortcuts{{{
 #bindsym --release $mod1+$mod2+Return exec kitty
 bindsym --release $mod1+$mod2+Return exec ~/.local/bin/kitty
@@ -196,12 +220,14 @@ bindsym --release $mod1+$mod2+Print  exec sh -c "gnome-screenshot -a"
 bindsym --release $mod1+$mod3+Print  exec sh -c "gnome-screenshot -a"
 
 # }}}
+
 # Insert text {{{
 bindsym --release $mod1+$mod2+$mod3+c      exec input-type c
 bindsym --release $mod1+$mod2+$mod3+f      exec input-type f
 bindsym --release $mod1+$mod2+$mod3+p      exec input-type p
 bindsym --release $mod1+$mod2+$mod3+s      exec input-type s
 # }}}
+
 # Container layout{{{
 # Mod1 + s / w / e : Change layout to stacked/tabbed/split){{{
 bindsym $mod1+s layout stacking
@@ -222,6 +248,7 @@ bindsym $mod1+$mod2+space floating toggle
 bindsym $mod1+space focus mode_toggle
 # }}}
 # }}}
+
 # Misc{{{
 # Mod1 + R : Reload configuration file/restart i3 in-place{{{
 bindsym $mod1+r reload
@@ -240,6 +267,7 @@ bindsym --release XF86AudioNext exec --no-startup-id $cmusNext
 bindsym --release XF86AudioPrev exec --no-startup-id $cmusPrev
 # }}}
 # }}}
+
 # Window/container shortcuts{{{
 # Change focus using vim movement keys{{{
 bindsym $mod1+$left focus left
@@ -282,6 +310,7 @@ bindsym $mod1+$mod3+$down2 resize shrink height 10 px or 10 ppt
 bindsym $mod1+$mod3+$right2 resize grow width 10 px or 10 ppt
 # }}}
 # }}}
+
 # Workspaces{{{
 # Mod1 + Tab / Mod3 + Tab / Mod2 + Mod3 + Left/Right : next/prev workspace {{{
 bindsym $mod1+$mod2+$mod3+$left  workspace prev
@@ -340,20 +369,16 @@ bindsym $mod1+$mod2+$mod3+9 move container to workspace $ws19
 bindsym $mod1+$mod2+$mod3+0 move container to workspace $ws20
 # }}}
 # }}}
+
 # }}}
 
 # Launch startup applications{{{
 exec --no-startup-id "compton -CGb --config '/home/michael/.config/compton.conf'"
-exec --no-startup-id "feh ~/.config/i3/wallpaper.jpg --no-fehbg --bg-center"
 exec --no-startup-id keepass2
 exec --no-startup-id "google-chrome 'http://messenger.com/' &"
 exec --no-startup-id "kitty --class=cmusmusicplayer --override \
 background_opacity=0.7 --override background='#202020' 'cmus' &"
-exec --no-startup-id "conky -c /usr/share/conky/conky-time.conf &"
-exec --no-startup-id "conky -c /usr/share/conky/active-task-timer.conf &"
 exec --no-startup-id sh -c "tickr"
-
-#exec --no-startup-id bash -c "(cd $HOME/'.local/taskwarriorc2'; . run.sh; exit 0) &"
 
 # Start unified remote server
 exec --no-startup-id "/opt/urserver/urserver-start --no-manager &"
@@ -366,6 +391,8 @@ exec --no-startup-id i3-msg bar hidden_state hide
 
 # Lock screen
 exec --no-startup-id sh -c "$HOME/.local/bin/lock &"
+
+exec --no-startup-id "feh --no-fehbg --bg-max ~/.config/i3/wallpaper.jpg "
 # }}}
 
 #  vim: set ts=4 sw=4 tw=79 fdm=marker et :

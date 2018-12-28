@@ -17,6 +17,7 @@
 
 
 # Define keycodes {{{
+# Get these with xev
 ESCAPE=9
 TAB=23
 CONTROL_L=37
@@ -83,10 +84,12 @@ xset -r $F12
 
 # Change modifiers
 # Modifier = Keysyms
+# Remove Lock modifier from Caps_Lock button
 xmodmap -e 'remove Lock = Caps_Lock'
 
 # Change keysyms
 # Keysym = Key Shift+Key ModeSw+Key ModeSw+Shift+Key AltGr+Key AltGr+Shift+Key
+# Change Caps_Lock to Escape and Shift + Caps_Lock to Caps_Lock
 xmodmap -e "keycode $CAPS_LOCK = Escape Caps_Lock"
 #xmodmap -e "keycode $ALT_R = Mode_switch ISO_Level3_Shift"
 # }}}
@@ -100,5 +103,8 @@ xset s on
 xset s 10800 10800
 # }}}
 
+# Configure dual monitors {{{
+xrandr --output DVI-1 --preferred --primary --pos 0x0 --output HDMI-0 --pos -1920x360 --preferred
+# }}}
 
 # vim: set ts=4 sw=4 tw=79 fdm=marker et :

@@ -30,7 +30,12 @@ retab
 " Autocommands{{{
 augroup TextFiletypeConfig
     autocmd!
-    autocmd BufWrite * if &ft == 'text' | call rccommon#DeleteTrailingWS() | fi
+    autocmd BufWrite *
+                \ if &ft == 'text' |
+                \ call rccommon#DeleteTrailingWS() |
+                \ call rccommon#UpdateModificationDate() |
+                \ retab
+                \ fi
 augroup end
 " }}}
 

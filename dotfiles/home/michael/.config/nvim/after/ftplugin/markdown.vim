@@ -5,7 +5,7 @@
 " Description:           Commands for markdown syntax buffers.
 " Author:                Michael De Pasquale <shaggyrogers>
 " Creation Date:         2018-02-19
-" Modification Date:     2018-05-11
+" Modification Date:     2018-11-18
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -39,7 +39,10 @@ augroup MarkdownFiletypeConfig
                 \ if exists(':TableModeDisable') |
                     \ silent exec 'TableModeDisable'
                 \ | endif
-    autocmd BufWrite *.md call rccommon#DeleteTrailingWS()
+    autocmd BufWrite *.md
+                \ call rccommon#DeleteTrailingWS() |
+                \ call rccommon#UpdateModificationDate() |
+                \ retab
 augroup end
 " }}}
 
