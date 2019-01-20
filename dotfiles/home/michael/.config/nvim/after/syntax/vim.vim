@@ -2,12 +2,10 @@
 " vim.vim
 " =======
 "
+" Description:           vim syntax tweaks
 " Author:                Michael De Pasquale
 " Creation Date:         2018-02-20
-"
-" Description
-" -----------
-" vim syntax tweaks
+" Modification Date:     2019-01-04
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -33,4 +31,5 @@ syntax match vimNiceComment
         \ contained conceal cchar=
 syn cluster vimCommentGroup contains=vimNiceComment,vimTodo,@vimCommentGroup
 "}}}
+
 " vim: set ts=4 sw=4 tw=79 fdm=marker et :

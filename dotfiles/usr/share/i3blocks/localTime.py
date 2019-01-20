@@ -5,15 +5,15 @@
 localTime.py
 ============
 
-  Version:               1.0.0
+  Description:           Displays the current time in the i3 status bar.
   Author:                Michael De Pasquale
   Creation Date:         2017-11-27
-  Modification Date:     2018-09-28
+  Modification Date:     2019-01-20
+  License:               MIT
 
-  Description
-  -----------
-  Displays the current time in the i3 status bar, with icons from Weather
-  Icons (http://erikflowers.github.io/weather-icons/)
+  Notes
+  -----
+  Requires nerd fonts (http://nerdfonts.com/).
 """
 
 import datetime

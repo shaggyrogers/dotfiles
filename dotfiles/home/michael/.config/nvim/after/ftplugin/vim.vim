@@ -2,53 +2,42 @@
 " vim.vim
 " =======
 "
+" Description:           Configuration for vim syntax buffers
 " Author:                Michael De Pasquale
 " Creation Date:         2018-02-18
-"
-" Description
-" -----------
-" Configuration for vim syntax buffers
+" Modification Date:     2019-01-05
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" highlight groups for syntax tweaks{{{
-hi link vimNiceComment Comment
-hi! link Conceal Operator
-"}}}
+function! s:UserFtSetUp()
+    hi! link vimNiceComment Comment
+    hi! link Conceal Operator
+    call rccommon#UpdateTagbarOptions()
+    call rccommon#LoadFiletypeDictionary()
+    call rccommon#SetAndSaveWindowOptions({
+                \ 'foldmethod': 'marker',
+                \ 'foldcolumn': '2'
+                \ })
+    call rccommon#HighlightTextWidth()
+endfunction
 
-" Buffer-local options{{{
-setlocal foldmethod=marker
-setlocal foldcolumn=2
-"}}}
-
-" Highlight lines exceeding textwidth{{{
-call rccommon#HighlightTextWidth()
-" }}}
-
-" Update Tagbar{{{
-call rccommon#UpdateTagbarOptions()
-"}}}
-
-" Load dictionary for filetype, if one exists{{{
-call rccommon#LoadFiletypeDictionary()
-"}}}
-
-" Delete trailing whitespace and replace tab characters{{{
-call rccommon#DeleteTrailingWS()
-retab
-"}}}
-
-" Autocommands{{{
 augroup VimscriptFiletypeConfig
-    autocmd!
-    autocmd BufEnter *.vim
-                \ hi! link Conceal Operator
-    autocmd BufWrite *.vim
-                \ call rccommon#DeleteTrailingWS() |
-                \ call rccommon#UpdateModificationDate() |
-                \ retab
-    autocmd VimResized *.vim call rccommon#UpdateTagbarOptions()
+    autocmd! * <buffer>
+    autocmd BufWinEnter <buffer> call s:UserFtSetUp()
+    autocmd BufEnter <buffer> hi! link Conceal Operator
+    autocmd BufWrite <buffer>
+                \ call rccommon#DeleteTrailingWS()
+                \ | call rccommon#UpdateModificationDate()
+                \ | retab
+    autocmd VimResized <buffer> call rccommon#UpdateTagbarOptions()
 augroup end
-"}}}
+
+" Undo
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
+            \ . (empty(get(b:, 'undo_ftplugin', '')) ? '' : '| ')
+            \ . 'execute "autocmd! VimscriptFiletypeConfig * <buffer>"'
+
+" Need this for window setup in some cases
+call s:UserFtSetUp()
 
 " vim: set ts=4 sw=4 tw=79 fdm=marker et :

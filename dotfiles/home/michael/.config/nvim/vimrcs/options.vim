@@ -5,7 +5,7 @@
 " Author:                Michael De Pasquale <shaggyrogers>
 " Description:           Sets vim options for all filetypes.
 " Creation Date:         2017-12-02
-" Modification Date:     2018-02-26
+" Modification Date:     2019-01-04
 " License:               MIT
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -157,7 +157,6 @@ set whichwrap=h,l,<,>,[,]
 " Syntax highlighting / redrawing{{{
 syntax enable
 "set concealcursor=nc
-set concealcursor=
 set conceallevel=2
 set lazyredraw
 set matchtime=2
@@ -278,6 +277,7 @@ set formatoptions=tcqjr
 
 " Lines{{{
 set textwidth=79
+" local to window
 set linebreak
 "set breakat=!@*-+;:,./?({>%|
 "set breakat=^I!@*-+;:,./?
@@ -288,36 +288,45 @@ set linebreak
 augroup VimrcOptions
     autocmd!
 
-    " Set buffer options
+    " Move quickfix window to the bottom
     autocmd FileType qf wincmd J
-    autocmd TermOpen * call s:InitialiseTerminal()
-    autocmd BufEnter *
-                \ execute 'set title titlestring=nvim%' .
-                \ '=-%=%<%{expand(\"%:~:.:t\")}%=[%l/%L]%=(%P)' .
-                \ 'titlelen=70' |
-                \ execute 'set scrolloff=' . string(winheight(0) / 4)
 
-    " Go to last cursor position and open folds
+    " Initialise terminal
+    autocmd TermOpen * call s:InitialiseTerminal()
+
+    " Change title to include file on buffer entry
+    autocmd BufEnter *
+                \ execute 'set titlestring=nvim%' .
+                \ '=-%=%<%{expand(\"%:~:.:t\")}%=[%l/%L]%=(%P)' .
+                \ ' titlelen=70'
+                \ | execute 'set scrolloff=' . string(winheight(0) / 4)
+
+    " Upon opening file, go to last cursor position and update folds
     autocmd BufReadPost *
-                \ if line("'\"") > 0 && line("'\"") <= line("$") |
-                    \ exe "normal! g'\"" |
-                    \ exe "normal! zx"
+                \ if line("'\"") > 0 && line("'\"") <= line("$")
+                    \ | execute "normal! g'\""
+                    \ | execute "normal! zx"
                 \ | endif
 
     " Disable cursorline for insert mode and on buffer leave
     autocmd BufEnter * set cursorline
     autocmd BufLeave * set nocursorline
+
+    " Show/hide textwidth on insert enter/leave
     autocmd InsertEnter *
-                \ set nocursorline |
-                \ if &textwidth > 0 |
-                    \ execute 'set colorcolumn='.string(&textwidth + 1) |
-                \ endif
+                \ set nocursorline
+                \ | if &textwidth > 0
+                    \ | execute 'set colorcolumn='.string(&textwidth + 1)
+                \ | endif
     autocmd InsertLeave *
-                \ set cursorline |
-                \ execute 'set colorcolumn='
+                \ set cursorline
+                \ | execute 'set colorcolumn='
 
     " F
-    autocmd VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\n" | endif
+    autocmd VimLeave *
+                \ if v:dying
+                \ | echo "\nAAAAaaaarrrggghhhh!!!\n"
+                \ | endif
 augroup end
 "}}}
 

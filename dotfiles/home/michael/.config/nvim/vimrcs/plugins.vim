@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2018-12-25
+" Modification Date:     2019-01-02
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -669,12 +669,17 @@ nnoremap <silent> <F6> :call TagbarToggleUpdate()<CR>
 " UpdateTagbarOptions : Update tagbar settings{{{
 function! UpdateTagbarOptions(...)
     if a:0 > 0 && a:1 != 0
-        call TagbarToggleUpdate() | wincmd h | return
+        call TagbarToggleUpdate()
+        wincmd h
+        return
     endif
+
     if rccommon#BufferColumns() - g:tagbar_width - 1 > &textwidth
-        let g:tagbar_autoclose = 0 | let g:tagbar_width = 30
+        "let g:tagbar_autoclose = 0
+        let g:tagbar_width = 30
     else
-        let g:tagbar_autoclose = 1 | let g:tagbar_width = 25
+        "let g:tagbar_autoclose = 1
+        let g:tagbar_width = 25
     endif
 endfunction
 "}}}

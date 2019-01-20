@@ -1,33 +1,37 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" c.vim
-" ======
+" conf.vim
+" ========
 "
-" Description:           Configuration for C syntax buffers
+" Description:           Buffer configuration for .conf files
 " Author:                Michael De Pasquale
-" Creation Date:         2018-02-19
+" Creation Date:         2019-01-01
 " Modification Date:     2019-01-04
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! s:UserFtSetUp()
-    call rccommon#HighlightTextWidth()
-    call rccommon#LoadFiletypeDictionary()
+    call rccommon#SetAndSaveBufferOptions({
+                \ 'textwidth': '0',
+                \ 'wrapmargin': '0',
+                \ })
+    call rccommon#LoadFiletypeDictionary('markdown')
     call rccommon#UpdateTagbarOptions()
 endfunction
 
-augroup CFiletypeConfig
+augroup ConfFiletypeConfig
     autocmd! * <buffer>
     autocmd BufWinEnter <buffer> call s:UserFtSetUp()
     autocmd BufWrite <buffer>
                 \ call rccommon#DeleteTrailingWS()
                 \ | call rccommon#UpdateModificationDate()
                 \ | retab
-    autocmd VimResized <buffer> call rccommon#UpdateTagbarOptions()
+    autocmd VimResized <buffer>
+                \ call rccommon#UpdateTagbarOptions()
 augroup end
 
 let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
             \ . (empty(get(b:, 'undo_ftplugin', '')) ? '' : '| ')
-            \ . 'exe "autocmd! CFiletypeConfig * <buffer>"'
+            \ . 'exe "autocmd! ConfFiletypeConfig * <buffer>"'
 
 call s:UserFtSetUp()
 

@@ -2,58 +2,46 @@
 " python.vim
 " ==========
 "
+" Description:           Configuration for python syntax buffers
 " Author:                Michael De Pasquale
 " Creation Date:         2018-02-18
-"
-" Description
-" -----------
-" Configuration for python syntax buffers
+" Modification Date:     2019-01-04
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Highlight groups for syntax tweaks{{{
-hi link pyNiceBuiltin pythonBuiltin
-hi link pyNiceComment Comment
-hi link pyNiceKeyword Keyword
-hi link pyNiceOperator Operator
-hi link pyNiceStatement Statement
-hi link Conceal Operator
-"}}}
+function! s:UserFtSetUp()
+    hi link pyNiceBuiltin pythonBuiltin
+    hi link pyNiceComment Comment
+    hi link pyNiceKeyword Keyword
+    hi link pyNiceOperator Operator
+    hi link pyNiceStatement Statement
+    hi link Conceal Operator
 
-" Buffer-local options{{{
-setlocal define=^\s*\\(def\\\\|class\\)
-setlocal foldmethod=marker
-"}}}
+    call rccommon#SetAndSaveBufferOptions({
+                \ 'define': '^\s*\\(def\\\\|class\\)'
+                \ })
+    call rccommon#SetAndSaveWindowOptions({'foldmethod': 'marker'})
+    call rccommon#HighlightTextWidth()
+    call rccommon#UpdateTagbarOptions()
+    call rccommon#LoadFiletypeDictionary()
+endfunction
 
-" Highlight lines exceeding textwidth{{{
-call rccommon#HighlightTextWidth()
-" }}}
-
-" Update Tagbar{{{
-call rccommon#UpdateTagbarOptions()
-"}}}
-
-" Load a dictionary for this filetype, if one exists{{{
-call rccommon#LoadFiletypeDictionary()
-"}}}
-
-" Delete trailing whitespace and replace tab characters{{{
-call rccommon#DeleteTrailingWS()
-retab
-"}}}
-
-" Autocommands{{{
 augroup PythonFiletypeConfig
-    autocmd!
-    autocmd BufEnter *.py,*.pyx,*.pyd,*.pyw,*.pxi,*.pyi
-                \ hi link Conceal Operator
-    autocmd BufWrite *.py,*.pyx,*.pyd,*.pyw,*.pxi,*.pyi
-                \ call rccommon#DeleteTrailingWS() |
-                \ call rccommon#UpdateModificationDate() |
-                \ retab
-    autocmd VimResized *.py,*.pyx,*.pyd,*.pyw,*.pxi,*.pyi
+    autocmd! * <buffer>
+    autocmd BufWinEnter <buffer> call s:UserFtSetUp()
+    autocmd BufEnter <buffer> hi link Conceal Operator
+    autocmd BufWrite <buffer>
+                \ call rccommon#DeleteTrailingWS()
+                \ | call rccommon#UpdateModificationDate()
+                \ | retab
+    autocmd VimResized <buffer>
                 \ call rccommon#UpdateTagbarOptions()
 augroup end
-"}}}
+
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
+            \ . (empty(get(b:, 'undo_ftplugin', '')) ? '' : '| ')
+            \ . 'exe "autocmd! PythonFiletypeConfig * <buffer>"'
+
+call s:UserFtSetUp()
 
 " vim: set ts=4 sw=4 tw=79 fdm=marker et :

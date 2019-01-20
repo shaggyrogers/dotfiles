@@ -6,7 +6,7 @@
 # Description:           i3-gaps configuration file
 # Author:                Michael De Pasquale <shaggyrogers>
 # Creation Date:         2017-11-01
-# Modification Date:     2018-12-28
+# Modification Date:     2019-01-20
 # License:               MIT
 ###############################################################################
 
@@ -65,6 +65,7 @@ set $cmusPlay            "$HOME/.config/cmus/cmus-playpause-launch.sh"
 set $cmusPause           "$HOME/.config/cmus/cmus-playpause-launch.sh"
 set $cmusNext            "cmus-remote --next"
 set $cmusPrev            "cmus-remote --prev"
+set $cmusStop            "cmus-remote --stop"
 # }}}
 
 # }}}
@@ -265,6 +266,7 @@ bindsym--release XF86AudioPlay exec --no-startup-id $cmusPlay
 bindsym --release XF86AudioPause exec --no-startup-id $cmusPause
 bindsym --release XF86AudioNext exec --no-startup-id $cmusNext
 bindsym --release XF86AudioPrev exec --no-startup-id $cmusPrev
+bindsym --release XF86AudioStop exec --no-startup-id $cmusStop
 # }}}
 # }}}
 

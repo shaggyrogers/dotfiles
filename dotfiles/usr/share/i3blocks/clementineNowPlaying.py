@@ -1,20 +1,18 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
+# pylint: disable=invalid-name, import-error
 """
 clementineNowPlaying.py
 =======================
 
-  Version:               1.0.0
+  Description:           Retrieves the current song in Clementine.
   Author:                Michael De Pasquale
   Creation Date:         2018-01-28
-  License:               None
+  Modification Date:     2019-01-20
+  License:               MIT
 
-  Description
-  -----------
-  Retrieves the current song in Clementine.
 """
 
-import json
 import sys
 
 from pydbus import SessionBus
@@ -24,7 +22,8 @@ MaxCharacters = 48
 ScrollFactor = 3
 
 
-def main(**args):
+def main():
+    """ Entry point for this script. """
     # Get mpris2
     bus = SessionBus()
     mpris = bus.get("org.mpris.MediaPlayer2.clementine",
@@ -52,24 +51,22 @@ def main(**args):
 
     if artist is None:
         artist = "Unknown Artist"
-    elif isinstance(artist, list) and len(artist) > 0:
+
+    elif isinstance(artist, list) and artist:
         artist = artist[0]
 
     album = album if album is not None else "Unknown Album"
     track = track if track is not None else "Unknown Track"
 
     # Build result string
-    icons = "\uf025 {Status} ".format(Status=status)
-    result = "{Artist} - {Album} - {Track}".format(Artist=artist,
-                                                   Album=album,
-                                                   Track=track,
-                                                   BitRate=bitrate)
+    icons = f'\uf025 {status} '
+    result = f'{artist} - {album} - {track}'
 
     if bitrate is not None:
-        result = "{Result} @ {Bitrate} kbps".format(Result=result,
-                                                    Bitrate=bitrate)
+        result = f'{result} @ {bitrate} kbps'
 
     # Apply scroll effect based on the time and print result
+    pos = mpris.Position
     posSeconds = (float(pos) / 1000000.0)
     strPos = int(posSeconds * ScrollFactor) % len(result)
     result = result[strPos:] + "    " + result[0:strPos]
@@ -80,4 +77,4 @@ def main(**args):
 
 # Allow import without running script
 if __name__ == '__main__':
-    sys.exit(main(sys.argv))
+    sys.exit(main())

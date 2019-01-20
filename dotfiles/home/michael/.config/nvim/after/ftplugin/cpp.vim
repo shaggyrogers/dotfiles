@@ -2,42 +2,34 @@
 " cpp.vim
 " ========
 "
+" Description:           Configuration for C++ syntax buffers
 " Author:                Michael De Pasquale
 " Creation Date:         2018-02-19
-"
-" Description
-" -----------
-" Configuration for java syntax buffers
+" Modification Date:     2019-01-04
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Highlight lines exceeding textwidth{{{
-call rccommon#HighlightTextWidth()
-" }}}
+function! s:UserFtSetUp()
+    call rccommon#HighlightTextWidth()
+    call rccommon#UpdateTagbarOptions()
+    call rccommon#LoadFiletypeDictionary()
+endfunction
 
-" Update Tagbar{{{
-call rccommon#UpdateTagbarOptions()
-"}}}
-
-" Load a dictionary for this filetype, if one exists{{{
-call rccommon#LoadFiletypeDictionary()
-"}}}
-
-" Delete trailing whitespace and replace tab characters{{{
-call rccommon#DeleteTrailingWS()
-retab
-"}}}
-
-" Autocommands{{{
 augroup CPPFiletypeConfig
-    autocmd!
-    autocmd BufWrite *.c++,*.cpp,*.cxx,*.h++,*.hpp,*.hxx
-                \ call rccommon#DeleteTrailingWS() |
-                \ call rccommon#UpdateModificationDate() |
-                \ retab
-    autocmd VimResized *.c++,*.cpp,*.cxx,*.h++,*.hpp,*.hxx
+    autocmd! * <buffer>
+    autocmd BufWinEnter <buffer> call s:UserFtSetUp()
+    autocmd BufWrite <buffer>
+                \ call rccommon#DeletingWS()
+                \ | call rccommon#UpdificationDate()
+                \ | retab
+    autocmd VimResized <buffer>
                 \ call rccommon#UpdateTagbarOptions()
 augroup end
-"}}}
+
+let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
+            \ . (empty(get(b:, 'undo_ftplugin', '')) ? '' : '| ')
+            \ . 'exe "autocmd! CPPFiletypeConfig * <buffer>"'
+
+call s:UserFtSetUp()
 
 " vim: set ts=4 sw=4 tw=79 fdm=marker et :

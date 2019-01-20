@@ -5,28 +5,24 @@
 localWeather.py
 ===============
 
-  Version:               1.2.0
   Author:                Michael De Pasquale
   Creation Date:         2017-11-06
-  Modification Date:     2018-09-28
+  Modification Date:     2019-01-20
   License:               MIT
 
-  Description
-  -----------
-  A simple script that retrieves BOM weather station data and outputs a pretty
-  and concise summary.
+  Description:           Displays BOM weather station data in i3blocks.
+
+  Requires
+  --------
+  Nerd fonts (http://nerdfonts.com/).
+  An emoji font which supports emoji 10 or later.
 
   Usage
   -----
-  Requires one or more nerd fonts to be installed, as well as an emoji font
-  which supports emoji 10 or later.
-
   To configure the script, find the BOM URI for the JSON-formatted weather
   data you want to display and set the value of BOM_API_URL. All VIC weather
   stations can be found at http://www.bom.gov.au/vic/observations/vicall.shtml
 
-  To display the data, call the script from i3blocks/i3blocks-gaps or anything
-  else that can display the pango markup language.
 """
 
 import json
@@ -42,7 +38,7 @@ import requests
 BOM_API_URI = 'http://www.bom.gov.au/fwo/IDV60801/IDV60801.94865.json'
 
 
-def getWindDirIcon(windDir: str) -> str:
+def getWindDirIcon(windDir: str) -> str:  # {{{
     """ Returns an icon for the given compass direction. Returns None if
         unsuccessful.
     """
@@ -63,19 +59,19 @@ def getWindDirIcon(windDir: str) -> str:
         'wnw':  u'\ue89b',  # wi-towards-nw
         'nw':   u'\ue89b',  # wi-towards-nw
         'nnw':  u'\ue89b',
-    }.get(windDir.lower())
+    }.get(windDir.lower())  # }}}
 
 
-def getForecast(weather: str, cloud: str=None) -> str:
+def getForecast(weather: str, cloud: str = None) -> str:  # {{{
     """ Returns a short forecast string for the given weather data. """
 
     if cloud is None:
         return weather.lower()
 
-    return weather.lower() if weather != '-' else cloud.lower()
+    return weather.lower() if weather != '-' else cloud.lower()  # }}}
 
 
-def getForecastIcon(weather: str, cloud: str) -> str:
+def getForecastIcon(weather: str, cloud: str) -> str:  # {{{
     """ Returns an icon for the weather forecast data. If if none is found, a
         default icon will be returned.
     """
@@ -96,34 +92,30 @@ def getForecastIcon(weather: str, cloud: str) -> str:
     }
 
     if key not in icons:
-        return u'❓'
+        return u'❓ '
 
-    return icons.get(key)
+    return icons.get(key)  # }}}
 
 
-def getTemperatureIcon(temp: Union[float, int, str]) -> str:
+def getTemperatureIcon(temp: Union[float, int, str]) -> str:  # {{{
     """ Returns an icon for the given temperature, in degrees C.  """
     fltemp = math.floor(float(temp))
 
     # Get icon for temperature range
-    if fltemp <= 0:
-        return u'❄️'
-    elif fltemp <= 9:
-        return u''
-    elif fltemp <= 19:
-        return u''
-    elif fltemp <= 24:
-        return u''
-    elif fltemp <= 29:
-        return u''
-    elif fltemp <= 39:
-        return u''
+    for trange, icon in [(0, u'❄️'),
+                         (9, u''),
+                         (19, u''),
+                         (24, u''),
+                         (29, u''),
+                         (39, u'')]:
+        if fltemp <= trange:
+            return icon
 
     # fltemp >= 40:
-    return u'🔥'
+    return u'🔥'  # }}}
 
 
-def main() -> None:
+def main() -> None:  # {{{
     """ Retrieves BOM data and prints a formatted string. Returns 0 if
         successful or a nonzero exit code otherwise.
     """
@@ -172,7 +164,7 @@ def main() -> None:
 
     print(output)
     print(shortOutput)
-    return 0
+    return 0  # }}}
 
 
 if __name__ == '__main__':

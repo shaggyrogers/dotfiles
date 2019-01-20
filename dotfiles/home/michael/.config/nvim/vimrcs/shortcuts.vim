@@ -5,7 +5,7 @@
 " Description:           Contains all non-plugin shortcuts.
 " Author:                Michael De Pasquale <shaggyrogers>
 " Creation Date:         2017-12-02
-" Modification Date:     2018-05-11
+" Modification Date:     2019-01-04
 " License:               MIT
 "
 " Note that some key combinations require kitty with a certain configuration.
@@ -19,7 +19,7 @@
 
 " Commands {{{
 function! RepeatCommandShortcut(shortcut) "{{{
-    exec a:shortcut . repeat('|'.a:shortcut, v:count1-1)
+    exec a:shortcut . repeat('|' . a:shortcut, v:count1-1)
 endfunction " }}}
 " <Leader> + s : show (S)yntax highight group under the cursor {{{
 nnoremap <leader>s <cmd>:echo CursorSynInfo('name')<CR>
@@ -64,28 +64,28 @@ nnoremap <C-O> <C-o>
 nnoremap <C-p> <C-i>
 "}}}
 " PageUp / PageDown : Scroll one page up/down {{{
-nnoremap <PageDown> :<C-u>call PageUpDown('j', 2 * v:count1)<CR>
-nnoremap <PageUp> :<C-u>call PageUpDown('k', 2 * v:count1)<CR>
-inoremap <PageDown> <C-o>:<C-u>call PageUpDown('j', 2 * v:count1)<CR>
-inoremap <PageUp> <C-o>:<C-u>call PageUpDown('k', 2 * v:count1)<CR>
-xnoremap <PageDown> <esc>:<C-u>call PageUpDown('j', 2 * v:count1)<CR>gv
-xnoremap <PageUp> <esc>:<C-u>call PageUpDown('k', 2 * v:count1)<CR>gv
+nnoremap <PageDown> <cmd>call PageUpDown('j', 2 * v:count1)<CR>
+nnoremap <PageUp> <cmd>call PageUpDown('k', 2 * v:count1)<CR>
+inoremap <PageDown> <cmd>call PageUpDown('j', 2 * v:count1)<CR>
+inoremap <PageUp> <cmd>call PageUpDown('k', 2 * v:count1)<CR>
+xnoremap <PageDown> <cmd>call PageUpDown('j', 2 * v:count1)<CR>
+xnoremap <PageUp> <cmd>call PageUpDown('k', 2 * v:count1)<CR>
 "}}}
 " CTRL + h/l : Scroll half of a page up/down {{{
-nnoremap <C-h> :<C-u>call PageUpDown('k')<CR>
-nnoremap <C-l> :<C-u>call PageUpDown('j')<CR>
-xnoremap <C-h> <esc>:<C-u>call PageUpDown('k')<CR>gv
-xnoremap <C-l> <esc>:<C-u>call PageUpDown('j')<CR>gv
+nnoremap <C-h> <cmd>call PageUpDown('k')<CR>
+nnoremap <C-l> <cmd>call PageUpDown('j')<CR>
+xnoremap <C-h> <cmd>call PageUpDown('k')<CR>
+xnoremap <C-l> <cmd>call PageUpDown('j')<CR>
 "}}}
-" CTRL + j/k : Jump to the next/previous function {{{
-nnoremap <silent> <C-j> :call feedkeys(']]')<cr>zx
-nnoremap <silent> <C-k> :call feedkeys('[[')<cr>zx
-xnoremap <silent> <C-j> <esc>:call feedkeys(']]')<cr>zxgv
-xnoremap <silent> <C-k> <esc>:call feedkeys('[[')<cr>zxgv
+" CTRL + j/k : Jump to the next/previous fold {{{
+nnoremap <silent> <C-j> zj
+nnoremap <silent> <C-k> zk
+xnoremap <silent> <C-j> zj
+xnoremap <silent> <C-k> zk
 "}}}
 " Alt + h/l : Move just before whitespace characters {{{
-nnoremap <silent> <M-h> :call DoMoveLR('h')<CR>
-nnoremap <silent> <M-l> :call DoMoveLR('l')<CR>
+nnoremap <silent> <M-h> <cmd>call DoMoveLR('h')<CR>
+nnoremap <silent> <M-l> <cmd>call DoMoveLR('l')<CR>
 inoremap <silent> <M-h> <esc>:call DoMoveLR('h')<CR>a
 inoremap <silent> <M-l> <esc>:call DoMoveLR('l')<CR>a
 xnoremap <silent> <M-h> :<C-u>call DoVisualMove('h')<CR>
@@ -116,16 +116,16 @@ xnoremap <silent> <M-J> }
 xnoremap <silent> <M-K> {
 "}}}
 " Ctrl + Alt + Shift + h/l : Next error / Prev error {{{
-nnoremap <silent> <Char-0x10>HZ :ALEPreviousWrap<CR>
-nnoremap <silent> <Char-0x10>Hd :ALENextWrap<CR>
+nnoremap <silent> <Char-0x10>HZ <cmd>ALEPreviousWrap<CR>
+nnoremap <silent> <Char-0x10>Hd <cmd>ALENextWrap<CR>
 "}}}
 " Ctrl + Alt + Shift + j/k : Go to definition / Jump to tag {{{
-nnoremap <silent> <Char-0x10>Hb :ptag<CR>
+nnoremap <silent> <Char-0x10>Hb <cmd>ptag<CR>
 nnoremap <silent> <Char-0x10>Hc gd
 "}}}
 " Ctrl + Alt + Shift + o/p : Next/prev git change {{{
-nnoremap <silent> <Char-0x10>Hg :call feedkeys('[c', 't')<CR>
-nnoremap <silent> <Char-0x10>Hh :call feedkeys(']c', 't')<CR>
+nnoremap <silent> <Char-0x10>Hg <cmd>call feedkeys('[c', 't')<CR>
+nnoremap <silent> <Char-0x10>Hh <cmd>call feedkeys(']c', 't')<CR>
 "}}}
 "}}}
 
@@ -148,20 +148,14 @@ vnoremap <silent> # :<C-U>
 " Ctrl+R in visual mode writes a search-replace command for the selected text
 vnoremap <C-r> <ESC>:call SearchReplaceVisualSelection()<CR>
 "}}}
-" Ctrl + n / Ctrl + Shift + n : Next / Previous match and update folds
+" Ctrl + n / Ctrl + Shift + n : Next / Previous match and update folds{{{
 nmap <silent> <expr> <C-n> ':<C-u>execute "normal '.v:count1.'nzx"<CR>'
 nmap <silent> <expr> <Char-0x10>Ff ':<C-u>execute "normal '.v:count1.'Nzx"<CR>'
 "}}}
+"}}}
 
 " Editing {{{
-" Ctrl + Alt + p : Toggle paste (see 'Change put behaviour') {{{
-
-"set pastetoggle=<Char-0x10>Fh
-"nmap <silent> <Char-0x10>Fh :<C-u>set paste!<CR>
-"xmap <silent> <Char-0x10>Fh <Esc>:<C-u>set paste!<CR>gv
-"imap <silent> <Char-0x10>Fh <C-o>:<C-u>set paste!<CR>
-" }}}
-" <Leader> + P/p/y/Y : Put/yank from/to system clipboard, keep vis. selection {{{
+" <Leader> + P/p/y/Y : Put/yank from/to system clipboard {{{
 nnoremap <silent> <Leader>y "+y
 nnoremap <silent> <Leader>Y V"+y
 xnoremap <silent> <Leader>y "+ygv
@@ -170,9 +164,6 @@ nnoremap <silent> <Leader>p "+p`[
 nnoremap <silent> <Leader>P "+P`[
 xnoremap <silent> <expr> <Leader>p '"+pgv'
 xnoremap <silent> <expr> <Leader>P '"+Pgv'
-
-"xmap <silent> <expr> <Leader>p '"+pgv"'.v:register.'y`>gv'
-"xmap <silent> <expr> <Leader>P '"+Pgv"'.v:register.'y`>gv'
 "}}}
 " y / Y : Keep visual selection when yanking {{{
 xnoremap y ygv
@@ -181,21 +172,14 @@ xnoremap Y Ygv
 " p / P : Change put behaviour {{{
 " * Put without copying replaced text
 " * Put without moving cursor
-" * If paste is set, put will not keep visual selection
 " * Ctrl + Shift + p toggles copying when pasting visual selection
 function! s:GetPutRegister()
-"    if &paste
-        let @"=@0
-"    endif
-
+    let @" = @0
     return '"'
 endfunction
 
 function! PostPut()
-"    if ! &paste
-        let @" = @0
-"    endif
-
+    let @" = @0
     return ''
 endfunction
 
@@ -241,7 +225,7 @@ nnoremap <silent> <M-i> "_yiw:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o>/\w
 "}}}
 " Enter / Shift + Enter : Insert newline after / before current line {{{
 nnoremap <Char-0x10>Bz  :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[
-nnoremap <CR>  :<c-u>put =repeat(nr2char(10), v:count1)<cr>
+nnoremap <CR> <cmd>put =repeat(nr2char(10), v:count1)<cr>
 "}}}
 " Ctrl + Enter: Insert newline at cursor {{{
 nnoremap <Char-0x10>Ez i<CR><Esc>
@@ -371,6 +355,7 @@ nnoremap <silent> <Leader>ml <cmd>:call AppendModeline()<CR>
 "}}}
 
 " Functions {{{
+
 " Wrappers / Input {{{
 " http://vim.wikia.com/wiki/Convert_between_hex_and_decimal
 " Dec2hex / Hex2dec{{{
@@ -482,34 +467,54 @@ function! NaturalWindowResize(dir)
 endfunction
 "}}}
 "}}}
+
 " Movement {{{
-" PageUpDown : Page up/down without moving cursor {{{
-function! PageUpDown(dir, ...)
-    if a:0 > 0 | let l:ct = a:1 | else | let l:ct = v:count1 | endif
-    let l:back = &scroll | set scroll=0
-    if a:dir == 'j' | let l:cm = "\<C-D>" | else | let l:cm = "\<C-U>" | endif
-    exec 'normal! ' . repeat(l:cm, l:ct) | exec ':set scroll=' . l:back
+" PageUpDown(dir, [count=1]) {{{
+" Scroll count half pages in dir (j or k)
+function! PageUpDown(dir, ...) abort
+    if a:dir != 'j' && a:dir != 'k'
+        echoerr 'PageUpDown: Invalid direction ' . a:dir . ' (j or k expected)'
+        return
+    endif
+
+    let l:ct = a:0 > 0 ? a:1 : v:count1
+    let l:sobackup = &scrolloff
+    execute 'setlocal scrolloff=' . winheight(0)
+
+    try
+        execute 'normal! ' . winheight(0) / 2 * l:ct . 'g' . a:dir
+
+    finally
+        execute 'setlocal scrolloff=' . l:sobackup
+    endtry
 endfunction
 "}}}
 " DoMoveLR : Jump just before whitespace characters left/right {{{
-function! DoMoveLR(dir)
-    let flags = 'n'
-    if a:dir ==? 'h' | let flags = flags . 'b' | endif
+function! DoMoveLR(dir) abort
+    if a:dir != 'h' && a:dir != 'l'
+        echoerr 'DoMoveLR: Invalid direction ' . a:dir . ' (h or l expected)'
+        return
+    endif
+
+    let flags = 'n' . (a:dir == 'h' ? 'b' : '')
     let pos = searchpos('[^     ][  ]',   flags, line('.'), 200)
 
     if pos[0] == 0 && pos[1] == 0
-        if a:dir ==? 'l' | silent exec 'normal! $'
-        else | silent exec 'normal! 0' | endif
+        silent exec 'normal! ' . (a:dir == 'l' ? '$' : '0')
         return
-    else
-        call setpos('.', [0, pos[0], pos[1], 0])
     endif
+
+    call setpos('.', [0, pos[0], pos[1], 0])
 endfunction
 "}}}
 " DoVisualMove : DoMoveLR for visual modes {{{
-function! DoVisualMove(dir)
+function! DoVisualMove(dir) abort
     exec 'normal! gv'
-    if a:dir ==? 'h' || a:dir ==? 'l' | call DoMoveLR(a:dir) | endif
+
+    if a:dir ==? 'h' || a:dir ==? 'l'
+        call DoMoveLR(a:dir)
+    endif
+
     call MoveNextChar(a:dir)
 endfunction
 "}}}
@@ -517,21 +522,23 @@ endfunction
 " Moves through non-whitespace characters or whitespace characters depending
 " on the character under the cursor. Stops at a non-whitespace character.
 " Dir is either j (down) or k (up)
-function! MoveNextChar(dir)
+function! MoveNextChar(dir) abort
     return MoveNextCharBlank(a:dir, 0)
 endfunction
 "}}}
 " MoveNextCharBlank : MoveNextChar, but can stop at blank characters {{{
-function! MoveNextCharBlank(dir, stopBlank)
+function! MoveNextCharBlank(dir, stopBlank) abort
     let result = GetCharInDir(a:dir, col('.'), line('.'), a:stopBlank)
     let startChar = result[0]
     let ldir = tolower(a:dir)
-    if result[0] ==? 'e' | return | endif
+
+    if result[0] ==? 'e'
+        return
+    endif
 
     while result[0] == startChar
         let result = GetCharInDir(a:dir, result[1], result[2], a:stopBlank)
     endwhile
-
 
     if result[0] ==? 's' || result[0] ==? 'b'
         if ldir ==? 'j' || ldir  ==? 'k'
@@ -547,42 +554,54 @@ function! MoveNextCharBlank(dir, stopBlank)
 endfunction
 "}}}
 "}}}
+
 " Misc {{{
 " GetCharInDir : Returns the character in the given direction {{{
 " Returns [char, x, y] where x,y is the new position and char is 's' for
 " whitespace or no character, 'o' for all other characters or 'e' if the
 " buffer ends.
-function! GetCharInDir(dir, xp, yp, blank)
+function! GetCharInDir(dir, xp, yp, blank) abort
     let xOff = {'h': -1, 'j': 0, 'k': 0, 'l': 1}[tolower(a:dir)]
     let yOff = {'h': 0, 'j': 1, 'k': -1, 'l': 0}[tolower(a:dir)]
-    let xs = a:xp | let ys = a:yp
-    let xp = a:xp + xOff | let yp = a:yp + yOff
+    let xs = a:xp
+    let ys = a:yp
+    let xp = a:xp + xOff
+    let yp = a:yp + yOff
     let char = 'o'
 
-    if yp > line('$') || yp <= 1 | let char = 'e'
+    if yp > line('$') || yp <= 1
+        let char = 'e'
     elseif a:dir ==? 'j' || a:dir ==? 'k'
-        if strlen(getline(yp)[xp - 1]) == 0 | let char = 's'
-        elseif getline(yp)[xp - 1] =~ '\s' | let char = 's' | endif
-    elseif a:dir ==? 'h' && xp <= 1 | let char = 'e'
-    elseif a:dir ==? 'l' && xp >= strlen(getline(ys)) | let char = 'e'
+        if strlen(getline(yp)[xp - 1]) == 0 || getline(yp)[xp - 1] =~ '\s'
+            let char = 's'
+        endif
+    elseif a:dir ==? 'h' && xp <= 1
+        let char = 'e'
+    elseif a:dir ==? 'l' && xp >= strlen(getline(ys))
+        let char = 'e'
     elseif (a:dir ==? 'h' || a:dir ==? 'l') && getline(yp)[xp - 1] =~ '\s'
         let char = 's'
     endif
 
-    if a:blank == 1  && char == 's' | let char = 'b' | endif
+    if a:blank == 1  && char == 's'
+        let char = 'b'
+    endif
+
     return [char, xp, yp]
 endfunction
 "}}}
 " CanMoveWindow : Returns whether the window can be moved in a direction {{{
 " Returns 1 if window can move in dir (<left>/<right>/<up>/<down>)
-function! CanMoveWindow(dir)
-    let prevNr = winnr() | exe "wincmd " . a:dir
-    let curNr = winnr() | exe prevNr . "wincmd w"
+function! CanMoveWindow(dir) abort
+    let prevNr = winnr()
+    execute "wincmd " . a:dir
+    let curNr = winnr()
+    execute prevNr . "wincmd w"
     return curNr != prevNr
 endfunction
 "}}}
 " CursorSynInfo : Print syntax information for hte text under the cursor {{{
-function! CursorSynInfo(attr)
+function! CursorSynInfo(attr) abort
     let l:pos = getpos('.')
     let l:c = synIDattr(synIDtrans(synID(pos[1], pos[2], 'TRUE')), a:attr)
     let l:stack = map(synstack(l:pos[1], l:pos[2]),
@@ -601,18 +620,23 @@ function! CursorSynInfo(attr)
 endfunc
 "}}}
 " UpdateCRShortcut : Update the <Enter> shortcut for adding newlines {{{
-function! UpdateCRShortcut()
+function! UpdateCRShortcut() abort
     if getbufvar(bufnr(''), '&modifiable', 0)
         nnoremap <CR> :<c-u>put =repeat(nr2char(10), v:count1)<cr>
-    else | silent! nunmap <CR> | endif
+    else
+        silent! nunmap <CR>
+    endif
 endfunc
 "}}}
 " AppendModeline : Adds a modeline comment or replacing the existing modeline {{{
 " Append modeline after last line in buffer.
 " Source: http://vim.wikia.com/wiki/Modeline_magic
-function! AppendModeline()
+function! AppendModeline() abort
     " Backup and change options
-    let urp = &report | let umagic = &magic | set report=9999 | set magic
+    let urp = &report
+    let umagic = &magic
+    set report=9999
+    set magic
 
     " Remove existing modeline
     if match(getline(line('$')), '\V' .
@@ -628,14 +652,19 @@ function! AppendModeline()
                 \ &expandtab ? '' : 'no')
     let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
     call append(line("$"), l:modeline)
-    echom 'Added new modeline: "'.l:modeline.'"'
+    echom 'Added new modeline: "' . l:modeline . '"'
 
     " Restore options
     exec 'set report='.urp
-    if umagic | set magic | else | set nomagic | endif
+    if umagic
+        set magic
+    else
+        set nomagic
+    endif
 endfunction
 "}}}
 "}}}
+
 " }}}
 
 " Map Unsupported Keys - Kitty {{{

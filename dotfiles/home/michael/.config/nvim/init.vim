@@ -28,13 +28,14 @@ let g:vimrcs = [
 "}}}
 
 " Initialise vim{{{
-execute 'set runtimepath+=' . g:vim_dir
-execute 'set runtimepath+=' . $VIMRUNTIME
+execute 'set runtimepath+=' . escape(g:vim_dir, ' ",*|[')
+execute 'set runtimepath+=' . escape($VIMRUNTIME, ' ",*|[')
 let s:errs = []
 
 for cs in g:vimrcs
     try
-        exec 'so '.g:vim_dir_rc.'/'.cs
+        exec 'source ' . escape(g:vim_dir_rc, ' ",*|[') . '/'
+                    \ . escape(cs, ' ",*|[')
     catch
         call add(s:errs,'Error "'.v:exception.'" during reload of '.cs)
     endtry
@@ -88,11 +89,10 @@ endif
 
 function! ReloadVimScript(path) " {{{
     if IsLoadedVimScript(a:path)
-
         try
-            execute 'source '.a:path
+            execute 'source ' . escape(a:path, ' ",*|[')
         catch
-            echoerr 'Failed to reload '.a:path.': '.v:exception
+            echoerr 'Failed to reload ' . a:path . ': ' . v:exception
             return
         endtry
 
