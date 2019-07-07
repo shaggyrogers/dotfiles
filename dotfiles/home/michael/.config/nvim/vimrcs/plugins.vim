@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2019-01-02
+" Modification Date:     2019-07-08
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -107,8 +107,8 @@ Plug 'https://github.com/c9s/perlomni.vim'
 Plug 'https://github.com/eagletmt/neco-ghc'
 Plug 'https://github.com/fishbullet/deoplete-ruby'
 Plug 'https://github.com/nsf/gocode.git'
-Plug 'https://github.com/OmniSharp/omnisharp-vim.git'
-Plug 'https://github.com/Robzz/deoplete-omnisharp/'
+"Plug 'https://github.com/OmniSharp/omnisharp-vim.git'
+"Plug 'https://github.com/Robzz/deoplete-omnisharp/'  " Not maintained, broken?
 Plug 'https://github.com/Shougo/deoplete.nvim.git'
 Plug 'https://github.com/Shougo/neco-syntax'
 Plug 'https://github.com/Shougo/neco-vim'
@@ -132,7 +132,7 @@ Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/zirrostig/vim-schlepp'
 "}}}
 
-" Syntax {{{
+" Syntax / other language-specific plugins {{{
 " Plug 'https://github.com/c0r73x/neotags.nvim.git' - faster?
 Plug 'https://github.com/elzr/vim-json.git'
 Plug 'https://github.com/KeitaNakamura/highlighter.nvim.git'
@@ -156,7 +156,7 @@ Plug 'https://github.com/DavidEGx/ctrlp-smarttabs.git'
 Plug 'https://github.com/nixprime/cpsm.git'
 "}}}
 
-" Version Control "{{{
+" Version Control {{{
 "Plug 'https://github.com/simnalamburt/vim-mundo.git'
 Plug 'https://github.com/shaggyrogers/vim-mundo.git'
 Plug 'https://github.com/kshenoy/vim-signature.git'
@@ -465,6 +465,11 @@ let g:ale_warn_about_trailing_whitespace = 1
 let g:ale_writegood_executable = 'writegood'
 let g:ale_writegood_options = ''
 let g:ale_writegood_use_global = 0
+
+" Python
+let g:ale_python_flake8_executable = 'python3'
+let g:ale_python_flake8_options = '-m flake8'
+
 "}}}
 
 " Appearance{{{

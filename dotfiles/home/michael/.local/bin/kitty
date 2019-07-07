@@ -1,16 +1,16 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # -*- coding: UTF-8 -*-
 ###############################################################################
 # kitty
 # =====
 #
-# Description:           Wrapper for kitty terminal emulator
+# Description:           Wrapper for kitty terminal emulator.
 # Author:                Michael De Pasquale <shaggyrogers>
 # Creation Date:         2018-03-07
-# Modification Date:     2018-03-11
-# License:               MIT
+# Modification Date:     2019-07-07
 #
 ###############################################################################
+
 
 # Ensure directory exists {{{
 if [ ! -d ~/.local/kitty/ ]; then

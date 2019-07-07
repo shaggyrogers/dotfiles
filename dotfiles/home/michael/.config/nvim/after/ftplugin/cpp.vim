@@ -5,7 +5,7 @@
 " Description:           Configuration for C++ syntax buffers
 " Author:                Michael De Pasquale
 " Creation Date:         2018-02-19
-" Modification Date:     2019-01-04
+" Modification Date:     2019-04-14
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -19,8 +19,8 @@ augroup CPPFiletypeConfig
     autocmd! * <buffer>
     autocmd BufWinEnter <buffer> call s:UserFtSetUp()
     autocmd BufWrite <buffer>
-                \ call rccommon#DeletingWS()
-                \ | call rccommon#UpdificationDate()
+                \ call rccommon#DeleteTrailingWS()
+                \ | call rccommon#UpdateModificationDate()
                 \ | retab
     autocmd VimResized <buffer>
                 \ call rccommon#UpdateTagbarOptions()

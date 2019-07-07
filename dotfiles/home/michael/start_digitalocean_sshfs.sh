@@ -6,7 +6,7 @@
 # Description:              Mount the digitalocean server over ssh.
 # Author:                   Michael De Pasquale
 # Creation Date:            2018-12-12
-# Modification Date:        2018-12-12
+# Modification Date:        2019-01-19
 #
 ###############################################################################
 
@@ -18,7 +18,7 @@ fi
 # Mount - cache, enable large reads/writes, use fast (insecure!) cipher
 # and reconnect automatically
 if ! sshfs \
-    -o reconnect digitalocean:/home/debian ~/digitalocean 2>/dev/null \
+    -o reconnect digitalocean:/ ~/digitalocean 2>/dev/null \
     -o cache=yes,auto_cache,kernel_cache \
     -o large_read,big_writes ; then
     echo "failed!"

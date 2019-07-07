@@ -8,18 +8,32 @@
 
 # Root partition
 UUID=8ffc40b4-0e2b-4843-8018-525989b9dfd6 / ext4 errors=remount-ro 0 1
-
 # UEFI partition
 UUID=AB4E-0869  /boot/efi vfat umask=0077 0 1
-
 # Swap partition
 UUID=baeb7ebd-b2ef-4478-a09d-6b332327b1c1 none swap sw 0 0
-
 # Windows partition
 UUID=BABEFACEBEEFD00D /media/michael/Windows ntfs defaults 0 0 
 
+# SSD 2
+#UUID=9e6d62c1-8a09-4aac-b38e-cbb1f08881a8 /media/michael/SSD\0402 ext4 defaults 0 0
+
 # SSD 3
 UUID=70FFE9C57AE9242C /media/michael/SSD\0403 ntfs defaults 0 0 
+
+# HDD 1 - RIP
+#UUID=9fadecfd-260a-4ec1-971f-95e3c6c5d615 /media/michael/HDD\0401 ext4 defaults,dirsync,noexec,nosuid,nodev,sync,nofail,x-gvfs-show 0 0
+
+# HDD 2 / Mick and Chris
+#UUID=F0D4E422D4E3E934 /media/michael/Mick\040and\040Chris ntfs defaults,dirsync,noexec,nosuid,nodev,sync 0 0 
+
+# HDD 3 - Media Libraries
+#UUID=dce02da7-f64e-4d3b-8daf-cc189cec9c2a /media/michael/HDD\0403 ext4 defaults,auto,dirsync,user,noexec,nosuid,nodev,rw,sync,nofail,x-gvfs-show 0 0
+#UUID=dce02da7-f64e-4d3b-8daf-cc189cec9c2a /media/michael/Libraries ext4 defaults,auto,dirsync,user,noexec,nosuid,nodev,rw,sync,nofail,x-gvfs-show 0 0
+
+# 2 USBs for backups
+#UUID=2A801EFD801ECEE7 /media/michael/USB\0401 ext4 defaults,auto,dirsync,nouser,noexec,nosuid,nodev,rw,sync 0 0
+#UUID=c2feba15-61dc-415c-9626-6fa24e5b1609 /media/michael/USB\0402 ext4 defaults,auto,dirsync,user,noexec,nosuid,nodev,rw,sync 0 0
 
 # Mount /tmp/ to RAM
 tmpfs /tmp tmpfs auto,rw,nodev,nosuid,size=4G

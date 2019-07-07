@@ -12,35 +12,35 @@ set color_cmdline_attr=default
 set color_cmdline_bg=default
 set color_cmdline_fg=default
 set color_cur_sel_attr=default
-set color_error=160
-set color_info=136
-set color_separator=245
+set color_error=lightred
+set color_info=lightyellow
+set color_separator=blue
 set color_statusline_attr=default
-set color_statusline_bg=black
-set color_statusline_fg=37
+set color_statusline_bg=gray
+set color_statusline_fg=black
 set color_titleline_attr=default
-set color_titleline_bg=black
-set color_titleline_fg=136
+set color_titleline_bg=blue
+set color_titleline_fg=white
 set color_win_attr=default
 set color_win_bg=default
-set color_win_cur=33
+set color_win_cur=lightyellow
 set color_win_cur_sel_attr=default
-set color_win_cur_sel_bg=black
-set color_win_cur_sel_fg=33
-set color_win_dir=33
+set color_win_cur_sel_bg=blue
+set color_win_cur_sel_fg=lightyellow
+set color_win_dir=lightblue
 set color_win_fg=default
 set color_win_inactive_cur_sel_attr=default
-set color_win_inactive_cur_sel_bg=default
-set color_win_inactive_cur_sel_fg=125
+set color_win_inactive_cur_sel_bg=gray
+set color_win_inactive_cur_sel_fg=lightyellow
 set color_win_inactive_sel_attr=default
-set color_win_inactive_sel_bg=default
-set color_win_inactive_sel_fg=125
+set color_win_inactive_sel_bg=gray
+set color_win_inactive_sel_fg=black
 set color_win_sel_attr=default
-set color_win_sel_bg=black
-set color_win_sel_fg=166
+set color_win_sel_bg=blue
+set color_win_sel_fg=white
 set color_win_title_attr=default
-set color_win_title_bg=black
-set color_win_title_fg=64
+set color_win_title_bg=blue
+set color_win_title_fg=white
 set confirm_run=true
 set continue=true
 set device=/dev/cdrom
@@ -77,7 +77,7 @@ set passwd=
 set pl_sort=
 set play_library=true
 set play_sorted=false
-set repeat=true
+set repeat=false
 set repeat_current=false
 set replaygain=disabled
 set replaygain_limit=true
@@ -125,7 +125,6 @@ bind common L push live-filter
 bind common M toggle play_library
 bind common N search-prev
 bind common P win-mv-before
-bind common T shell ~/.config/cmus/cmus-edit-tags.sh
 bind common U win-update-cache
 bind common [ vol +1% +0
 bind common ] vol +0 +1%

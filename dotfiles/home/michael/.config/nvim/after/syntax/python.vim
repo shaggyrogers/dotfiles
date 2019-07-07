@@ -51,21 +51,36 @@ syntax match pyNiceOperator "\m\( \|\)\*\*\( \|\)3\>" conceal cchar=³
 syntax match pyNiceOperator "\m\( \|\)\*\*\( \|\)n\>" conceal cchar=ⁿ
 syntax match pyNiceOperator "\m\<in\>" conceal cchar=∈
 syntax match pyNiceOperator "\m\<not in\>" conceal cchar=∉
+
+" '"\s*\%([sS]:\|\h\w*#\)\=\u\w*\(\s\+\u\w*\)*:'hs=s+1
+
+
+syn match Diagnostic "\m\<type\>"
+syn match Diagnostic "\m\<exec\>"
+syn match Diagnostic "\m\<id\>"
+syn match Diagnostic "\m\<print\>"
+syn match Diagnostic "\m\<hash\>"
+syn match Diagnostic "\m\<breakpoint\>"
+syn match Diagnostic "\m\<help\>"
+syn match Diagnostic "\m\<compile\>"
+syn match Diagnostic "\m\<__import__\>"
+
 " TODO: Finish
-"syntax match pyNiceComment
-"            \ '\m\(^\s\{0,4}#\s\{0,4}\([*\-+][^*\-+]\)\?\s*\)<=\[ \?\]'
-"            \ contained conceal cchar=☐
-"syntax match pyNiceComment
-"            \ '\m\(^\s\{0,4}#\s\{0,4}\([*\-+][^*\-+]\)\?\s*\)<=\[[*x+]\]'
-"            \ contained conceal cchar=☑
-"syntax match pyNiceComment
-"            \ '\m\(^\s\{0,4}#\s\{0,4}\)\@16<=[*+]\([^*\-+]\|$\)=' contained
-"            \ conceal cchar=•
-"syntax match pyNiceComment
-"            \ '\m\(^\s\{0,4}#\s\{0,4}\)\@16<=[\-]\([^*\-+]\|$\)=' contained
-"            \ conceal cchar=
-"syntax cluster pyNiceCommentGroup contains=pythonTodo,pyNiceComment,@spell
-"syntax match pythonComment "\m#\s\{0,79}$" contains=pythonTodo,@pyNiceCommentGroup
+syntax match pyNiceComment
+            \ '\m\(^\s\{0,4}#\s\{0,4}\([*\-+][^*\-+]\)\?\s*\)<=\[ \?\]'
+            \ contained conceal cchar=☐
+syntax match pyNiceComment
+            \ '\m\(^\s\{0,4}#\s\{0,4}\([*\-+][^*\-+]\)\?\s*\)<=\[[*x+]\]'
+            \ contained conceal cchar=☑
+syntax match pyNiceComment
+            \ '\m\(^\s\{0,4}#\s\{0,4}\)\@16<=[*+]\([^*\-+]\|$\)=' contained
+            \ conceal cchar=•
+syntax match pyNiceComment
+            \ '\m\(^\s\{0,4}#\s\{0,4}\)\@16<=[\-]\([^*\-+]\|$\)=' contained
+            \ conceal cchar=
+syntax keyword pythonTodo BUG DEBUG DEPRECATED FINISH FIXME HACK NOTE NOTES OPTIMISE TBD TODO REVIEW XXX contained
+syntax cluster pyNiceCommentGroup contains=pythonTodo,pyNiceComment,@spell
+syntax match pythonComment "\m#.*$" contains=pythonTodo,@spell,@pyNiceCommentGroup
 
 hi link pythonOperator Operator
 hi link pyNiceStatement Statement

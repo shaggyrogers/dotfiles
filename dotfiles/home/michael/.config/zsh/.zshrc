@@ -37,6 +37,7 @@ setopt pushdminus
 autoload -Uz compinit
 compinit
 
+# Completion options
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
@@ -57,13 +58,12 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 # Path to your oh-my-zsh installation.
 export ZSH=$ZDOTDIR/.oh-my-zsh
 
-ZSH_THEME=""
-HIST_STAMPS="yyyy-mm-dd"
-DISABLE_AUTO_TITLE="true"
 COMPLETION_WAITING_DOTS="true"
+DISABLE_AUTO_TITLE="true"
 DISABLE_AUTO_UPDATE="true"
-ENABLE_CORRECTION="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
+ENABLE_CORRECTION="true"
+HIST_STAMPS="yyyy-mm-dd"
 export KEYTIMEOUT=1
 
 # Load plugins
@@ -75,13 +75,22 @@ plugins=(
   python
   aliases
   lscolors
-  mickprompt
+  micktitle
+
   bgnotify
   sudo
   python_shell
 )
 
+# Theme
+ZSH_THEME="mickprompt"
+export PIPENV_SHELL_FANCY=1
+
 source $ZSH/oh-my-zsh.sh
+
+# Enable kitty completion - this needs to come after sourcing oh-my-zsh.sh,
+# or it won't work.
+kitty + complete setup zsh | source /dev/stdin
 
 # Startup message {{{
 # Display image logo for kitty, ascii logo for everything else

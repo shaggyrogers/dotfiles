@@ -5,19 +5,21 @@
 " Description:           Shared functions for vim scripts
 " Author:                Michael De Pasquale <shaggyrogers>
 " Creation Date:         2018-02-18
-" Modification Date:     2019-01-05
+" Modification Date:     2019-07-07
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Editing
 " UpdateModificationDate() {{{
 " Update modification date in file header in current buffer.
-" Does not make any changes if the modification date is the current date.
+" Does not make any changes if the buffer has not been modified, or the
+" modification date is already correct.
 function! rccommon#UpdateModificationDate()
     if !&modified
         return
     endif
 
+    " Search the first 14 lines for 'modification date'
     let l:lines = getbufline('', 1, 14)
     let l:i = 0
     let l:oldts = ''
@@ -29,10 +31,12 @@ function! rccommon#UpdateModificationDate()
         let l:i += 1
     endwhile
 
+    " Exit if not found, or already up-to-date
     if l:oldts == '' || l:oldts == strftime('%Y-%m-%d')
         return
     endif
 
+    " Change to current date
     call setline(l:i, l:lines[l:i-1][0:-len(l:oldts)-1] . strftime('%Y-%m-%d'))
 endfunc " }}}
 
@@ -47,7 +51,7 @@ endfunc " }}}
 " GetVisual() {{{
 " Returns a list of visual selection lines
 " Source: https://github.com/SpaceVim/SpaceVim/blob/master/config/neovim.vim
-function! rccommon#GetVisual()
+function! rccommon#GetVisual() abort
     let [lnum1, col1] = getpos("'<")[1:2]
     let [lnum2, col2] = getpos("'>")[1:2]
     let lines = getline(lnum1, lnum2)
@@ -55,6 +59,53 @@ function! rccommon#GetVisual()
     let lines[0] = lines[0][col1 - 1:]
     return lines
 endfunction" }}}
+
+" ExecNoCursor : Executes a command and restores the cursor position. {{{
+function! rccommon#ExecNoCursor(cmd) abort
+    let pos = getpos('.')
+    exec a:cmd
+    call cursor(pos[1], pos[2], pos[3])
+endfunction
+"}}}
+
+" AppendModeline : Update or add a modeline {{{
+" Source: http://vim.wikia.com/wiki/Modeline_magic (with alterations)
+function! rccommon#AppendModeline() abort
+    " Build modeline
+    let l:modeline = printf(
+                \ ' vim: set ts=%d sw=%d tw=%d fdm=%s fenc=%s %set : ',
+                \ &tabstop, &shiftwidth, &textwidth, &foldmethod,
+                \ &fileencoding, &expandtab ? '' : 'no')
+    let l:modeline = substitute(
+                \ &commentstring,
+                \ '\V%s',
+                \ printf(
+                \     ' vim: set ts=%d sw=%d tw=%d fdm=%s fenc=%s %set : ',
+                \     &tabstop, &shiftwidth, &textwidth, &foldmethod,
+                \     &fileencoding, &expandtab ? '' : 'no'
+                \ ),
+                \ ''
+                \ )
+
+    " Backup and change options
+    let urp = &report
+    set report=9999
+
+    " Remove existing modeline
+    if match(getline(line('$')), '\V' .
+                \ escape(matchstr(&commentstring,'\zs.*\ze%s'), '\') .
+                \ '\s\*\[Vv]im\?:\s\+se\[t]', 0, 1) >= 0
+        call rccommon#ExecNoCursor(string(line('$')) . 'd')
+        echom 'Removed existing modeline.'
+    endif
+
+    call append(line("$"), l:modeline)
+    echom 'Added new modeline: "' . l:modeline . '"'
+
+    " Restore options
+    exec 'set report='.urp
+endfunction
+"}}}
 
 " UI
 " Echo(msg, [hilight_group=None], [nonewline=0]) {{{
@@ -310,7 +361,7 @@ function! rccommon#SetAndSaveBufferOptions(optsdict) abort
     endtry
 endfunction  "}}}
 
-function! rccommon#SetLocalOption(opt, val)
+function! rccommon#SetLocalOption(opt, val)  "{{{
     if a:val == v:true
         execute 'setlocal ' . a:opt
     elseif a:val == v:false
@@ -318,15 +369,15 @@ function! rccommon#SetLocalOption(opt, val)
     else
         execute 'setlocal ' . a:opt . '=' . a:val
     endif
-endfunction
+endfunction  "}}}
 
-function! rccommon#GetOption(opt, setVal)
+function! rccommon#GetOption(opt, setVal)  "{{{
     if a:setVal == v:true || a:setVal == v:false
         execute 'return (&' . a:opt . ' ? v:true : v:false)'
     else
         execute 'return &' . a:opt
     endif
-endfunction
+endfunction  "}}}
 
 " RestoreBufferOptions() - CALLED AUTOMATICALLY {{{
 " Restore options changed by SetAndSaveBufferOptions().
@@ -341,6 +392,73 @@ function! rccommon#RestoreBufferOptions() abort
 
     unlet b:_user_ftplugin_bufopts_prev
 endfunction  "}}}
+
+" Pars
+function! rccommon#ParseModeline() abort "{{{
+    let l:modelines = &modelines
+    let l:lastln = line('$')
+
+    " Get lines in buffer potentially containing a modeline
+    if l:lastln <= l:modelines * 2
+        let l:lines = getline(1, l:modelines * 2)
+    else
+        let l:lines = getline(1, l:modelines)
+                    \ + getline(l:lastln - l:modelines - 1, l:lastln)
+    endif
+
+    " Find a modeline
+    let l:mlexpr = '\C\m^.\{-}\s\+\%(vim\?\|ex\):\s*'
+                \ . '\%(set\? \%(\%([a-z]\+\%(=\%(\\:\|[^ :]\)\+\)\?\) \?\)*'
+                \ . '\s\?:\|\(\([a-z]\+\(=\(\\:\|[^ :]\)\+\)\?\|\)[: ]\)*'
+                \ . '\([a-z]\+\(=\(\\:\|[^ :]\)\+\)\?\)\)'
+    let l:match = match(l:lines, l:mlexpr)
+
+    if l:match == -1
+        return {}
+    endif
+
+    " Parse
+    let l:ml = substitute(l:lines[l:match], '\C\m^.* \(vim\?\|ex\):\s*', '',
+                \ '')
+
+    if l:ml[0:2] == 'se ' || l:ml[0:3] == 'set '
+        let l:ml = (l:ml[0:2] == 'se ' ? l:ml[3:] : l:ml[4:])
+        let l:ml = substitute(l:ml, '\m:[^:]*$', '', '')
+        let l:opts = split(l:ml, '\m\%(\s\|\\\@<!:\)', 0)
+    else
+        let l:opts = split(l:ml, '\m\%(\s\|\\\@<!:\)', 0)
+    endif
+
+    let l:result = {}
+
+    for opt in l:opts
+        if opt == '' | continue | endif
+
+        let l:eq = match(opt, '\m=')
+
+        if l:eq != -1
+            " a=b
+            let l:name = opt[0:l:eq - 1]
+            let l:val = opt[l:eq + 1:]
+
+        else
+            " [no]{option}
+            let l:val = (opt[0:1] == 'no' ? (v:false) : (v:true))
+            let l:name = (opt[0:1] == 'no' ? opt[2:] : opt)
+        endif
+
+        " Strip whitespace
+        let l:name = substitute(l:name, '\m^\s*\(.\{-}\)\s*$', '\1', '')
+
+        if l:val != v:true && l:val != v:false
+            let l:val = substitute(l:val, '\m^\s*\(.\{-}\)\s*$', '\1', '')
+        endif
+
+        let l:result[l:name] = l:val
+    endfor
+
+    return l:result
+endfunction " }}}
 
 " Plugins
 " UpdateTagbarOptions() {{{
@@ -377,4 +495,4 @@ function! rccommon#CommentStrings()
     return [l:res[0], (l:res[1] == '' ? '\$' : l:res[1])]
 endf " }}}
 
-" vim: set ts=4 sw=4 tw=79 fdm=marker et :
+" vim: set ts=4 sw=4 tw=79 fdm=marker fenc=utf-8 et :

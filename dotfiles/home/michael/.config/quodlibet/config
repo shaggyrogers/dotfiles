@@ -1,9 +1,9 @@
 [memory]
-exfalso_last_active_version = 4.1.-1
+exfalso_last_active_version = 4.2.-1
 exfalso_maximized = 0
 exfalso_paned_position = 0.22873194221508827
-exfalso_position = 1286 40
-exfalso_size_ = 1246 1378
+exfalso_position = 3206 16
+exfalso_size_ = 1246 1396
 open_browsers = 
 plugin_prefs_maximized = 0
 plugin_prefs_position = 615 398
@@ -18,22 +18,22 @@ windows = true
 version = 0
 
 [plugins]
-active_plugins = artwork-url-cover
-	lastfm-cover
+active_plugins = embedded_edit
+	Force Write
+	FilterAll
+	Search album in Wikipedia
+	discogs-cover
 	refresh-songs
+	CustomCommands
+	MusicBrainz lookup
 	Convert Encodings
-	filterbrowser
-	ReplayGain
-	embedded_edit
+	lastfm-cover
+	Download Album Art
+	artwork-url-cover
 	Search artist in Wikipedia
 	musicbrainz-cover
-	Force Write
-	Search album in Wikipedia
-	MusicBrainz lookup
-	CustomCommands
-	Download Album Art
-	discogs-cover
-	FilterAll
+	ReplayGain
+	filterbrowser
 cover_edit = False
 cover_edit_cmd = gimp
 cover_engine_amazon = True

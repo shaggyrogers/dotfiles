@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # -*- coding: UTF-8 -*-
 ###############################################################################
 # kitty-nvim
@@ -8,24 +8,17 @@
 #                        for each workspace.
 # Author:                Michael De Pasquale <shaggyrogers>
 # Creation Date:         2018-03-07
-# Modification Date:     2018-04-17
+# Modification Date:     2019-06-30
 # License:               MIT
 #
 # Notes
 # -----
-# Currrently only i3 is supported, but this can be used with any WM by use of
-# the '-g' option.  Support for other WMs is not planned but may be added in
-# future.
+# Only i3 is supported.
 #
 ###############################################################################
 
-# Help, usage, version info and other documentation {{{
-# Version information {{{
-# Given a version number MAJOR.MINOR.PATCH, increment the:
-#    1. MAJOR version when you make incompatible API changes,
-#    2. MINOR version when you add backwards-compatible functionality
-#    3. PATCH version when you make backwards-compatible bug fixes.
-# see https://semver.org/
+# Help {{{
+# Version {{{
  __version="$(cat <<- 'EOF'
    kitty-nvim 1.3.0
 EOF
@@ -114,19 +107,17 @@ __help="$(cat <<- 'EOF'
 
     The only WM currently supported is i3.
 EOF
-)" # }}}
+)"  #}}}
 
-# version() : Diplay version info and exit {{{
-version () {
+version () {  #{{{
     echo "" 1>&2
     echo "  ${__version:-No version information available}" 1>&2
     echo "" 1>&2
 
     exit 0
-} # }}}
+}  #}}}
 
-# help() : Diplay help info and exit {{{
-help () {
+help () {  #{{{
     echo "" 1>&2
     echo "  ${__usage:-No usage available}" 1>&2
     echo "" 1>&2
@@ -134,7 +125,8 @@ help () {
     echo "" 1>&2
 
     exit 1
-} # }}}
+}  #}}}
+
 # }}}
 
 parse_arguments() { # {{{
@@ -166,14 +158,15 @@ use-existing:,global,instance-index:,send-keys:open-in:,wait' -n 'nvim-kitty' --
     # Parse options {{{
     while true; do
         case "$1" in
-            '-h'|'--help')
+            '-h'|'--help')  #{{{
                 help
-            ;;
+            ;;  #}}}
 
-            '--version')
+            '--version')  #{{{
                 version
-            ;;
-            '-a'|'--command-after')
+            ;;  #}}}
+
+            '-a'|'--command-after')  #{{{
                 if [ "$(echo -n "$2" | wc -m)" = '0' ]; then
                     echo 'Error: Commands cannot be empty.' 1>&2
                     exit 1
@@ -182,8 +175,9 @@ use-existing:,global,instance-index:,send-keys:open-in:,wait' -n 'nvim-kitty' --
                 COMMAND_AFTER="$2"
                 shift 2
                 continue
-            ;;
-            '-b'|'--command-before')
+            ;;  #}}}
+
+            '-b'|'--command-before')  #{{{
                 if [ "$(echo -n "$2" | wc -m)" = '0' ]; then
                     echo 'Error: Commands cannot be empty.' 1>&2
                     exit 1
@@ -192,8 +186,9 @@ use-existing:,global,instance-index:,send-keys:open-in:,wait' -n 'nvim-kitty' --
                 COMMAND_BEFORE="$2"
                 shift 2
                 continue
-            ;;
-            '-c'|'--command-evaluate')
+            ;;  #}}}
+
+            '-c'|'--command-evaluate')  #{{{
                 if [ "$(echo -n "$2" | wc -m)" = '0' ]; then
                     echo 'Error: Commands cannot be empty.' 1>&2
                     exit 1
@@ -203,8 +198,9 @@ use-existing:,global,instance-index:,send-keys:open-in:,wait' -n 'nvim-kitty' --
                 USE_EXISTING=2
                 shift 2
                 continue
-            ;;
-            '-e'|'--use-existing')
+            ;;  #}}}
+
+            '-e'|'--use-existing')  #{{{
                 if [ "$(echo -n "$2" | wc -m)" = '0' ]; then
                     echo 'Error: --use-existing requires a value.' 1>&2
                     exit 1
@@ -216,13 +212,15 @@ use-existing:,global,instance-index:,send-keys:open-in:,wait' -n 'nvim-kitty' --
                 USE_EXISTING="$2"
                 shift 2
                 continue
-            ;;
-            '-g'|'--global')
+            ;;  #}}}
+
+            '-g'|'--global')  #{{{
                 GLOBAL=1
                 shift 1
                 continue
-            ;;
-            '-i'|'--instance-index')
+            ;;  #}}}
+
+            '-i'|'--instance-index')  #{{{
                 if [ "$(echo -n "$2" | wc -m)" = '0' ]; then
                     echo 'Error: Index cannot be blank.' 1>&2
                     exit 1
@@ -234,8 +232,9 @@ use-existing:,global,instance-index:,send-keys:open-in:,wait' -n 'nvim-kitty' --
                 INSTANCE_INDEX="$2"
                 shift 2
                 continue
-            ;;
-            '-k'|'--send-keys')
+            ;;  #}}}
+
+            '-k'|'--send-keys')  #{{{
                 if [ "$(echo -n "$2" | wc -m)" = '0' ]; then
                     echo 'Error: Keys cannot be empty.' 1>&2
                     exit 1
@@ -245,8 +244,9 @@ use-existing:,global,instance-index:,send-keys:open-in:,wait' -n 'nvim-kitty' --
                 USE_EXISTING=2
                 shift 2
                 continue
-            ;;
-            '-o'|'--open-in')
+            ;;  #}}}
+
+            '-o'|'--open-in')  #{{{
                 # Ensure argument is a single character in 'oOt'
                 if ! [ "$(echo -n "$2" | wc -m)" = '1' ]; then
                     echo 'Error: --open-in requires a single character.' 1>&2
@@ -260,43 +260,46 @@ use-existing:,global,instance-index:,send-keys:open-in:,wait' -n 'nvim-kitty' --
                 OPEN_IN="$2"
                 shift 2
                 continue
-            ;;
-            '-w'|'--wait')
+            ;;  #}}}
+
+            '-w'|'--wait')  #{{{
                 WAIT=1
                 USE_EXISTING=0
                 shift
                 continue
-            ;;
-            '--')
+            ;;  #}}}
+
+            '--')  #{{{
                 shift
                 break
-            ;;
-            *)
+            ;;  #}}}
+
+            *)  #{{{
                 echo 'Error: Could not parse arguments.' 1>&2
                 exit 1
-            ;;
+            ;;  #}}}
         esac
     done # }}}
 
-    # Perform additional validation {{{
+    # Check for conflicting options {{{
     if [ -n "$WAIT" ] &&  ! [ "$USE_EXISTING" = '0' ]; then
         echo "Error: Arguments conflict, '--w' implies '-e 0'." 1>&2
         exit 1
     fi
-    if [ -n "$COMMAND_AFTER" ] || [ -n "$COMMAND_BEFORE" ]; then
-        if [ -n "$COMMAND_EVALUATE" ]; then
-            echo "Error: '-c' cannot be combined with '-a' or '-b." 1>&2
-            exit 1
-        fi
-        if [ -n "$SEND_KEYS" ]; then
-            echo "Error: '-k' cannot be combined with '-a' or '-b." 1>&2
-            exit 1
-        fi
+
+    if ( [ -n "$COMMAND_AFTER" ] || [ -n "$COMMAND_BEFORE" ] ) && \
+            ( [ -n "$COMMAND_EVALUATE" ] || [ -n "$SEND_KEYS" ] ); then
+        if [ -n "$COMMAND_EVALUATE" ]; then ARG_CK='-c'; else ARG_CK='-k'; fi
+        echo "Error: '$ARG_CK' cannot be combined with '-a' or '-b." 1>&2
+        exit 1
     fi
+
     if [ -n "$COMMAND_EVALUATE" ] && [ -n "$SEND_KEYS" ]; then
         echo "Error: '-c' cannot be combined with '-k'." 1>&2
         exit 1
     fi
+
+
     if ( [ -n "$COMMAND_EVALUATE" ] || [ -n "$SEND_KEYS" ] ) && \
             ! [ "$USE_EXISTING" = '2' ]; then
         echo "Error: Commands '-c' and '-k' imply -e 2." 1>&2

@@ -2,28 +2,26 @@
 " solarized8_flat_fork.vim
 " ========================
 "
+" Description:           Tweaked version of vim-solarized8-flat
+" Authors:               Ethan Schoonover (solarized)
+"                        Lifepillar <lifepillar@lifepillar.me> (vim-solarized8)
+"                        Michael De Pasquale <shaggyrogers> (tweaks)
 " Creation Date:         2018-02-20
-" Description:
-" License:               OSI approved MIT license
-" Authors:
-" solarized              Ethan Schoonover
-" vim-solarized8         Lifepillar <lifepillar@lifepillar.me>
-" vim-solarized8 fork    Michael De Pasquale <shaggyrogers>
-"
-" solarized8_flat.vim
-" ====================
-" Description:           Precision colors for machines and people
+" Modification Date:     2019-07-08
 " Source:                https://github.com/lifepillar/vim-solarized8
 " License:               OSI approved MIT license
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+
 if !(has('termguicolors') && &termguicolors) && !has('gui_running') "{{{
     echoerr '[Solarized 8 Flat] There are not enough colors.'
     finish
 elseif &background !=# 'dark'
-    echoerr '[Solarized 8 Flat] Only a dark background is supported.'
-    finish
+    redraw
+    echohl WarningMsg
+    echomsg '[Solarized 8 Flat] WARNING: Only a dark background is supported.'
+    echohl None
 endif "}}}
 
 let g:colors_name = 'solarized8_flat_fork' "{{{
@@ -55,6 +53,8 @@ hi CursorColumn  guifg=NONE    guibg=NONE    gui=bold
 hi CursorLine    guifg=NONE    guibg=NONE    gui=underline
 hi CursorLineNr  guifg=fg      guibg=NONE    gui=bold,underline
 hi Directory     guifg=#268bd2 guibg=bg      gui=NONE
+" ADDED: For breakpoint() in python, etc.
+hi Diagnostic    guifg=#A662F1 guibg=bg      gui=NONE,bold
 hi EndOfBuffer   guifg=fg      guibg=bg      gui=NONE
 hi Error         guifg=#dc322f guibg=bg      gui=NONE,bold
 hi ErrorMsg      guifg=#fdf6e3 guibg=#dc322f gui=NONE
@@ -90,7 +90,7 @@ hi VertSplit     guifg=#444444 guibg=#444444 gui=NONE
 hi Visual        guifg=NONE    guibg=NONE    gui=NONE,reverse
 hi VisualMode    guifg=#083C4A guibg=#d33682 gui=NONE,bold,reverse
 hi VisualNOS     guifg=NONE    guibg=#083C4A gui=NONE,reverse
-hi WarningMsg    guifg=#cb4b16 guibg=bg      gui=NONE,bold
+hi WarningMsg    guifg=#FA7A17 guibg=bg      gui=NONE,bold
 hi WildMenu      guifg=#6F8790 guibg=#eee8d5 gui=NONE,reverse
 "}}}
 

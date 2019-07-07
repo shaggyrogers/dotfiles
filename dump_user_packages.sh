@@ -16,12 +16,8 @@
 #
 ###############################################################################
 
-SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
-OUTFILE=$SCRIPT_DIR'/user_packages.txt'
-
-printf "$(comm -23 <(apt-mark showmanual | sort -u) \
-            <(gzip -dc /var/log/installer/initial-status.gz | \
-            sed -n 's/^Package: //p' | sort -u))" > $OUTFILE
+OUTFILE='/user_packages.txt'
+apt-mark showmanual | sort -u > $OUTFILE
 echo "Wrote $(cat $OUTFILE | wc -l) package names to $OUTFILE."
 
 # vim: set ts=4 sw=4 tw=79 fdm=manual et :

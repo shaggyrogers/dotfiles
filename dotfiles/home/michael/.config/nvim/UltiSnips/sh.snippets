@@ -28,14 +28,12 @@ endglobal
 
 snippet header "File header" b
 #!/usr/bin/env bash
-# -*- coding: UTF-8 -*-
 ###############################################################################
 # `!v expand('%:t')`
 # `!v repeat('=', len(expand('%:t')))`
 #
 # Description:           ${1:TODO}
 # Author:                `!v g:snips_author `
-# Creation Date:         %DATE%
 # Creation Date:         `!v strftime("%Y-%m-%d")`
 # Modification Date:     `!v strftime("%Y-%m-%d")`
 #

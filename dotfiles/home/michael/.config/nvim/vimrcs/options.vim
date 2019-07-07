@@ -5,7 +5,7 @@
 " Author:                Michael De Pasquale <shaggyrogers>
 " Description:           Sets vim options for all filetypes.
 " Creation Date:         2017-12-02
-" Modification Date:     2019-01-04
+" Modification Date:     2019-07-08
 " License:               MIT
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -210,6 +210,11 @@ set nosplitbelow
 set previewheight=8
 set splitright
 set title
+
+" Don't automatically resize windows after winodw split/close
+set noequalalways
+set winminheight=0
+set winminwidth=1
 "}}}
 
 " Wild menu{{{
@@ -272,7 +277,14 @@ set tabstop=4
 "}}}
 
 " Automatic formatting{{{
-set formatoptions=tcqjr
+" t - Auto-wrap text using textwidth
+" c - Auto-wrap comments using textwidth, inserting the current comment
+" q - Allow formatting comments ('gq')
+" j - Remove comment leader when joining comments
+" l - Don't break long lines that were already long
+" 1 - Numbered lists (need to set formatlistpat and enable autoindent)
+" Default: tcqj
+set formatoptions=tcqjrl1
 "}}}
 
 " Lines{{{

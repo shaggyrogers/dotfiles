@@ -5,7 +5,7 @@
 " Description:           Contains all non-plugin shortcuts.
 " Author:                Michael De Pasquale <shaggyrogers>
 " Creation Date:         2017-12-02
-" Modification Date:     2019-01-04
+" Modification Date:     2019-07-07
 " License:               MIT
 "
 " Note that some key combinations require kitty with a certain configuration.
@@ -224,8 +224,23 @@ nnoremap <silent> <M-u> "_yiw?\w\+\_W\+\%#<CR>:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3
 nnoremap <silent> <M-i> "_yiw:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o>/\w\+\_W\+<CR><c-l>:nohlsearch<CR>
 "}}}
 " Enter / Shift + Enter : Insert newline after / before current line {{{
-nnoremap <Char-0x10>Bz  :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[
 nnoremap <CR> <cmd>put =repeat(nr2char(10), v:count1)<cr>
+nnoremap <Char-0x10>Bz  :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[
+
+augroup UpdateCRShorcut
+    autocmd!
+    autocmd BufEnter * call UpdateCRShortcut()
+augroup end
+
+function! UpdateCRShortcut() abort
+    if getbufvar(bufnr(''), '&modifiable', 0)
+        nnoremap <CR> :<c-u>put =repeat(nr2char(10), v:count1)<cr>
+        nnoremap <Char-0x10>Bz :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[
+    else
+        silent! nunmap <CR>
+        silent! nunmap <Char-0x10>Bz
+    endif
+endfunc
 "}}}
 " Ctrl + Enter: Insert newline at cursor {{{
 nnoremap <Char-0x10>Ez i<CR><Esc>
@@ -233,11 +248,6 @@ nnoremap <Char-0x10>Ez i<CR><Esc>
 " Alt + Enter : Create a copy of the current line below {{{
 nnoremap <expr> <M-CR> repeat(":\<C-u>t.\<CR>", v:count1)
 inoremap <expr> <M-CR> repeat("\<C-o>:\<C-u>t.\<CR>", v:count1)
-
-augroup UpdateCRShorcut
-    autocmd!
-    autocmd BufEnter * call UpdateCRShortcut()
-augroup end
 "}}}
 " <Leader> + Space : Delete trailing whitespace {{{
 nnoremap <Leader><Space> <cmd>:call rccommon#DeleteTrailingWS()<CR>
@@ -350,7 +360,7 @@ xmap <M-f> <cmd>:echom expand('%:p')<CR>
 "}}}
 " <Leader> + ml : Append modeline after last line in buffer. {{{
 " Source: http://vim.wikia.com/wiki/Modeline_magic
-nnoremap <silent> <Leader>ml <cmd>:call AppendModeline()<CR>
+nnoremap <silent> <Leader>ml <cmd>:call rccommon#AppendModeline()<CR>
 "}}}
 "}}}
 
@@ -358,6 +368,7 @@ nnoremap <silent> <Leader>ml <cmd>:call AppendModeline()<CR>
 
 " Wrappers / Input {{{
 " http://vim.wikia.com/wiki/Convert_between_hex_and_decimal
+
 " Dec2hex / Hex2dec{{{
 command! -nargs=? -range Dec2hex call s:Dec2hex(<line1>, <line2>, '<args>')
 function! s:Dec2hex(line1, line2, arg) range
@@ -393,6 +404,7 @@ function! s:Hex2dec(line1, line2, arg) range
     echo (a:arg =~? '^0x') ? a:arg + 0 : ('0x'.a:arg) + 0
   endif
 endfunction"}}}
+
 " ExecuteMacroOverVisualRange : Executes for lines in the visual selection {{{
 " https://github.com/robertmeta/vimfiles/blob/master/vimrc
 function! ExecuteMacroOverVisualRange()
@@ -400,6 +412,7 @@ function! ExecuteMacroOverVisualRange()
     execute ":'<,'>normal @".nr2char(getchar())
 endfunction
 "}}}
+
 " VisualBlockSelect : Selects a given region with visual block mode. {{{
 function! VisualBlockSelect(x1, y1, x2, y2)
     call cursor(a:y1, a:x1)
@@ -407,13 +420,7 @@ function! VisualBlockSelect(x1, y1, x2, y2)
     call cursor(a:y2, a:x2)
 endfunction
 "}}}
-" ExecNoCursor : Executes a command and restores the cursor position. {{{
-function! ExecNoCursor(cmd)
-    let pos = getpos('.')
-    exec a:cmd
-    call cursor(pos[1], pos[2], pos[3])
-endfunction
-"}}}
+
 " SearchReplaceVisualSelection : Search/replace command assistant {{{
 function! SearchReplaceVisualSelection()
     " Backup user data, get search string
@@ -450,6 +457,7 @@ function! SearchReplaceVisualSelection()
     call feedkeys(":\<C-u>%s/".srch.'/'.repl."/g\<Left>\<Left>", 't')
 endfunction
 "}}}
+
 " NaturalWindowResize : Intuitive window resize {{{
 " Returns 1 if window can move in dir (<left>/<right>/<up>/<down>)
 function! NaturalWindowResize(dir)
@@ -466,6 +474,7 @@ function! NaturalWindowResize(dir)
     endif
 endfunction
 "}}}
+
 "}}}
 
 " Movement {{{
@@ -556,6 +565,7 @@ endfunction
 "}}}
 
 " Misc {{{
+
 " GetCharInDir : Returns the character in the given direction {{{
 " Returns [char, x, y] where x,y is the new position and char is 's' for
 " whitespace or no character, 'o' for all other characters or 'e' if the
@@ -590,6 +600,7 @@ function! GetCharInDir(dir, xp, yp, blank) abort
     return [char, xp, yp]
 endfunction
 "}}}
+
 " CanMoveWindow : Returns whether the window can be moved in a direction {{{
 " Returns 1 if window can move in dir (<left>/<right>/<up>/<down>)
 function! CanMoveWindow(dir) abort
@@ -600,6 +611,7 @@ function! CanMoveWindow(dir) abort
     return curNr != prevNr
 endfunction
 "}}}
+
 " CursorSynInfo : Print syntax information for hte text under the cursor {{{
 function! CursorSynInfo(attr) abort
     let l:pos = getpos('.')
@@ -619,50 +631,7 @@ function! CursorSynInfo(attr) abort
                 \ ' - '.string(l:stack)
 endfunc
 "}}}
-" UpdateCRShortcut : Update the <Enter> shortcut for adding newlines {{{
-function! UpdateCRShortcut() abort
-    if getbufvar(bufnr(''), '&modifiable', 0)
-        nnoremap <CR> :<c-u>put =repeat(nr2char(10), v:count1)<cr>
-    else
-        silent! nunmap <CR>
-    endif
-endfunc
-"}}}
-" AppendModeline : Adds a modeline comment or replacing the existing modeline {{{
-" Append modeline after last line in buffer.
-" Source: http://vim.wikia.com/wiki/Modeline_magic
-function! AppendModeline() abort
-    " Backup and change options
-    let urp = &report
-    let umagic = &magic
-    set report=9999
-    set magic
 
-    " Remove existing modeline
-    if match(getline(line('$')), '\V' .
-                \ escape(matchstr(&commentstring,'\zs.*\ze%s'), '\') .
-                \ '\s\*\[Vv]im\?:\s\+se\[t]', 0, 1) >= 0
-        call ExecNoCursor(string(line('$')) . 'd')
-        echom 'Removed existing modeline.'
-    endif
-
-    " Build and append new modeline
-    let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d fdm=%s %set : ",
-                \ &tabstop, &shiftwidth, &textwidth, &foldmethod,
-                \ &expandtab ? '' : 'no')
-    let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
-    call append(line("$"), l:modeline)
-    echom 'Added new modeline: "' . l:modeline . '"'
-
-    " Restore options
-    exec 'set report='.urp
-    if umagic
-        set magic
-    else
-        set nomagic
-    endif
-endfunction
-"}}}
 "}}}
 
 " }}}

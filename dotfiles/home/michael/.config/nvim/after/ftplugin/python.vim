@@ -5,7 +5,7 @@
 " Description:           Configuration for python syntax buffers
 " Author:                Michael De Pasquale
 " Creation Date:         2018-02-18
-" Modification Date:     2019-01-04
+" Modification Date:     2019-03-24
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -20,7 +20,25 @@ function! s:UserFtSetUp()
     call rccommon#SetAndSaveBufferOptions({
                 \ 'define': '^\s*\\(def\\\\|class\\)'
                 \ })
-    call rccommon#SetAndSaveWindowOptions({'foldmethod': 'marker'})
+
+    " Foldmethod "defaults" to marker, will be changed to expr by simpylfold
+    " unless explicitly disabled using a modeline.
+    let l:ml = rccommon#ParseModeline()
+
+    if has_key(l:ml, 'fdm') || has_key(l:ml, 'foldmethod')
+        let l:fdm = (has_key(l:ml, 'fdm') ? l:ml['fdm'] : l:ml['foldmethod'])
+
+        if l:fdm != 'expr'
+            let b:loaded_SimpylFold = 1
+            let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
+                    \ . (empty(get(b:, 'undo_ftplugin', '')) ? '' : '| ')
+                    \ . 'unlet b:loaded_SimpylFold'
+        endif
+
+    else
+        call rccommon#SetAndSaveWindowOptions({'foldmethod': 'marker'})
+    endif
+
     call rccommon#HighlightTextWidth()
     call rccommon#UpdateTagbarOptions()
     call rccommon#LoadFiletypeDictionary()

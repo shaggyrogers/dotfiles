@@ -23,7 +23,6 @@ let g:vimrcs = [
             \ 'options.vim',
             \ 'shortcuts.vim',
             \ 'plugins.vim',
-            \ 'SpeedSyntax.vim',
             \ ]
 "}}}
 
