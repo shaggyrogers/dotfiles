@@ -5,7 +5,7 @@
 " Description:           Configuration for python syntax buffers
 " Author:                Michael De Pasquale
 " Creation Date:         2018-02-18
-" Modification Date:     2019-03-24
+" Modification Date:     2019-07-21
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -31,8 +31,8 @@ function! s:UserFtSetUp()
         if l:fdm != 'expr'
             let b:loaded_SimpylFold = 1
             let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
-                    \ . (empty(get(b:, 'undo_ftplugin', '')) ? '' : '| ')
-                    \ . 'unlet b:loaded_SimpylFold'
+                    \ . (empty(get(b:, 'undo_ftplugin', '')) ? '' : ' | ')
+                    \ . 'unlet! b:loaded_SimpylFold'
         endif
 
     else

@@ -5,7 +5,7 @@
 " Description:           Configuration for vim syntax buffers
 " Author:                Michael De Pasquale
 " Creation Date:         2018-02-18
-" Modification Date:     2019-01-05
+" Modification Date:     2019-07-21
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 

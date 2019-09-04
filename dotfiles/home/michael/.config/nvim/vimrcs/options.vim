@@ -5,54 +5,43 @@
 " Author:                Michael De Pasquale <shaggyrogers>
 " Description:           Sets vim options for all filetypes.
 " Creation Date:         2017-12-02
-" Modification Date:     2019-07-08
+" Modification Date:     2019-08-19
 " License:               MIT
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " TODO: tweak formatting options
 
 " General{{{
-" Memory Usage
-"set maxmem=2000000
-set maxmempattern=200000
-"set maxmemtot=2400000
-set mkspellmem=900000,10000,1000
-" }}
-
-" Enable filetype plugins{{{
+" Enable filetype plugins
 filetype plugin indent on
 set cpoptions=aABceFs_
-"}}}
 
-" Encoding{{{
+" Default encoding
 set encoding=utf8
 set fileformats=unix,dos,mac
-"}}}
 
-" Spell checking{{{
+" Memory usage limits (kB) - regex, mkspell
+set maxmempattern=32768
+set mkspellmem=900000,10000,1000
+
+" Spell checking
 set nospell
 set spelllang=en_au
-"}}}
 
-" Mouse support{{{
+" Mouse support
+behave xterm
 set mouse=ar
-set mousehide
-set mousemodel=popup
 set mouseshape=i:beam,r:beam,s:updown,sd:cross,m:no,ml:up-arrow,v:rightup-arrow
-" }}}
 " }}}
 
 " Behaviour{{{
-" Detect file changes, buffers remain open in background{{{
+" Detect file changes, buffers remain open in background
 set autoread
 set hidden
-"}}}
 
-" Persistent command / undo history{{{
-"}}}
-
-" Persistence, sessions / backups / swap files{{{
+" Persistence, sessions / backups / swap files
 set history=4096
+set writebackup
 set nobackup
 set sessionoptions+=localoptions,options,tabpages,winsize
 set sessionoptions=blank,buffers,curdir,folds,globals,help
@@ -87,63 +76,44 @@ exec "set shada=!,s8096,h,%," .
             \ 'r~/.local/share/Trash,' .
             \ 'r~/tmp,' .
             \ 'n'.s:tempDir.'/shada'
-"}}}
 
-" Bell{{{
+
+" Bell
 set belloff=all
 set noerrorbells
-"}}}
 
-" Modelines{{{
+" Modelines
 set modeline
 set modelines=5
-"}}}
 
-" Maximum function call depth, timouts for key codes/mappings/key sequences{{{
+" Maximum function call depth, timouts for key codes/mappings/key sequences
 set maxfuncdepth=300
 set timeoutlen=750
 set ttimeoutlen=30
-"}}}
 
-" Jump to the first open window or tab for a buffer, or make a new tab{{{
+" Jump to the first open window or tab for a buffer, or make a new tab
 set switchbuf=useopen,usetab,newtab
-"}}}
 
-" Always echo the number of lines changed.{{{
+" Always echo the number of lines changed by a command.
 set report=0
-"}}}
 "}}}
 
 " Search & Patterns {{{
-" Patterns{{{
+" Patterns
 set ignorecase
 set smartcase
-"}}}
 
-" Search behaviour{{{
-"set nowrapscan
-"}}}
-
-" Search appearance {{{
+" Search appearance
 set nohlsearch
 set inccommand=nosplit
 set incsearch
 set matchpairs=(:),{:},[:],<:>,{:}
 set matchtime=3
 set showmatch
-"}}}
 
-" File Search {{{
+" File Search
 set tags=.tags
 " }}}
-" }}}
-
-" Misc  {{{
-" TOhtml
-let g:html_dynamic_folds = 1
-let g:html_prevent_copy = 'fn'
-let g:html_font = 'FuraCode Nerd Font Mono'
-"}}}
 
 " Navigation {{{
 " Movement restrictions/jumps
@@ -294,6 +264,22 @@ set linebreak
 "set breakat=!@*-+;:,./?({>%|
 "set breakat=^I!@*-+;:,./?
 "}}}
+"}}}
+
+" TOhtml  {{{
+let g:html_dynamic_folds = 1
+let g:html_use_css = 1
+let g:html_number_lines = 1
+let g:html_line_ids = 1
+let g:html_ignore_conceal = 0
+let g:html_ignore_folding = 0
+let g:html_no_foldcolumn = 0
+let g:html_no_invalid = 0
+let g:html_hover_unfold = 0
+let g:html_pre_wrap = 0
+let g:html_expand_tabs = 1
+let g:html_prevent_copy = 'fn'
+" let g:html_font = 'monospace'
 "}}}
 
 " Autocommands{{{

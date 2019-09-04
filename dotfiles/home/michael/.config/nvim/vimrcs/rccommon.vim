@@ -5,7 +5,7 @@
 " Description:           Shared functions for vim scripts
 " Author:                Michael De Pasquale <shaggyrogers>
 " Creation Date:         2018-02-18
-" Modification Date:     2019-07-07
+" Modification Date:     2019-08-09
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -43,49 +43,31 @@ endfunc " }}}
 " DeleteTrailingWS() {{{
 " Remove trailing whitespace in current buffer
 function! rccommon#DeleteTrailingWS(...)
-    let pos = getpos(".")
-    %s/\s\+$//e
-    call cursor(pos[1], pos[2], pos[3])
+    call rccommon#ExecNoCursor('%s/\s\+$//e')
 endfunc " }}}
-
-" GetVisual() {{{
-" Returns a list of visual selection lines
-" Source: https://github.com/SpaceVim/SpaceVim/blob/master/config/neovim.vim
-function! rccommon#GetVisual() abort
-    let [lnum1, col1] = getpos("'<")[1:2]
-    let [lnum2, col2] = getpos("'>")[1:2]
-    let lines = getline(lnum1, lnum2)
-    let lines[-1] = lines[-1][:col2 - 2]
-    let lines[0] = lines[0][col1 - 1:]
-    return lines
-endfunction" }}}
-
-" ExecNoCursor : Executes a command and restores the cursor position. {{{
-function! rccommon#ExecNoCursor(cmd) abort
-    let pos = getpos('.')
-    exec a:cmd
-    call cursor(pos[1], pos[2], pos[3])
-endfunction
-"}}}
 
 " AppendModeline : Update or add a modeline {{{
 " Source: http://vim.wikia.com/wiki/Modeline_magic (with alterations)
 function! rccommon#AppendModeline() abort
     " Build modeline
-    let l:modeline = printf(
-                \ ' vim: set ts=%d sw=%d tw=%d fdm=%s fenc=%s %set : ',
-                \ &tabstop, &shiftwidth, &textwidth, &foldmethod,
-                \ &fileencoding, &expandtab ? '' : 'no')
     let l:modeline = substitute(
-                \ &commentstring,
-                \ '\V%s',
-                \ printf(
-                \     ' vim: set ts=%d sw=%d tw=%d fdm=%s fenc=%s %set : ',
-                \     &tabstop, &shiftwidth, &textwidth, &foldmethod,
-                \     &fileencoding, &expandtab ? '' : 'no'
-                \ ),
-                \ ''
-                \ )
+            \     &commentstring == '' ? '%s' : &commentstring,
+            \     '\V%s',
+            \     printf(
+            \         ' vim: set ts=%d sw=%d tw=%d fdm=%s fenc=%s %set :',
+            \         &tabstop,
+            \         &shiftwidth,
+            \         &textwidth,
+            \         &foldmethod,
+            \         &fileencoding,
+            \         &expandtab ? '' : 'no'
+            \     ),
+            \     ''
+            \ )
+
+    if s:Trim(l:modeline) == ''
+        throw 'AppendModeline: Error creating modeline!'
+    endif
 
     " Backup and change options
     let urp = &report
@@ -96,26 +78,26 @@ function! rccommon#AppendModeline() abort
                 \ escape(matchstr(&commentstring,'\zs.*\ze%s'), '\') .
                 \ '\s\*\[Vv]im\?:\s\+se\[t]', 0, 1) >= 0
         call rccommon#ExecNoCursor(string(line('$')) . 'd')
-        echom 'Removed existing modeline.'
     endif
 
     call append(line("$"), l:modeline)
-    echom 'Added new modeline: "' . l:modeline . '"'
+    call rccommon#Echo('Added new modeline: ', 'Info')
+    call rccommon#Echo(l:modeline, '', 1)
 
     " Restore options
-    exec 'set report='.urp
+    exec 'set report=' . urp
 endfunction
 "}}}
 
 " UI
 " Echo(msg, [hilight_group=None], [nonewline=0]) {{{
 " Echo prints a newline before msg if necessary, unless nonewline is nonzero.
-function! rccommon#Echo(text, ...)
+function! rccommon#Echo(text, ...) abort
     if a:0 >= 1
         execute 'echohl ' . a:1
     endif
 
-    execute 'echo' . (a:0 >= 2 && a:2 ? 'n' : '') . ' "' . a:text . '"'
+    execute 'echo' . (a:0 >= 2 && a:2 ? 'n' : '') . " '" . escape(a:text, "'") . "'"
 
     if a:0 >= 1
         echohl 'None'
@@ -131,29 +113,48 @@ function! rccommon#ConfirmYN(msg, ...) abort
     let [l:nr, l:ucmdheight] = [get(a:, '1', 3), &cmdheight]
     let l:ypattern = get(a:, '2', 0) ? '\V\CY' : '\V\cy'
     let l:npattern = get(a:, '2', 0) ? '\V\CN' : '\V\cn'
-    let l:cpattern = get(a:, '2', 0) ? '' : '\V\[\r]'
-    let l:result = a:0 < 3 ? 0 : (a:3 == 1)
+    let l:cpattern = get(a:, '2', 0) ? '' : '\V\[]'
+    let l:default = a:0 < 3 ? 0 : (a:3 == 1)
+    let l:result = -1
     let l:hi = a:0 < 4 ? 'Question' : a:4
+    let l:whine = 'Only Y or N are accepted, case '
+                \ . (get(a:, '2', 0) ? '.' : 'in')
+                \ . 'sensitive.'
     set cmdheight=2
 
-    if get(a:, '2', 0) | let l:yn = '[Y/N] (case sensitive):' |
+    if get(a:, '2', 0) | let l:yn = '[Y/N]:' |
                 \ elseif l:result | let l:yn = '[Y/n]:' |
-                \ else | let l:yn = '[y/N]:' | endif
+                \ else | let l:yn = '[y/n]:' | endif
 
     while l:nr
-        call rccommon#Echo(a:msg . ' ' . l:yn, l:hi)
+        call rccommon#Echo(a:msg . ' ' . l:yn . ' ', l:hi)
         let [l:answer, l:nr] = [nr2char(getchar()), l:nr - 1]
         redraw!
 
         if match(l:answer, l:ypattern) >= 0 | let l:result = 1 | break | endif
-        if match(l:answer, l:npattern) >= 0 | let l:result = 0  | break | endif
+        if match(l:answer, l:npattern) >= 0 | let l:result = 0 | break | endif
         if match(l:answer, l:cpattern) >= 0 | break | endif
 
-        echo printf('Response not recognised. %d attempt%s remaining.',
-                    \ l:nr, (l:nr == 1 ? '' : 's'))
+        let l:whine = 'Please enter either Y or N'
+                    \ . (get(a:, '2', 0) ? ', case sensitive.' : '.')
+                    \ . printf(' %d attempt%s remaining.', l:nr, (l:nr == 1 ? '' : 's'))
+
+        call rccommon#Echo(l:whine, 'ErrorMsg')
+        sleep 500m
     endwhile
 
     exec 'set cmdheight=' . l:ucmdheight
+    redraw!
+    call rccommon#Echo(a:msg . ' ' . l:yn . ' ', l:hi)
+
+    if l:result == -1
+        let l:result = l:default
+        call rccommon#Echo('Cancelled (default ' . (l:result == 1 ? 'Y' : 'N') . ')', 'ErrorMsg', 1)
+        call rccommon#Echo(l:whine, 'ErrorMsg')
+    else
+        call rccommon#Echo(' ' . l:answer, '', 1)
+    endif
+
     return l:result
 endfunction " }}}
 
@@ -177,18 +178,18 @@ endfunction
 " Window-local, must only be used in a filetype plugin.
 function! rccommon#HighlightTextWidth() abort
     if &textwidth == 0
-        echoerr 'HighlightTextWidth: textwidth must be greater than 0!'
+        echom 'HighlightTextWidth: textwidth is 0.'
         return
     endif
 
     if exists('w:_highlight_tw_matchid')
-        try
-            unlet w:_highlight_tw_matchid
-            call matchdelete(w:_highlight_tw_matchid)
-            call remove(b:_highlight_tw_ids,
-                        \ index(b:_highlight_tw_ids, w:_highlight_tw_matchid))
-        catch /.*/
-        endtry
+        "try
+        call matchdelete(w:_highlight_tw_matchid)
+        call remove(b:_highlight_tw_ids,
+                    \ index(b:_highlight_tw_ids, w:_highlight_tw_matchid))
+        unlet w:_highlight_tw_matchid
+        "catch /.*/
+        "endtry
     endif
 
     let w:_highlight_tw_matchid =
@@ -361,27 +362,28 @@ function! rccommon#SetAndSaveBufferOptions(optsdict) abort
     endtry
 endfunction  "}}}
 
-function! rccommon#SetLocalOption(opt, val)  "{{{
-    if a:val == v:true
-        execute 'setlocal ' . a:opt
-    elseif a:val == v:false
-        execute 'setlocal no' . a:opt
-    else
-        execute 'setlocal ' . a:opt . '=' . a:val
+function! rccommon#SetLocalOption(opt, val) abort "{{{
+    if a:val is v:null
+        echoerr 'Cannot set ' . a:opt . ' to v:null'
     endif
+
+    let l:val = a:val
+
+    if type(a:val) == type(v:true)
+        let l:val = (a:val == v:true ? 1 : 0)
+    endif
+
+    execute 'let &l:' . a:opt . ' = "' . l:val . '"'
 endfunction  "}}}
 
-function! rccommon#GetOption(opt, setVal)  "{{{
-    if a:setVal == v:true || a:setVal == v:false
-        execute 'return (&' . a:opt . ' ? v:true : v:false)'
-    else
-        execute 'return &' . a:opt
-    endif
+function! rccommon#GetOption(opt, setVal) abort "{{{
+    execute 'let l:result = &l:' . a:opt
+    return l:result
 endfunction  "}}}
 
-" RestoreBufferOptions() - CALLED AUTOMATICALLY {{{
+" RestoreBufferOptions() - CALLED AUTOMATICALLY
 " Restore options changed by SetAndSaveBufferOptions().
-function! rccommon#RestoreBufferOptions() abort
+function! rccommon#RestoreBufferOptions() abort " {{{
     if !exists('b:_user_ftplugin_bufopts_prev')
         return
     endif
@@ -393,7 +395,7 @@ function! rccommon#RestoreBufferOptions() abort
     unlet b:_user_ftplugin_bufopts_prev
 endfunction  "}}}
 
-" Pars
+" Utility functions
 function! rccommon#ParseModeline() abort "{{{
     let l:modelines = &modelines
     let l:lastln = line('$')
@@ -418,8 +420,7 @@ function! rccommon#ParseModeline() abort "{{{
     endif
 
     " Parse
-    let l:ml = substitute(l:lines[l:match], '\C\m^.* \(vim\?\|ex\):\s*', '',
-                \ '')
+    let l:ml = substitute(l:lines[l:match], '\C\m^.* \(vim\?\|ex\):\s*', '', '')
 
     if l:ml[0:2] == 'se ' || l:ml[0:3] == 'set '
         let l:ml = (l:ml[0:2] == 'se ' ? l:ml[3:] : l:ml[4:])
@@ -460,6 +461,25 @@ function! rccommon#ParseModeline() abort "{{{
     return l:result
 endfunction " }}}
 
+" Returns a list of visual selection lines
+" Source: https://github.com/SpaceVim/SpaceVim/blob/master/config/neovim.vim
+function! rccommon#GetVisual() abort  " {{{
+    let [lnum1, col1] = getpos("'<")[1:2]
+    let [lnum2, col2] = getpos("'>")[1:2]
+    let lines = getline(lnum1, lnum2)
+    let lines[-1] = lines[-1][:col2 - 2]
+    let lines[0] = lines[0][col1 - 1:]
+    return lines
+endfunction" }}}
+
+" Executes a command and restores the cursor position.
+function! rccommon#ExecNoCursor(cmd) abort  " {{{
+    let pos = getpos('.')
+    exec a:cmd
+    call cursor(pos[1], pos[2], pos[3])
+endfunction
+"}}}
+
 " Plugins
 " UpdateTagbarOptions() {{{
 " Updates tagbar window width.
@@ -494,5 +514,14 @@ function! rccommon#CommentStrings()
                 \ escape(matchstr(&commentstring, '%s\zs.*'), '\') ]
     return [l:res[0], (l:res[1] == '' ? '\$' : l:res[1])]
 endf " }}}
+
+" Helpers
+function! s:Trim(str) abort
+    if exists('*trim')
+        return trim(a:str)
+    endif
+
+    return substitute(a:str, '\v^\s*(.{-})\s*$', '\1', '')
+endfunction
 
 " vim: set ts=4 sw=4 tw=79 fdm=marker fenc=utf-8 et :

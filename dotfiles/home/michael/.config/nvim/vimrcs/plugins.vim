@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2019-07-08
+" Modification Date:     2019-09-05
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -121,12 +121,13 @@ Plug 'https://github.com/zchee/deoplete-jedi.git',
 "}}}
 
 " Editing{{{
+Plug 'https://github.com/SirVer/ultisnips.git'
 Plug 'https://github.com/dhruvasagar/vim-table-mode.git'
 Plug 'https://github.com/godlygeek/tabular.git'
 Plug 'https://github.com/itmammoth/doorboy.vim.git'
 Plug 'https://github.com/manasthakur/vim-commentor.git'
 Plug 'https://github.com/rhysd/clever-f.vim.git'
-Plug 'https://github.com/SirVer/ultisnips.git'
+Plug 'https://github.com/shaggyrogers/vim-slide.git'
 Plug 'https://github.com/tpope/vim-speeddating'
 Plug 'https://github.com/tpope/vim-surround.git'
 Plug 'https://github.com/zirrostig/vim-schlepp'
@@ -141,11 +142,11 @@ Plug 'https://github.com/majutsushi/tagbar.git'
 Plug 'https://github.com/okcompute/vim-python-match'
 Plug 'https://github.com/okcompute/vim-python-motions.git'
 Plug 'https://github.com/rhysd/vim-gfm-syntax.git'
-Plug 'https://github.com/sheerun/vim-polyglot.git'
+"Plug 'https://github.com/sheerun/vim-polyglot.git'
 Plug 'https://github.com/tmhedberg/SimpylFold.git'
 Plug 'https://github.com/tweekmonster/impsort.vim.git'
 Plug 'https://github.com/vim-python/python-syntax.git'
-Plug 'https://github.com/Vimjas/vim-python-pep8-indent.git'
+" Plug 'https://github.com/Vimjas/vim-python-pep8-indent.git'
 Plug 'https://github.com/w0rp/ale.git'
 "}}}
 
@@ -163,19 +164,20 @@ Plug 'https://github.com/kshenoy/vim-signature.git'
  "}}}
 
 " UI{{{
-Plug 'https://github.com/nathanaelkane/vim-indent-guides.git'
-Plug 'https://github.com/lambdalisue/neovim-prompt'
 Plug 'https://github.com/Shougo/denite.nvim.git'
 Plug 'https://github.com/Shougo/unite.vim.git'
-Plug 'https://github.com/vim-airline/vim-airline-themes.git'
-Plug 'https://github.com/vim-airline/vim-airline.git'
-Plug 'https://github.com/mhinz/vim-signify'
-Plug 'https://github.com/mhinz/vim-startify.git'
+"Plug 'https://github.com/chrisbra/Colorizer.git'
 Plug 'https://github.com/itchyny/vim-cursorword.git'
+Plug 'https://github.com/lambdalisue/neovim-prompt'
 Plug 'https://github.com/luochen1990/rainbow.git'
 Plug 'https://github.com/machakann/vim-highlightedyank.git'
+Plug 'https://github.com/mhinz/vim-signify'
+Plug 'https://github.com/mhinz/vim-startify.git'
+Plug 'https://github.com/nathanaelkane/vim-indent-guides.git'
 Plug 'https://github.com/ryanoasis/vim-devicons.git'
 Plug 'https://github.com/timakro/vim-searchant.git'
+Plug 'https://github.com/vim-airline/vim-airline-themes.git'
+Plug 'https://github.com/vim-airline/vim-airline.git'
 "}}}
 
 " Miscellaneous {{{
@@ -183,6 +185,13 @@ Plug 'https://github.com/tpope/vim-repeat.git'
 "}}}
 
 call plug#end()
+
+"let l:installed = map(systemlist('find "' . g:plug_home . '" -maxdepth 1 -mindepth 1 -type d | sort -V'), 'fnamemodify(v:val, ":t")')
+
+"echo map(values(g:plugs), 'fnamemodify(v:val.dir[0:-2], ":t")')
+" /home/michael/.config/nvim/plugged
+"map(values(g:plugs), 'fnamemodify(v:val.dir, ":t")')
+" https://github.com/chrisbra/Colorizer.git
 
 " Prompt user to install new / clean old plugins
 if len(filter(values(g:plugs), '!isdirectory(v:val.dir)')) &&
@@ -1264,8 +1273,8 @@ let g:startify_session_dir = '~/.config/nvim/sessions'
 let g:startify_update_oldfiles = 1
 let g:startify_change_to_dir = 1
 let g:startify_custom_indices = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                                \ 'w', 'r', 'y', 'u', 'i', 'o', 'p', 'a', 's','d',
-                                \ 'f', 'g', 'z', 'x', 'c', 'v', 'b', 'n', 'm',
+                                \ 'w', 'r', 'y', 'u', 'o', 'p', 'a', 'd', 'f',
+                                \ 'g', 'z', 'x', 'c', 'n', 'm',
                                 \ '<F2>', '<F3>', '<F4>', '<F5>', '<F6>',
                                 \ '<F7>', '<F8>', '<F9>', '<F10>', '<F11>',
                                 \ '<F12>']
@@ -1584,6 +1593,11 @@ endfunction
 let g:startify_custom_footer = map(['', plugins#getRandomStartifyFooter()],
             \ '"   ".v:val')
 "}}}
+
+" tasklist
+nnoremap <silent> <M-t> <cmd>:TODOList<CR>
+xnoremap <silent> <M-t> <cmd>:TODOList<CR>
+
 
 "}}}
 

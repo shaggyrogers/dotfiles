@@ -7,7 +7,7 @@
 "                        Lifepillar <lifepillar@lifepillar.me> (vim-solarized8)
 "                        Michael De Pasquale <shaggyrogers> (tweaks)
 " Creation Date:         2018-02-20
-" Modification Date:     2019-07-08
+" Modification Date:     2019-08-29
 " Source:                https://github.com/lifepillar/vim-solarized8
 " License:               OSI approved MIT license
 "
@@ -53,7 +53,6 @@ hi CursorColumn  guifg=NONE    guibg=NONE    gui=bold
 hi CursorLine    guifg=NONE    guibg=NONE    gui=underline
 hi CursorLineNr  guifg=fg      guibg=NONE    gui=bold,underline
 hi Directory     guifg=#268bd2 guibg=bg      gui=NONE
-" ADDED: For breakpoint() in python, etc.
 hi Diagnostic    guifg=#A662F1 guibg=bg      gui=NONE,bold
 hi EndOfBuffer   guifg=fg      guibg=bg      gui=NONE
 hi Error         guifg=#dc322f guibg=bg      gui=NONE,bold

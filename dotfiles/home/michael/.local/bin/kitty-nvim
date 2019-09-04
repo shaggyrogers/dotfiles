@@ -460,15 +460,12 @@ fi
 case "$OPEN_IN" in
     'h')
         NVR_OPTS="$NVR_OPTS -o"
-        break
     ;;
     'v')
         NVR_OPTS="$NVR_OPTS -O"
-        break
     ;;
     't')
         NVR_OPTS="$NVR_OPTS -p"
-        break
     ;;
 esac
 
@@ -496,9 +493,15 @@ fi # }}}
 
 # Create a new instance in kitty {{{
 export EDITOR="kitty-nvim -i $INSTANCE_INDEX -o t"
-eval python3 "$HOME/.local/kitty/" \
---config="$HOME/.config/kitty/kitty.nvim.conf" \
---class="$CLASS_NAME" "$KITTY_OPTS" nvr "$NVR_OPTS"
+
+# Needed to fix neovim sudo issue
+export SUDO_ASKPASS="$(which ssh-askpass)"
+
+# eval python3 "$HOME/.local/kitty/" \
+# --config="$HOME/.config/kitty/kitty.nvim.conf" \
+# --class="$CLASS_NAME" "$KITTY_OPTS" nvr "$NVR_OPTS"
+bash -c "kitty --config='$HOME/.config/kitty/kitty.nvim.conf' --class='$CLASS_NAME' $KITTY_OPTS nvr $NVR_OPTS"
+
 # }}}
 
 exit 0
