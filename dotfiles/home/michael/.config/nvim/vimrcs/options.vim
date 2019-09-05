@@ -5,11 +5,10 @@
 " Author:                Michael De Pasquale <shaggyrogers>
 " Description:           Sets vim options for all filetypes.
 " Creation Date:         2017-12-02
-" Modification Date:     2019-08-19
+" Modification Date:     2019-09-05
 " License:               MIT
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" TODO: tweak formatting options
 
 " General{{{
 " Enable filetype plugins
@@ -43,15 +42,14 @@ set hidden
 set history=4096
 set writebackup
 set nobackup
-set sessionoptions+=localoptions,options,tabpages,winsize
-set sessionoptions=blank,buffers,curdir,folds,globals,help
+set sessionoptions=blank,curdir,folds,help,resize,slash,tabpages,winpos,winsize
 set swapfile
 set undofile
 set undolevels=4096
 set undoreload=0
 set updatecount=256
 set updatetime=16000
-set viewoptions=cursor,curdir,folds,options
+set viewoptions=cursor,curdir,folds,slash
 
 " Persistent file directories (// = use full path)
 let s:tempDir = rccommon#TempDir()
@@ -132,7 +130,7 @@ set lazyredraw
 set matchtime=2
 set noshowmode
 set redrawtime=150
-set synmaxcol=140
+set synmaxcol=256
 
 " Highlight everything
 let python_highlight_all = 1
@@ -201,6 +199,7 @@ set scroll=0
 set scrollback=999
 set scrolljump=1
 set scrolloff=12
+set sidescrolloff=5
 set scrollopt=ver,hor,jump
 "}}}
 
@@ -253,7 +252,6 @@ set tabstop=4
 " j - Remove comment leader when joining comments
 " l - Don't break long lines that were already long
 " 1 - Numbered lists (need to set formatlistpat and enable autoindent)
-" Default: tcqj
 set formatoptions=tcqjrl1
 "}}}
 

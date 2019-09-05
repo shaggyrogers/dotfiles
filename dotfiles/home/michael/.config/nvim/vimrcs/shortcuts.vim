@@ -244,15 +244,17 @@ endfunction  "}}}
 " Windows & Tabs / UI {{{
 " Space : Fold visual selection / toggle fold
 nnoremap <silent> <space> za
-"vnoremap <silent> <expr> <space> "zfzngv:'<,'>s/\([ ]\{0,2\}\)# [{}]\{3\}/  \0<CR>zN"
 vnoremap <space> :'<,'>call DoFold()<CR>
 
+" Adds fold markers, with preceding whitespace for non-blank lines.
+" For single lines, a newline is added between the markers.
 function! DoFold() range "{{{
     if &fdm != 'marker'
-        execute 'normal! zf'
+        execute 'normal! gvzf'
         return
     endif
 
+    " Build foldmarker comments and strip leading/trailing whitespace
     let l:markers = map(
                     \ map(
                         \ split(&foldmarker, '\V,'),
@@ -260,6 +262,8 @@ function! DoFold() range "{{{
                     \ ),
                     \ 'substitute(v:val, "\v(^\s+|\s+$)", "", "")'
                 \ )
+
+    " Get text for first/last lines and strip trailing whitespace
     let l:lines = map(
                     \ map(
                         \ [a:firstline, a:lastline],
@@ -268,9 +272,11 @@ function! DoFold() range "{{{
                     \ 'len(v:val) > 0 ? v:val . "  " : v:val'
                 \ )
 
+    " Append markers
     call setline(a:firstline, l:lines[0] . l:markers[0])
 
     if a:firstline == a:lastline
+        " Add newline between markers for single lines
         call append(a:firstline, l:markers[1])
         return
     endif
@@ -409,6 +415,8 @@ endfunction  "}}}
 "}}}
 
 " Map Unsupported Keys - Kitty {{{
+" FIXME: Clean this up - don't really need to map everything to NOP...
+" FIXME: <C-p> goes back 2 for auto-complete
 " Replace 2xCtrl+P/0x10 with Ctrl+i
 nnoremap <Char-0x10><Char-0x10> <C-i>
 xnoremap <Char-0x10><Char-0x10> <C-i>
