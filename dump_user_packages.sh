@@ -16,7 +16,7 @@
 #
 ###############################################################################
 
-OUTFILE='/user_packages.txt'
+OUTFILE='./user_packages.txt'
 apt-mark showmanual | sort -u > $OUTFILE
 echo "Wrote $(cat $OUTFILE | wc -l) package names to $OUTFILE."
 

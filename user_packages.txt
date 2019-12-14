@@ -1,3 +1,4 @@
+acoustid-fingerprinter
 acpi-support
 activity-log-manager
 adb
@@ -10,10 +11,10 @@ anacron
 android-sdk-platform-tools
 android-sdk-platform-tools-common
 anomaly
-ant
 apache2
 apache2-doc
 apcalc
+apktool
 apparmor
 apparmor-easyprof
 app-install-data-partner
@@ -26,7 +27,9 @@ apt-transport-https
 apt-utils
 arc-theme
 arp-scan
+atool
 at-spi2-core
+audacity
 augeas-lenses
 autoconf
 autoconf-archive
@@ -66,7 +69,6 @@ bzip2
 caca-utils
 ca-certificates
 ccache
-cento
 checkinstall
 cheese
 chromium-browser
@@ -80,11 +82,11 @@ clang-format-4.0
 clang-tidy-4.0
 clementine
 clog
+cmake
 cmake-data
 cmatrix
 cmus
 cmuscheme48-el
-cmus-plugin-ffmpeg
 command-not-found
 compton
 conky
@@ -92,6 +94,7 @@ console-setup
 console-setup-linux
 coreutils
 cowsay
+cpanminus
 cpio
 cpp-5
 cron
@@ -112,9 +115,6 @@ debconf-i18n
 debhelper
 debianutils
 debsecan
-default-jdk
-default-jre
-default-jre-headless
 deja-dup
 deluge
 deluge-common
@@ -126,6 +126,7 @@ detox
 dex
 d-feet
 dh-python
+dieharder
 diffutils
 discord
 dmidecode
@@ -138,18 +139,19 @@ docker.io
 docutils-common
 dos2unix
 dosfstools
+dotnet-sdk-2.2
 doxygen
 dpkg
 dpkg-dev
 e2fslibs
 e2fsprogs
-eclipse-jdt
 ecm
 ed
 eject
-emulationstation
 emulationstation-theme-simple
+ent
 eog
+equivs
 espeak
 evince
 example-content
@@ -158,6 +160,7 @@ exim4
 exim4-base
 exim4-config
 exim4-daemon-light
+extract
 extundelete
 fancontrol
 fasd
@@ -179,6 +182,9 @@ font-manager
 fonts-dejavu-core
 fonts-freefont-ttf
 fonts-guru
+fonts-indic
+fonts-ipafont-gothic
+fonts-ipafont-mincho
 fonts-kacst-one
 fonts-khmeros-core
 fonts-lao
@@ -195,11 +201,14 @@ fonts-symbola
 fonts-takao-pgothic
 fonts-thai-tlwg
 fonts-tibetan-machine
+fonts-wqy-microhei
+fonts-wqy-zenhei
 foomatic-db-compressed-ppds
 fortune-mod
 fortunes-debian-hints
 fortunes-off
 fp-compiler
+freeglut3-dev
 ftp
 fwupd
 fwupdate
@@ -250,6 +259,7 @@ gnupg
 gnupg-agent
 gnustep-gui-runtime
 gobject-introspection
+gocode
 golang-go
 google-chrome-stable
 gparted
@@ -259,6 +269,8 @@ gpick
 gprolog
 gprolog-doc
 grafana
+graphviz
+graphviz-doc
 gravitation
 grep
 grub2-common
@@ -278,6 +290,7 @@ gzip
 hdparm
 hello
 highlight
+holes
 hollywood
 hostname
 htop
@@ -367,9 +380,12 @@ libbluetooth3
 libbluetooth-dev
 libbluray1
 libbluray-dev
+libboost-all-dev
 libboost-dev
 libboost-filesystem1.60.0
+libboost-filesystem-dev
 libboost-serialization-dev
+libboost-system-dev
 libboost-thread-dev
 libbotan-1.10-1
 libbsd0
@@ -385,6 +401,10 @@ libc6-x32
 libcairo2
 libcairo2-dev
 libcairo2-doc
+libcanberra0
+libcanberra-dev
+libcanberra-gtk0
+libcanberra-pulse
 libcap2
 libcap2-bin
 libcap-dev
@@ -399,6 +419,7 @@ libcec4
 libcec-dev
 libcgi-fast-perl
 libcgi-pm-perl
+libcgraph6
 libchromaprint0
 libchromaprint-dev
 libchromaprint-tools
@@ -418,8 +439,6 @@ libcrypto++-dev
 libcryptokit-ocaml
 libcrystalhd3
 libcrystalhd-dev
-libcurl3
-libcurl3:i386
 libcwiid1
 libcwiid-dev
 libdata-optlist-perl
@@ -435,6 +454,8 @@ libdevel-caller-perl
 libdevel-globaldestruction-perl
 libdevel-lexalias-perl
 libdevmapper1.02.1
+libdivsufsort3
+libdivsufsort-dev
 libdpkg-perl
 libdw1
 libechonest-dev
@@ -451,6 +472,7 @@ libexiv2-14
 libexpat1
 libexpat1-dev
 libexporter-tiny-perl
+libextutils-cppguess-perl
 libfaac0
 libfaac-dev
 libfaad2
@@ -520,6 +542,7 @@ libgssapi-krb5-2
 libgstreamer1.0-dev
 libgstreamer-plugins-base1.0-dev
 libgtk2.0-0
+libgtk2.0-dev
 libgtk-3-0
 libgtk3.0-cil-dev
 libgts-dev
@@ -541,6 +564,7 @@ libicu-dev
 libidn11
 libidn11-dev
 libidn2-0
+libimage-exiftool-perl
 libimport-into-perl
 libindirect-perl
 libio-html-perl
@@ -573,10 +597,12 @@ libleptonica-dev
 liblexical-sealrequirehints-perl
 liblist-moreutils-perl
 liblocale-gettext-perl
+liblocal-lib-perl
 liblog-message-perl
 liblog-message-simple-perl
 liblouis-data
 libltdl-dev
+libluajit-5.1-dev
 liblwp-mediatypes-perl
 liblzma5
 liblzma-dev
@@ -610,6 +636,7 @@ libmpg123-0
 libmpx0
 libmro-compat-perl
 libmspack0
+libmspack-dev
 libmtp9
 libmtp-common
 libmtp-dev
@@ -635,6 +662,7 @@ libopenal1:i386
 libopencore-amrnb-dev
 libopencore-amrwb-dev
 libopenexr22
+libopengl-perl
 libopenjp2-7
 libopenmpt0
 libopenmpt-modplug1
@@ -667,6 +695,7 @@ libperl-dev
 libplist3
 libplist-dev
 libpng12-0
+libpng16-16:i386
 libpng-dev
 libpod-latex-perl
 libpod-markdown-perl
@@ -827,6 +856,8 @@ libtag1v5-vanilla
 libtasn1-6
 libtasn1-6-dev
 libtasn1-doc
+libtbb-dev
+libtermkey-dev
 libterm-ui-perl
 libtext-charwidth-perl
 libtext-iconv-perl
@@ -850,6 +881,7 @@ libtype-tiny-perl
 libtype-tiny-xs-perl
 libudev1
 libudev-dev
+libunibilium-dev
 libunicode-utf8-perl
 libuninameslist-dev
 libunistring-dev
@@ -859,6 +891,7 @@ libusb-dev
 libusbmuxd-dev
 libustr-1.0-1
 libuuid1
+libuv1-dev
 libvala-0.34-0
 libvala-0.34-dev
 libvaladoc-data
@@ -900,6 +933,10 @@ libwmf0.2-7-gtk
 libwpd-0.10-10
 libwscodecs1
 libwsutil7
+libwx-glcanvas-perl
+libwxgtk3.0-dev
+libwxgtk-media3.0-dev
+libwx-perl
 libx11-6
 libx11-dev
 libx11-doc
@@ -1050,6 +1087,8 @@ lsb-release
 lshw
 lsof
 ltrace
+luajit
+luarocks
 m4
 m4-doc
 makedev
@@ -1076,6 +1115,7 @@ mount
 mousetweaks
 mp3info
 mpv
+msitools
 mtr-tiny
 multiarch-support
 mumble
@@ -1083,6 +1123,7 @@ myspell-en-au
 mysql-client
 mysql-server
 mythes-en-us
+namebench
 nasm
 ncdu
 ncurses-base
@@ -1091,6 +1132,7 @@ ncurses-term
 nemo
 neofetch
 neovim
+neovim-runtime
 netbase
 netcat-openbsd
 nethack
@@ -1102,8 +1144,6 @@ nload
 nmap
 notify-osd
 notify-osd-icons
-npm
-nprobe
 ntfs-3g
 ntopng
 ntpdate
@@ -1113,10 +1153,7 @@ ocl-icd-opencl-dev
 odt2txt
 onboard
 openconnect
-openjdk-8-jdk
-openjdk-8-jdk-headless
 openjdk-8-jre
-openjdk-8-jre-headless
 openoffice.org-hyphenation
 openprinting-ppds
 openssh-client
@@ -1127,6 +1164,7 @@ os-prober
 overlay-scrollbar
 overlay-scrollbar-gtk2
 p7zip
+packages-microsoft-prod
 paper-gtk-theme
 paper-icon-theme
 paprefs
@@ -1196,6 +1234,8 @@ python3.6
 python3.6-dev
 python3.6-doc
 python3.6-venv
+python3.7
+python3.7-doc
 python3-apparmor
 python3-apt
 python3-dev
@@ -1340,6 +1380,7 @@ sni-qt
 software-properties-common
 sox
 speech-dispatcher
+spek
 ssh-askpass-gnome
 sshfs
 steamcmd:i386
@@ -1382,6 +1423,7 @@ transmission-gtk
 trash-cli
 tree
 ttf-ancient-fonts-symbola
+ttf-mscorefonts-installer
 ttf-ubuntu-font-family
 tzdata
 ubuntu-artwork
@@ -1412,6 +1454,7 @@ usbutils
 util-linux
 uuid-runtime
 valac
+veles
 vim
 vim-common
 vim-runtime
@@ -1450,6 +1493,7 @@ wireshark-common
 wireshark-qt
 wmctrl
 wpasupplicant
+wx-common
 x11-apps
 x11-common
 x11proto-xinerama-dev

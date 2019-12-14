@@ -7,7 +7,7 @@
 "                        Lifepillar <lifepillar@lifepillar.me> (vim-solarized8)
 "                        Michael De Pasquale <shaggyrogers> (tweaks)
 " Creation Date:         2018-02-20
-" Modification Date:     2019-08-29
+" Modification Date:     2019-12-14
 " Source:                https://github.com/lifepillar/vim-solarized8
 " License:               OSI approved MIT license
 "
@@ -402,14 +402,15 @@ if get(g:, 'solarized_extra_hi_groups', 0) "{{{
     hi vimGroup           guifg=#268bd2 guibg=bg gui=NONE,bold
     hi vimHiGroup         guifg=#268bd2 guibg=bg gui=NONE
     hi vimHiLink          guifg=#268bd2 guibg=bg gui=NONE
-    hi vimIsCommand       guifg=#6F8790 guibg=bg gui=NONE
+    hi vimIsCommand       guifg=#b58920 guibg=bg gui=NONE
     hi vimSynMtchOpt      guifg=#b58900 guibg=bg gui=NONE
     hi vimSynType         guifg=#2aa198 guibg=bg gui=NONE
+    hi vimFunction        guifg=#C2BA00 guibg=bg gui=NONE
 
     hi! link helpSpecial      Special
     hi! link vimCommentString Comment
     hi! link vimFunc          Function
-    hi! link vimSet           Normal
+    hi! link vimSet           PreProc
     hi! link vimSetEqual      Normal
     hi! link vimUserFunc      Function
     hi! link vimVar           Identifier

@@ -5,7 +5,7 @@
 " Author:                Michael De Pasquale <shaggyrogers>
 " Description:           Sets vim options for all filetypes.
 " Creation Date:         2017-12-02
-" Modification Date:     2019-09-05
+" Modification Date:     2019-12-14
 " License:               MIT
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -48,7 +48,7 @@ set undofile
 set undolevels=4096
 set undoreload=0
 set updatecount=256
-set updatetime=16000
+set updatetime=5000
 set viewoptions=cursor,curdir,folds,slash
 
 " Persistent file directories (// = use full path)
@@ -129,7 +129,7 @@ set conceallevel=2
 set lazyredraw
 set matchtime=2
 set noshowmode
-set redrawtime=150
+set redrawtime=1000
 set synmaxcol=256
 
 " Highlight everything
@@ -210,13 +210,9 @@ set foldlevelstart=0
 set foldlevel=0
 set foldnestmax=8
 set foldmethod=manual
-set foldopen=hor,mark,percent,quickfix,search,tag,undo
+set foldopen=hor,mark,percent,quickfix,search,tag
+"set foldopen=hor,mark,percent,quickfix,search,tag,undo
 set foldtext=FoldTextCustom()
-
-if &ft == 'vim'
-    setlocal foldmethod=marker
-    execute 'normal zx'
-endif
 "}}}
 
 " Text display{{{
@@ -252,7 +248,8 @@ set tabstop=4
 " j - Remove comment leader when joining comments
 " l - Don't break long lines that were already long
 " 1 - Numbered lists (need to set formatlistpat and enable autoindent)
-set formatoptions=tcqjrl1
+set formatoptions=1cjlqrt
+
 "}}}
 
 " Lines{{{

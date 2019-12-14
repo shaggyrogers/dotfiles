@@ -2,16 +2,23 @@
 " init.vim
 " ========
 "
+" Description:           Loads vimrcs.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-06
-"
-" Description
-" -----------
-" Loads vimrcs and creates an autocommand to relead them automatically.
+" Modification Date:     2019-12-02
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Configuration{{{
+" Configuration
+let g:python3_host_prog = '/usr/bin/python3.7'
+
+if exists('g:loaded_python3_provider')
+    echo 'g:loaded_python3_provider = ' . g:loaded_python3_provider
+    unlet g:loaded_python3_provider
+endif
+
+let g:loaded_python_provider = 0
+
 " Folders
 let g:vim_dir = resolve(expand('~/.config/nvim'))
 let g:vim_dir_tmp = resolve(g:vim_dir.'/temp_data')
@@ -24,7 +31,6 @@ let g:vimrcs = [
             \ 'shortcuts.vim',
             \ 'plugins.vim',
             \ ]
-"}}}
 
 " Initialise vim{{{
 execute 'set runtimepath+=' . escape(g:vim_dir, ' ",*|[')
@@ -60,7 +66,7 @@ augroup ReloadVimScript
 augroup end
 "}}}
 
-function! GetLoadedScripts() " {{{
+function! s:GetLoadedScripts() " {{{
     let [l:scriptnames_output, l:scripts] = ['', []]
 
     redir => scriptnames_output
@@ -76,9 +82,9 @@ function! GetLoadedScripts() " {{{
     return scripts
 endfunction " }}}
 
-function! IsLoadedVimScript(str) " {{{
+function! s:IsLoadedVimScript(str) " {{{
     let l:str = resolve(expand(a:str))
-    let l:scriptList = GetLoadedScripts()
+    let l:scriptList = s:GetLoadedScripts()
     return index(l:scriptList, l:str) != -1
 endfunc " }}}
 
@@ -87,7 +93,7 @@ if exists('*ReloadVimScript')
 endif
 
 function! ReloadVimScript(path) " {{{
-    if IsLoadedVimScript(a:path)
+    if s:IsLoadedVimScript(a:path)
         try
             execute 'source ' . escape(a:path, ' ",*|[')
         catch
@@ -100,4 +106,4 @@ function! ReloadVimScript(path) " {{{
     endif
 endfunction " }}}
 
-" vim: set ts=4 sw=4 tw=79 fdm=marker et :
+" vim: set ts=4 sw=4 tw=79 fdm=marker ff=unix fenc=utf-8 et :

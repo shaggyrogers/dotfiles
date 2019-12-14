@@ -5,7 +5,7 @@
 " Description:           Shared functions for vim scripts
 " Author:                Michael De Pasquale <shaggyrogers>
 " Creation Date:         2018-02-18
-" Modification Date:     2019-08-09
+" Modification Date:     2019-10-27
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -50,22 +50,37 @@ endfunc " }}}
 " Source: http://vim.wikia.com/wiki/Modeline_magic (with alterations)
 function! rccommon#AppendModeline() abort
     " Build modeline
+    let l:mlList = [
+                \ printf('ts=%d', &tabstop),
+                \ printf('sw=%d', &shiftwidth),
+                \ printf('tw=%d', &textwidth),
+                \ printf('fdm=%s', &foldmethod),
+                \ printf('ff=%s', &fileformat),
+                \ printf('fenc=%s', &fileencoding),
+                \ printf('%set', &expandtab ? '' : 'no'),
+    \ ]
+
+    if &binary
+        let l:mlList += ['bin']
+    endif
+
     let l:modeline = substitute(
             \     &commentstring == '' ? '%s' : &commentstring,
             \     '\V%s',
             \     printf(
-            \         ' vim: set ts=%d sw=%d tw=%d fdm=%s fenc=%s %set :',
+            \         ' vim: set ts=%d sw=%d tw=%d fdm=%s ff=%s fenc=%s %set :',
             \         &tabstop,
             \         &shiftwidth,
             \         &textwidth,
             \         &foldmethod,
+            \         &fileformat,
             \         &fileencoding,
             \         &expandtab ? '' : 'no'
             \     ),
             \     ''
             \ )
 
-    if s:Trim(l:modeline) == ''
+    if trim(l:modeline) == ''
         throw 'AppendModeline: Error creating modeline!'
     endif
 
@@ -94,10 +109,10 @@ endfunction
 " Echo prints a newline before msg if necessary, unless nonewline is nonzero.
 function! rccommon#Echo(text, ...) abort
     if a:0 >= 1
-        execute 'echohl ' . a:1
+        execute 'echohl ' . trim(a:1)
     endif
 
-    execute 'echo' . (a:0 >= 2 && a:2 ? 'n' : '') . " '" . escape(a:text, "'") . "'"
+    execute printf('echo%s "%s"', (a:0 >= 2 && a:2 ? 'n' : ''), escape(a:text, '"'))
 
     if a:0 >= 1
         echohl 'None'
@@ -364,7 +379,7 @@ endfunction  "}}}
 
 function! rccommon#SetLocalOption(opt, val) abort "{{{
     if a:val is v:null
-        echoerr 'Cannot set ' . a:opt . ' to v:null'
+        throw 'rccommon#SetLocalOption Error: Cannot set ' . a:opt . ' to v:null'
     endif
 
     let l:val = a:val
@@ -376,9 +391,8 @@ function! rccommon#SetLocalOption(opt, val) abort "{{{
     execute 'let &l:' . a:opt . ' = "' . l:val . '"'
 endfunction  "}}}
 
-function! rccommon#GetOption(opt, setVal) abort "{{{
-    execute 'let l:result = &l:' . a:opt
-    return l:result
+function! rccommon#GetOption(opt, ...) abort "{{{
+    execute 'return &l:' . a:opt
 endfunction  "}}}
 
 " RestoreBufferOptions() - CALLED AUTOMATICALLY
@@ -515,13 +529,65 @@ function! rccommon#CommentStrings()
     return [l:res[0], (l:res[1] == '' ? '\$' : l:res[1])]
 endf " }}}
 
+
+" NOTE: Can also use maparg() if you have a plug mapping
+function! GetScriptNumber()
+    let l:script = fnamemodify(expand('%'), ':~')
+    " let l:script = fnamemodify(expand('<sfile>'), ':~')
+    redir => l:scripts | silent scriptnames | redir end
+    let l:scriptList = split(l:scripts, '\m\n', 0)
+
+    for l:s in split(l:scripts, '\m\n', 0)
+        let [l:nr, l:path] = split(trim(l:s), '\m\(^\d\+\)\@<=:\s*')
+
+        if l:path == l:script
+            return str2nr(l:nr)
+        endif
+    endfor
+
+    return -1
+endfunction
+
 " Helpers
-function! s:Trim(str) abort
-    if exists('*trim')
-        return trim(a:str)
+function! FormatFileSize(size) abort
+    let [l:unit, l:size] = ['B', a:size]
+
+    for l:u in ['kB', 'MB', 'GB']
+        if l:size < 1000
+            break
+        endif
+
+        let l:unit = l:u
+        let l:size = l:size / 1000
+    endfor
+
+    return printf('%d %s', l:size, l:unit)
+endfunction
+
+function! FormatSeconds(seconds) abort
+    function! s:MakePart(name, val)
+        return printf('%d %s%s', a:val, a:name, a:val > 1 ? 's' : '')
+    endfunction
+
+    if a:seconds < 60
+        return s:MakePart('second', a:seconds)
     endif
 
-    return substitute(a:str, '\v^\s*(.{-})\s*$', '\1', '')
+    let l:val = a:seconds / 60
+    let l:parts = []
+
+    for [l:unit, l:count] in [['minute', 60], ['hour', 24],
+                \ ['day', 7], ['week', 365], ['year', 0xFFFFFFFFFFFFFFFF]]
+        let l:c = l:val % l:count
+        let l:parts += [l:c > 0 ? s:MakePart(l:unit, l:val % l:count) : '']
+        let l:val = l:val / l:count
+
+        if l:val == 0
+            return join(filter(l:parts[-1:-1] + l:parts[-2:-2], 'v:val != ""'), ', ')
+        endif
+    endfor
+
+    throw 'FormatSeconds Error: Should never get here'
 endfunction
 
 " vim: set ts=4 sw=4 tw=79 fdm=marker fenc=utf-8 et :

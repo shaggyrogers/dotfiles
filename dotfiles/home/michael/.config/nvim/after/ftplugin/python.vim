@@ -5,7 +5,7 @@
 " Description:           Configuration for python syntax buffers
 " Author:                Michael De Pasquale
 " Creation Date:         2018-02-18
-" Modification Date:     2019-07-21
+" Modification Date:     2019-12-14
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -18,7 +18,8 @@ function! s:UserFtSetUp()
     hi link Conceal Operator
 
     call rccommon#SetAndSaveBufferOptions({
-                \ 'define': '^\s*\\(def\\\\|class\\)'
+                \ 'define': '^\s*\\(def\\\\|class\\)',
+                \ 'breakat': ' ^I!*-+;:,/?[]{}()',
                 \ })
 
     " Foldmethod "defaults" to marker, will be changed to expr by simpylfold
