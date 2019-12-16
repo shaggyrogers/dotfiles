@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # -*- coding: UTF-8 -*-
 ###############################################################################
-# dump_user_packages.sh
+# dump-user-packages.sh
 # =====================
 #
 # Description:           Dumps user-installed apt packages to a file.
@@ -16,8 +16,10 @@
 #
 ###############################################################################
 
-OUTFILE='./user_packages.txt'
+. ./common.sh
+
+OUTFILE='../user_packages.txt'
 apt-mark showmanual | sort -u > $OUTFILE
-echo "Wrote $(cat $OUTFILE | wc -l) package names to $OUTFILE."
+logsuccess "Wrote $(cat $OUTFILE | wc -l) package names to $OUTFILE."
 
 # vim: set ts=4 sw=4 tw=79 fdm=manual et :
