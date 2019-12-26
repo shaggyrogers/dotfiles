@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2019-12-14
+" Modification Date:     2019-12-26
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -507,6 +507,13 @@ nnoremap <F12> :ALEFix<CR>:echom 'Running ALE fixers...'<CR>
 
 " Autocommands{{{
 let g:_ale_statusicon = ''
+
+" Workaround for 'invalid sign text' apparent bug
+" Seems to be caused by emoji signs?
+augroup DoALEInvalidSignTextWorkaround
+    autocmd!
+    autocmd User ALELintPre ++once silent! ALEReset | silent! ALELint
+augroup END
 "}}}
 
 "}}}

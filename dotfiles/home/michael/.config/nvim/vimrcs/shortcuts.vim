@@ -5,7 +5,7 @@
 " Description:           Contains all non-plugin shortcuts.
 " Author:                Michael De Pasquale <shaggyrogers>
 " Creation Date:         2017-12-02
-" Modification Date:     2019-12-14
+" Modification Date:     2019-12-26
 " License:               MIT
 "
 " Note that some key combinations require kitty with a certain configuration.
@@ -370,7 +370,7 @@ endfunction "}}}
 
 " Creates a fold between the given lines. Has added heuristics for markers.
 command! -nargs=? -addr=lines -range=2 AddFold
-        \ call <SID>AddFold([str2nr(<q-line1>), str2nr(<q-line2>)],str2nr(<q-range>))
+        \ execute <SID>AddFold([str2nr(<q-line1>), str2nr(<q-line2>)],str2nr(<q-range>))
 
 function! s:AddFold(range, rangeNr) abort "{{{
     if a:rangeNr == 0
