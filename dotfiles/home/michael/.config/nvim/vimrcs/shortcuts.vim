@@ -5,7 +5,7 @@
 " Description:           Contains all non-plugin shortcuts.
 " Author:                Michael De Pasquale <shaggyrogers>
 " Creation Date:         2017-12-02
-" Modification Date:     2019-12-26
+" Modification Date:     2020-01-12
 " License:               MIT
 "
 " Note that some key combinations require kitty with a certain configuration.
@@ -177,11 +177,6 @@ nnoremap dh d0
 nnoremap <S-c> Vc
 nnoremap <S-y> Vy
 nnoremap <S-d> Vd
-
-" Alt + u/i : Swap words left / right
-" Source: http://vim.wikia.com/wiki/Swapping_characters,_words_and_lines
-nnoremap <silent> <M-u> "_yiw?\w\+\_W\+\%#<CR>:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o><c-l>:nohlsearch<CR>
-nnoremap <silent> <M-i> "_yiw:s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<CR><c-o>/\w\+\_W\+<CR><c-l>:nohlsearch<CR>
 
 " Enter / Shift + Enter / Ctrl + Enter: Insert newline after / before current line / at cursor
 nnoremap <CR> <cmd>put =repeat(nr2char(10), v:count1)<cr>
@@ -372,6 +367,7 @@ endfunction "}}}
 command! -nargs=? -addr=lines -range=2 AddFold
         \ execute <SID>AddFold([str2nr(<q-line1>), str2nr(<q-line2>)],str2nr(<q-range>))
 
+" TODO: check for comment and omit comment marker
 function! s:AddFold(range, rangeNr) abort "{{{
     if a:rangeNr == 0
         let l:range = [line('v'), line('.')]

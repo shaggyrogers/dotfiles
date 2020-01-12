@@ -5,9 +5,13 @@ priority -50
 ###########################################################################
 
 #! header
-snippet header "Header for python3 scripts" b
+snippet shebang "" b
 #!/usr/bin/env python3
-# -*- coding: UTF-8 -*-
+$0
+endsnippet
+
+snippet header "Header for python3 modules" b
+#!/usr/bin/env python3
 """
 `!v '  ' . expand('%:t')`
 `!v '  ' . repeat('=', len(expand('%:t')))`

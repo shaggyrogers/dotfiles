@@ -18,7 +18,7 @@ if !has('conceal')
     finish
 endif
 
-" Clear syntax groups if they exist {{{
+" Clear syntax groups if they exist
 try
     syntax clear pyNiceBuiltin
     syntax clear pyNiceComment
@@ -28,10 +28,8 @@ try
     syntax clear pythonOperator
 catch
 endtry
-" }}}
 
-" Create syntax groups {{{
-
+" Create syntax groups
 syntax match pythonOperator '\V\[=\-+*/%|^&~<>]\|!='
 syntax keyword pythonOperator is or and
 
@@ -100,6 +98,6 @@ hi link pythonOperator Operator
 hi link pyNiceStatement Statement
 hi link pyNiceKeyword Keyword
 hi! link Conceal Operator
-" }}}
+"
 
 " vim: set ts=4 sw=4 tw=0 fdm=marker et :

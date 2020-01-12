@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2019-12-26
+" Modification Date:     2020-01-12
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -123,6 +123,7 @@ Plug 'https://github.com/SirVer/ultisnips.git'
 Plug 'https://github.com/dhruvasagar/vim-table-mode.git'
 Plug 'https://github.com/godlygeek/tabular.git'
 Plug 'https://github.com/itmammoth/doorboy.vim.git'
+Plug 'https://github.com/kurkale6ka/vim-swap'
 Plug 'https://github.com/manasthakur/vim-commentor.git'
 Plug 'https://github.com/rhysd/clever-f.vim.git'
 Plug 'https://github.com/shaggyrogers/vim-slide.git'
@@ -133,8 +134,9 @@ Plug 'https://github.com/zirrostig/vim-schlepp'
 "}}}
 
 " Syntax / other language-specific plugins {{{
-Plug 'https://github.com/elzr/vim-json.git'
 Plug 'https://github.com/KeitaNakamura/highlighter.nvim.git'
+Plug 'https://github.com/Vimjas/vim-python-pep8-indent.git'
+Plug 'https://github.com/elzr/vim-json.git'
 Plug 'https://github.com/ludovicchabant/vim-gutentags.git'
 Plug 'https://github.com/majutsushi/tagbar.git'
 Plug 'https://github.com/okcompute/vim-python-match'
@@ -274,6 +276,12 @@ call assert_true(exists('g:loaded_doorboy'))
 let g:doorboy_additional_quotations = {'coffee': ['/']}
 let g:doorboy_nomap_quotations = {'javascript': ['/']}
 let g:doorboy_additional_brackets = {'html': ['<>']}
+"}}}
+
+" vim-swap {{{
+" Alt + u/i : Swap words left / right
+nmap <M-u> <Plug>SwapSwapWithL_WORD
+nmap <M-i> <Plug>SwapSwapWithR_WORD
 "}}}
 
 " schlepp{{{
