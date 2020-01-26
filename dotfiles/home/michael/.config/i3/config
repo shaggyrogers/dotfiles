@@ -4,7 +4,7 @@
 # Description:           i3 (i3-gaps) configuration file
 # Author:                Michael De Pasquale <shaggyrogers>
 # Creation Date:         2017-11-01
-# Modification Date:     2019-07-06
+# Modification Date:     2020-01-20
 #
 ###############################################################################
 
@@ -273,7 +273,7 @@ exec --no-startup-id sh -c "$HOME/.local/bin/lock &"
 exec --no-startup-id feh --no-fehbg --bg-max ~/.config/i3/wallpaper.jpg
 
 # HACK: Hide i3bar on startup - "i3-msg bar hidden_state hide" seems to show bar...?
-exec --no-startup-id "i3-msg bar hidden_state hide; sleep 0.25; xdotool Super_L Super_L Super_L"
+exec --no-startup-id bash -c "sleep 1; i3-msg bar hidden_state hide; sleep 0.25; xdotool key --clearmodifiers --delay 50 --repeat 3 Super_L"
 # }}}
 
 #  vim: set ts=4 sw=4 tw=0 fdm=marker nowrap et :

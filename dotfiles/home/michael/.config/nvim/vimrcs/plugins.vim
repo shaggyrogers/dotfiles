@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2020-01-12
+" Modification Date:     2020-01-25
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -343,6 +343,7 @@ nnoremap <Leader>T:       <cmd>Tabularize /:<CR>
 nnoremap <Leader>T::      <cmd>Tabularize /:\zs<CR>
 nnoremap <Leader>T<Bar>   <cmd>Tabularize /<Bar><CR>
 nnoremap <Leader>T<Space> <cmd>Tabularize /\S\+<CR>
+nnoremap <Leader>T<Tab>   <cmd>Tabularize /\t\+<CR>
 nnoremap <Leader>T=       <cmd>Tabularize /^[^=]*\zs=<CR>
 nnoremap <Leader>T=>      <cmd>Tabularize /=><CR>
 xnoremap <Leader>T&       <cmd>call TabularizeVisual('/&')<CR>
@@ -608,6 +609,13 @@ let g:highlighter#syntax_python = [
      \ }]
 " }}}
 
+" python-pep8-indent {{{
+let g:python_pep8_indent_searchpair_timeout = 2000
+let g:python_pep8_indent_multiline_string = 0
+let g:python_pep8_indent_hang_closing = 0
+let g:python_pep8_indent_skip_concealed = 0
+" }}}
+
 " impsort{{{
 let g:impsort_override_formatexpr = 1
 let g:impsort_highlight_imported = 1
@@ -621,7 +629,6 @@ hi TypeSpecial ctermfg=121 ctermbg=NONE guifg=#C7A90C guibg=NONE
 hi link pythonImportedClassDef TypeSpecial
 hi link pythonImportedModule IdentifierSpecial
 hi link pythonImportedObject TypeSpecial
-
 " }}}
 
 " python-syntax{{{

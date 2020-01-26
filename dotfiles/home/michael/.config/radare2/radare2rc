@@ -1,0 +1,58 @@
+# Radare2 Configuration File
+
+# Analysis
+e anal.autoname     = true
+e anal.fcnprefix    = func
+e anal.pushret      = true
+
+# Assembly
+e asm.highlight     = true
+e asm.lines.ret     = true
+e asm.stackptr      = true
+e asm.symbol        = true
+e asm.symbol.col    = 48
+e asm.syntax        = intel
+
+# Config
+e cfg.editor        = `env EDITOR`
+e cfg.fortunes      = true
+e cfg.fortunes.tts  = false
+e cfg.fortunes.type = tips,fun,nsfw
+e cfg.newtab        = true
+e cfg.plugins       = true
+
+# Debugger
+e dbg.bep           = loader
+e dbg.funcarg       = true
+
+# Directories
+e dir.tmp           = /tmp
+
+# Logging
+# FIXME: Doesn't seem to work
+e log.file          = radare2-`!date '+%Y%m%dT%H%M%S' | tr -d '\n'`.log
+e log.level         = 3
+
+# Debug info (.pdb)
+e pdb.autoload      = true
+
+# Interface
+e scr.bgfill        = true
+e scr.breaklines    = false
+e scr.color         = 3
+e scr.color.args    = true
+e scr.color.bytes   = true
+e scr.color.grep    = false
+e scr.color.ops     = true
+e scr.color.pipe    = false
+e scr.confirmquit   = true
+e scr.demo          = true
+e scr.pager         = `env PAGER`
+e scr.prompt.vi     = true
+
+# Signatures
+e zign.autoload     = true
+
+eco my_solarized_flat_dark
+
+# vim: set ts=4 sw=4 tw=79 fdm=manual ff=unix ft=rc fenc=utf-8 et cms=#%s :

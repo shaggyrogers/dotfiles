@@ -387,10 +387,27 @@ function! s:AddFold(range, rangeNr) abort "{{{
     endif
 
     " Build foldmarker comments and strip leading/trailing whitespace
-    let l:markers = map(
-        \ map(split(&foldmarker, '\V,'), 'substitute(&cms, "%s", v:val, "")'),
-        \ 'trim(v:val)'
-    \ )
+    let l:markers = split(&foldmarker, '\V,')
+
+    for l:i in range(2)
+        let l:markers[l:i] = trim(
+            \ substitute(
+                \ synIDattr(
+                    \ synIDtrans(
+                        \ synID(
+                            \ l:range[l:i],
+                            \ len(getline(l:range[l:i])),
+                            \ 0
+                        \ )
+                    \ ),
+                    \ 'name'
+                \ ) =~? 'comment' ? '%s' : &cms,
+                \ "%s",
+                \ l:markers[l:i],
+                \ ""
+            \ )
+        \ )
+    endfor
 
     " Get text for first/last lines and strip trailing whitespace
     let l:lines = map(
