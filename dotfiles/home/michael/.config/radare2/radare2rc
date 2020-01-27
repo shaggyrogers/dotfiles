@@ -53,6 +53,78 @@ e scr.prompt.vi     = true
 # Signatures
 e zign.autoload     = true
 
-eco my_solarized_flat_dark
+# Colorscheme
+ec other #2AA89F
+ec b0x00 #218E88
+ec b0x7f #2BB5AB
+ec b0xff #24BCB1
+ec bin #27CEC1
+ec btext #4DB687
+ec ucall #00BCD4
+ec call #FFB81A
+
+ec ujmp #d33682 NONE bold
+ec cjmp #DF418B NONE bold
+ec jmp #DA1AFF NONE bold
+
+ec cmp #FFDF16
+
+ec comment #838c9a NONE italic
+ec usrcmt #879bbb NONE italic
+
+ec ret #eee8d5
+ec fline #969683
+ec flow #34D8CC
+ec flow2 #507070
+
+ec fname #d03030
+
+ec label #268bd2
+
+ec math #268bd2
+ec mov #93a1a1
+ec nop #6F8790
+ec num #eee8d5
+ec offset #839496
+
+ec prompt #cb4b16
+
+ec pop #719E07
+ec push #719E07
+
+ec reg #b58900
+ec args #b58900
+
+ec input #cb4b16
+ec flag #2aa198
+
+ec help #d33682
+ec trap #dc322f
+ec swi #dc322f
+ec creg #d0e080
+ec linehl #000040
+
+ec graph.box #444444 #444444
+ec graph.box2 #afd787 #444444
+ec graph.box3 #6F8790
+ec graph.box4 #00313D
+ec graph.true #809000
+ec graph.false #c04010
+ec graph.trufae #809090
+ec graph.current #f00000
+ec graph.traced #dc322f
+
+ec func_var #839496
+ec func_var_type #b58900
+ec func_var_addr #2aa198
+
+ec ai.read #3090e0
+ec ai.write #586e75
+ec ai.exec #a0b040
+ec ai.seq #839496
+ec ai.ascii #839496
+
+ec widget_bg #b0b050 #003030
+ec widget_sel #eee8d5 #c04010
 
 # vim: set ts=4 sw=4 tw=79 fdm=manual ff=unix ft=rc fenc=utf-8 et cms=#%s :

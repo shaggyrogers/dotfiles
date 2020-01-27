@@ -49,13 +49,13 @@
 <wheel_type type="int32">2</wheel_type>
 </generate_scheme>
 <group_and_sort type="dynv">
-<group_sensitivity type="float">35</group_sensitivity>
-<group_type type="int32">11</group_type>
-<max_groups type="int32">8</max_groups>
+<group_sensitivity type="float">0.5</group_sensitivity>
+<group_type type="int32">5</group_type>
+<max_groups type="int32">5</max_groups>
 <reverse type="bool">false</reverse>
 <reverse_groups type="bool">false</reverse_groups>
 <show_preview type="bool">true</show_preview>
-<sort_type type="int32">12</sort_type>
+<sort_type type="int32">8</sort_type>
 <window type="dynv">
 <height type="int32">701</height>
 <width type="int32">558</width>
@@ -234,12 +234,12 @@
 <secondary_color_source type="string">blend_colors</secondary_color_source>
 <single_instance type="bool">false</single_instance>
 <start_in_tray type="bool">false</start_in_tray>
-<vertical_paned_position type="int32">967</vertical_paned_position>
+<vertical_paned_position type="int32">374</vertical_paned_position>
 <window type="dynv">
-<height type="int32">1036</height>
+<height type="int32">1018</height>
 <width type="int32">926</width>
-<x type="int32">966</x>
-<y type="int32">376</y>
+<x type="int32">16</x>
+<y type="int32">400</y>
 </window>
 </main>
 <options type="dynv">
@@ -294,12 +294,12 @@
 <rotate_swatch_after_sample type="bool">false</rotate_swatch_after_sample>
 </sampler>
 <swatch type="dynv">
-<active_color type="int32">2</active_color>
+<active_color type="int32">5</active_color>
 <color1 type="color">0.798887 0.27972 0.91774 3.06828e-41</color1>
 <color2 type="color">0.2095 0.793361 0.9405 4.57706e-41</color2>
 <color3 type="color">0.913725 0.329412 0.184314 3.09687e-41</color3>
 <color4 type="color">0.524488 0.678407 0.832397 3.09645e-41</color4>
-<color5 type="color">0.229864 0.574122 0.337368 4.2039e-45</color5>
+<color5 type="color">0.176 0.704 0.664067 4.58253e-41</color5>
 <color6 type="color">1 0.055 0.16 4.58155e-41</color6>
 </swatch>
 <zoom type="float">20</zoom>
@@ -310,11 +310,11 @@
 </recent>
 <secondary_view type="dynv">
 <blend_colors type="dynv">
-<end_color type="color">0.227335 1 0.0769812 4.56725e-41</end_color>
-<middle_color type="color">0.434926 0.996952 0.325561 4.56725e-41</middle_color>
-<start_color type="color">0.229864 0.574122 0.337053 4.56725e-41</start_color>
-<steps1 type="int32">6</steps1>
-<steps2 type="int32">6</steps2>
+<end_color type="color">0.796078 0.0862745 0.716316 4.573e-41</end_color>
+<middle_color type="color">0.1694 0.7106 0.669669 3.07459e-41</middle_color>
+<start_color type="color">0.301961 0.713726 0.528431 3.07459e-41</start_color>
+<steps1 type="int32">3</steps1>
+<steps2 type="int32">3</steps2>
 <type type="int32">0</type>
 </blend_colors>
 <brightness_darkness type="dynv">

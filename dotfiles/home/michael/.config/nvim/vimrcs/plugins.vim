@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2020-01-25
+" Modification Date:     2020-01-27
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -163,7 +163,7 @@ Plug 'https://github.com/mhinz/vim-signify'
 " UI{{{
 Plug 'https://github.com/Shougo/denite.nvim.git'
 Plug 'https://github.com/Shougo/unite.vim.git'
-"Plug 'https://github.com/chrisbra/Colorizer.git'
+Plug 'https://github.com/chrisbra/Colorizer.git'
 Plug 'https://github.com/itchyny/vim-cursorword.git'
 Plug 'https://github.com/kshenoy/vim-signature.git'
 Plug 'https://github.com/lambdalisue/neovim-prompt'
@@ -1053,6 +1053,31 @@ nnoremap <F4> <cmd>call FunctionMenu('buffer_settings')<CR>
 nnoremap <silent> <M-c> <cmd>Denite change -auto-resize<CR>
 nnoremap <silent> <M-r> <cmd>Denite register<CR>
 "}}}
+
+" Colorizer
+let g:colorizer_skip_comments = 1
+let g:colorizer_colornames = 0
+let g:colorizer_auto_filetype = 'css'
+let g:colorizer_use_virtual_text = 0
+let g:colorizer_disable_bufleave = 1
+let g:colorizer_textchangedi = 0
+let g:colorizer_syntax = 0
+let g:colorizer_hex_pattern = ['#', '\%(\x\{3}\(\x\{3}\)\?\)', '']
+
+augroup ColorizerEnableForVimColorschemes
+    autocmd!
+    autocmd BufNewFile,BufRead *.vim call s:HighlightVimColorScheme(expand("<afile>:p"))
+    autocmd BufWrite *.vim call s:HighlightVimColorScheme(expand("<afile>:p"))
+augroup END
+
+function! s:HighlightVimColorScheme(path) abort
+    if fnamemodify(a:path, ':e') == 'vim'
+            \ && fnamemodify(fnamemodify(a:path, ':h'), ':t') == 'colors'
+            \ && index(getcompletion('', 'color'), fnamemodify(a:path, ':t:r')) > -1
+        exec 'ColorClear'
+        exec 'ColorHighlight'
+    endif
+endfunction
 
 " devicons{{{
 call assert_true(exists('*webdevicons#version'))

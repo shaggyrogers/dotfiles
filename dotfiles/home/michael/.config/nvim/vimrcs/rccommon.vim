@@ -5,7 +5,7 @@
 " Description:           Shared functions for vim scripts
 " Author:                Michael De Pasquale <shaggyrogers>
 " Creation Date:         2018-02-18
-" Modification Date:     2019-10-27
+" Modification Date:     2020-01-26
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -112,7 +112,7 @@ function! rccommon#Echo(text, ...) abort
         execute 'echohl ' . trim(a:1)
     endif
 
-    execute printf('echo%s "%s"', (a:0 >= 2 && a:2 ? 'n' : ''), escape(a:text, '"'))
+    execute printf('echo%s "%s"', (a:0 >= 2 && a:2 ? 'n' : ''), escape(a:text, '"\'))
 
     if a:0 >= 1
         echohl 'None'
