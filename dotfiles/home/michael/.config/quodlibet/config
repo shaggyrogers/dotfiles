@@ -1,9 +1,9 @@
 [memory]
 exfalso_last_active_version = 4.2.-1
 exfalso_maximized = 0
-exfalso_paned_position = 0.17602591792656588
-exfalso_position = 966 400
-exfalso_size_ = 926 1018
+exfalso_paned_position = 0.326133909287257
+exfalso_position = 966 726
+exfalso_size_ = 926 336
 open_browsers = 
 plugin_prefs_maximized = 0
 plugin_prefs_position = 615 398
@@ -18,22 +18,22 @@ windows = true
 version = 0
 
 [plugins]
-active_plugins = refresh-songs
+active_plugins = Download Album Art
 	Search album in Wikipedia
 	Convert Encodings
-	lastfm-cover
-	embedded_edit
-	artwork-url-cover
-	musicbrainz-cover
-	CustomCommands
-	discogs-cover
-	Force Write
-	Download Album Art
 	ReplayGain
-	MusicBrainz lookup
-	FilterAll
 	filterbrowser
+	lastfm-cover
+	refresh-songs
+	embedded_edit
+	CustomCommands
+	FilterAll
 	Search artist in Wikipedia
+	artwork-url-cover
+	discogs-cover
+	musicbrainz-cover
+	MusicBrainz lookup
+	Force Write
 cover_edit = False
 cover_edit_cmd = gimp
 cover_engine_amazon = True

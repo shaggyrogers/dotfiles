@@ -41,12 +41,12 @@
 </generate>
 <generate_scheme type="dynv">
 <hsv_shift type="float" list="true"><li>0.446904</li><li>0.123019</li><li>0.265703</li><li>-0.137116</li><li>0</li><li>0</li><li>0.0235042</li><li>0</li><li>0</li><li>-0.0742473</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0</li><li>0.320451</li><li>0</li><li>0</li></hsv_shift>
-<hue type="float">10.6594</hue>
-<lightness type="float">10</lightness>
-<saturation type="float">120</saturation>
+<hue type="float">66.6316</hue>
+<lightness type="float">-15.098</lightness>
+<saturation type="float">100</saturation>
 <type type="int32">7</type>
 <wheel_locked type="bool">false</wheel_locked>
-<wheel_type type="int32">2</wheel_type>
+<wheel_type type="int32">0</wheel_type>
 </generate_scheme>
 <group_and_sort type="dynv">
 <group_sensitivity type="float">0.5</group_sensitivity>
@@ -234,7 +234,7 @@
 <secondary_color_source type="string">blend_colors</secondary_color_source>
 <single_instance type="bool">false</single_instance>
 <start_in_tray type="bool">false</start_in_tray>
-<vertical_paned_position type="int32">374</vertical_paned_position>
+<vertical_paned_position type="int32">504</vertical_paned_position>
 <window type="dynv">
 <height type="int32">1018</height>
 <width type="int32">926</width>
@@ -261,7 +261,7 @@
 </color_space>
 <component_edit type="dynv">
 <window type="dynv">
-<height type="int32">130</height>
+<height type="int32">158</height>
 <width type="int32">190</width>
 </window>
 </component_edit>
@@ -271,7 +271,7 @@
 <expander type="dynv">
 <cmyk type="bool">true</cmyk>
 <hsl type="bool">true</hsl>
-<hsv type="bool">false</hsv>
+<hsv type="bool">true</hsv>
 <info type="bool">true</info>
 <lab type="bool">true</lab>
 <lch type="bool">true</lch>
@@ -294,13 +294,13 @@
 <rotate_swatch_after_sample type="bool">false</rotate_swatch_after_sample>
 </sampler>
 <swatch type="dynv">
-<active_color type="int32">5</active_color>
+<active_color type="int32">2</active_color>
 <color1 type="color">0.798887 0.27972 0.91774 3.06828e-41</color1>
-<color2 type="color">0.2095 0.793361 0.9405 4.57706e-41</color2>
+<color2 type="color">0.65098 0.556863 0.45098 3.09547e-41</color2>
 <color3 type="color">0.913725 0.329412 0.184314 3.09687e-41</color3>
-<color4 type="color">0.524488 0.678407 0.832397 3.09645e-41</color4>
-<color5 type="color">0.176 0.704 0.664067 4.58253e-41</color5>
-<color6 type="color">1 0.055 0.16 4.58155e-41</color6>
+<color4 type="color">0.516364 0.709091 0.883636 4.56389e-41</color4>
+<color5 type="color">0.8768 0.2432 0.549911 4.58897e-41</color5>
+<color6 type="color">0.835294 0 0 0</color6>
 </swatch>
 <zoom type="float">20</zoom>
 <zoom_size type="int32">150</zoom_size>
@@ -310,12 +310,12 @@
 </recent>
 <secondary_view type="dynv">
 <blend_colors type="dynv">
-<end_color type="color">0.796078 0.0862745 0.716316 4.573e-41</end_color>
-<middle_color type="color">0.1694 0.7106 0.669669 3.07459e-41</middle_color>
-<start_color type="color">0.301961 0.713726 0.528431 3.07459e-41</start_color>
-<steps1 type="int32">3</steps1>
-<steps2 type="int32">3</steps2>
-<type type="int32">0</type>
+<end_color type="color">0.301961 0.713726 0.67451 0</end_color>
+<middle_color type="color">0.164706 0.631373 0.596078 3.09323e-41</middle_color>
+<start_color type="color">0.200217 0.519044 0.530151 0</start_color>
+<steps1 type="int32">5</steps1>
+<steps2 type="int32">10</steps2>
+<type type="int32">3</type>
 </blend_colors>
 <brightness_darkness type="dynv">
 <brightness type="float">0.5</brightness>

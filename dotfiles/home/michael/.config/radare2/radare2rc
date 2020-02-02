@@ -9,7 +9,7 @@ e anal.pushret      = true
 e asm.highlight     = true
 e asm.lines.ret     = true
 e asm.stackptr      = true
-e asm.symbol        = true
+e asm.symbol        = false
 e asm.symbol.col    = 48
 e asm.syntax        = intel
 
