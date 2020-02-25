@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2020-01-27
+" Modification Date:     2020-02-25
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -134,8 +134,11 @@ Plug 'https://github.com/zirrostig/vim-schlepp'
 "}}}
 
 " Syntax / other language-specific plugins {{{
-Plug 'https://github.com/KeitaNakamura/highlighter.nvim.git'
+" NOTE: Have seen performance issues with vim-python-pep8-indent...
 Plug 'https://github.com/Vimjas/vim-python-pep8-indent.git'
+Plug 'https://github.com/KeitaNakamura/highlighter.nvim.git'
+Plug 'https://github.com/gisphm/vim-gitignore.git'
+Plug 'https://github.com/cespare/vim-toml.git'
 Plug 'https://github.com/elzr/vim-json.git'
 Plug 'https://github.com/ludovicchabant/vim-gutentags.git'
 Plug 'https://github.com/majutsushi/tagbar.git'
@@ -224,6 +227,7 @@ call assert_true(exists(':UltiSnipsEdit'))
 let g:UltiSnipsUsePythonVersion = 3
 let g:UltiSnipsEditSplit = 'horizontal'
 let g:UltiSnipsSnippetDir = $HOME . '/.config/nvim/UltiSnips'
+let g:UltiSnipsEnableSnipMate = 1
 let g:snips_author = g:username
 let g:snips_email = g:email
 let g:snips_github = g:github
@@ -406,9 +410,9 @@ let g:ale_echo_msg_info_str = 'Info'
 let g:ale_echo_msg_warning_str = 'Warning'
 let g:ale_emit_conflict_warnings = 1
 let g:ale_fix_on_save = 0
+            "\       'add_blank_lines_for_python_control_statements',
 let g:ale_fixers = {
             \   'python': [
-            \       'add_blank_lines_for_python_control_statements',
             \       'black',
             \   ],
             \   'cpp': [
@@ -510,7 +514,18 @@ nnoremap <silent> <C-Up> <Cmd>ALEPreviousWrap<CR>
 nnoremap <silent> <C-Down> <Cmd>ALENextWrap<CR>
 "}}}
 " F12 : Run ALE fixers{{{
-nnoremap <F12> :ALEFix<CR>:echom 'Running ALE fixers...'<CR>
+function! s:RunALEFixers() abort
+    if !has_key(g:ale_fixers, &ft) || !len(g:ale_fixers[&ft])
+        call rccommon#Echo('No ALE fixers defined for ' . &ft, 'ErrorMsg')
+        return
+    endif
+
+    call rccommon#Echo('Running ' . &ft . ' fixers: ', 'MoreMsg', 1)
+    call rccommon#Echo(join(g:ale_fixers[&ft], ', '), 'Constant', 1)
+
+    ALEFix
+endfunction
+nnoremap <F12> <cmd>call <SID>RunALEFixers()<CR>
 "}}}
 "}}}
 
@@ -610,7 +625,7 @@ let g:highlighter#syntax_python = [
 " }}}
 
 " python-pep8-indent {{{
-let g:python_pep8_indent_searchpair_timeout = 2000
+let g:python_pep8_indent_searchpair_timeout = 250
 let g:python_pep8_indent_multiline_string = 0
 let g:python_pep8_indent_hang_closing = 0
 let g:python_pep8_indent_skip_concealed = 0

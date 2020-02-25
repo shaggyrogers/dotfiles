@@ -5,7 +5,7 @@
 " Author:                Michael De Pasquale <shaggyrogers>
 " Description:           Sets vim options for all filetypes.
 " Creation Date:         2017-12-02
-" Modification Date:     2019-12-14
+" Modification Date:     2020-02-11
 " License:               MIT
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -206,7 +206,8 @@ set scrollopt=ver,hor,jump
 " Folding{{{
 set foldclose=
 set foldcolumn=2
-set foldlevelstart=0
+set foldlevelstart=1
+"set foldlevelstart=0
 set foldlevel=0
 set foldnestmax=8
 set foldmethod=manual

@@ -19,7 +19,7 @@ alias e=$EDITOR
 # Disable nested ranger instances - exit shell instead
 function ranger() {
     if [ -z "$RANGER_LEVEL" ]; then
-        /usr/bin/ranger "$@"
+        command ranger "$@"
     else
         exit
     fi

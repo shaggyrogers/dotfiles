@@ -5,7 +5,7 @@
 " Description:           Configuration for python syntax buffers
 " Author:                Michael De Pasquale
 " Creation Date:         2018-02-18
-" Modification Date:     2019-12-14
+" Modification Date:     2020-02-13
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -25,6 +25,10 @@ function! s:UserFtSetUp()
     " Foldmethod "defaults" to marker, will be changed to expr by simpylfold
     " unless explicitly disabled using a modeline.
     let l:ml = rccommon#ParseModeline()
+
+    if !has_key(l:ml, 'tw') || has_key(l:ml, 'textwidth')
+        setlocal textwidth=88
+    endif
 
     if has_key(l:ml, 'fdm') || has_key(l:ml, 'foldmethod')
         let l:fdm = (has_key(l:ml, 'fdm') ? l:ml['fdm'] : l:ml['foldmethod'])
