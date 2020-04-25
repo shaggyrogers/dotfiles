@@ -234,12 +234,12 @@
 <secondary_color_source type="string">blend_colors</secondary_color_source>
 <single_instance type="bool">false</single_instance>
 <start_in_tray type="bool">false</start_in_tray>
-<vertical_paned_position type="int32">504</vertical_paned_position>
+<vertical_paned_position type="int32">514</vertical_paned_position>
 <window type="dynv">
-<height type="int32">1018</height>
+<height type="int32">1036</height>
 <width type="int32">926</width>
 <x type="int32">16</x>
-<y type="int32">400</y>
+<y type="int32">16</y>
 </window>
 </main>
 <options type="dynv">

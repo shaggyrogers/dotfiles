@@ -6,9 +6,9 @@
 #
 # Description:           Runs i3lock with a set configuration.
 # Author:                Michael De Pasquale <shaggyrogers>
+# License:               MIT
 # Creation Date:         2017-11-28
 # Modification Date:     2018-12-28
-# License:               MIT
 #
 ###############################################################################
 
@@ -20,7 +20,7 @@ fi
 # Interior circle
 INSIDE_VERIFY_COLOR='#79849466'
 INSIDE_WRONG_COLOR='#FF463366'
-INSIDE_COLOR='#00000000'
+INSIDE_COLOR='#E0E0E033'
 
 # Outside ring
 RING_VERIFY_COLOR='#AFCCDDCC'
@@ -28,29 +28,27 @@ RING_WRONG_COLOR='#FF260FFF'
 RING_COLOR='#F1F5F8AA'
 ENTER_KEY_HL_COLOR='#47ED35FF'
 BACKSPACE_HL_COLOR='#D4493AFF'
-HL_SEPARATOR_COLOR='#00000000'
+HL_SEPARATOR_COLOR='#E0E0E033'
 CIRCLE_RADIUS=36
 RING_WIDTH=8
 
 # Separates interior and exterior
-LINE_COLOR='#00000000'
+LINE_COLOR='#F0F0FF1A'
 
 # Time
-TIME_COLOR='#FFFFFFCC'
+TIME_COLOR='#FFFFFFCA'
 TIME_FORMAT='%H:%M:%S'
 TIME_FONT='Roboto'
 TIME_FONT_SIZE=48
 
 # Date
-DATE_COLOR='#FFFFFFCC'
-DATE_FORMAT='%A, %m %B %Y'
+DATE_COLOR='#FFFFFFC0'
+DATE_FORMAT='%A, %d %B %Y'
 DATE_FONT_SIZE=24
 DATE_FONT=$TIME_FONT
 
 # Status text
 STATUS_TEXT_COLOR='#FFFFFFCC'
-VERIFY_TEXT=''
-WRONG_TEXT=''
 STATUS_TEXT_SIZE=48
 
 i3lock -k --timepos='x+0.5*w-0.5*cw:y+0.5*h-0.5*ch' \
@@ -58,6 +56,8 @@ i3lock -k --timepos='x+0.5*w-0.5*cw:y+0.5*h-0.5*ch' \
           --timestr="$TIME_FORMAT" \
           --timecolor="$TIME_COLOR" \
           --datecolor="$TIME_COLOR" \
+          --textcolor="$TIME_COLOR" \
+          -c "#444444" \
           --datestr="$DATE_FORMAT" \
           --datesize=$DATE_FONT_SIZE \
           --indicator \
@@ -70,8 +70,10 @@ i3lock -k --timepos='x+0.5*w-0.5*cw:y+0.5*h-0.5*ch' \
           --time-align=0 \
           --date-align=0 \
           --layout-align=0 \
-          --veriftext="$VERIFY_TEXT" \
-          --wrongtext="$WRONG_TEXT" \
+          --ignore-empty-password \
+          --keylayout 0 \
+          --veriftext='' \
+          --wrongtext='' \
           --insidevercolor="$INSIDE_VERIFY_COLOR" \
           --insidewrongcolor="$INSIDE_WRONG_COLOR" \
           --insidecolor="$INSIDE_COLOR" \
@@ -86,4 +88,4 @@ i3lock -k --timepos='x+0.5*w-0.5*cw:y+0.5*h-0.5*ch' \
 
 exit 0
 
-# vim: set ts=4 sw=4 tw=79 fdm=marker et :
+# vim: set ts=4 sw=4 tw=88 fdm=marker ff=unix fenc=utf-8 et :

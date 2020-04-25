@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2020-02-25
+" Modification Date:     2020-04-03
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -752,7 +752,7 @@ nnoremap <leader>f :CtrlP<cr>
 nnoremap <leader>F :CtrlPMixed<cr>
 nnoremap <leader>r :CtrlPMRUFiles<cr>
 nnoremap <leader>t :CtrlPBufTag<cr>
-nnoremap <leader>T :CtrlPTag<cr>
+" nnoremap <leader>T :CtrlPTag<cr>
 nnoremap <leader><Tab> :CtrlPSmartTabs<CR>
 "}}}
 
