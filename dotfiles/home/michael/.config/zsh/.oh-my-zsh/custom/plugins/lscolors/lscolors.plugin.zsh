@@ -18,47 +18,52 @@ function dfc () {
         return
     fi
 
-    df -h | awk '
-        BEGIN {
-            FPAT = "([[:space:]]*[^[:space:]]+)";
-            OFS = "";
-        }
-        {
-            $1 = "\033[31m" $1 "\033[0m";
-            $2 = "\033[35m" $2 "\033[0m";
-            $3 = "\033[34m" $3 "\033[0m";
-            $4 = "\033[32m" $4 "\033[0m";
-            $5 = "\033[33m" $5 "\033[0m";
-            $6 = "\033[36m" $6
-            print $0"\033[0m";
-        }
-'
+    df -h \
+        | awk '
+            BEGIN {
+                FPAT = "([[:space:]]*[^[:space:]]+)";
+                OFS = "\t";
+            }
+            {
+                $1 = "\033[31m" $1 "\033[0m";
+                $2 = "\033[35m" $2 "\033[0m";
+                $3 = "\033[34m" $3 "\033[0m";
+                $4 = "\033[32m" $4 "\033[0m";
+                $5 = "\033[33m" $5 "\033[0m";
+                $6 = "\033[36m" $6
+                print $0"\033[0m";
+            }' \
+        | column -s $'\t' -t
 }
+
 alias df='dfc'
 # }}}
 
 # Color lsblk {{{
-function lsblkc () {
+lsblkc () {
     if ! [ "$#" = '0' ]; then
         lsblk "$@"
         return
     fi
-    lsblk | awk '
-        BEGIN {
-            FPAT = "([[:space:]]*[^[:space:]]+)";
-            OFS = "";
-        }
-        {
-            $1 = "\033[31m" $1 "\033[0m";
-            $2 = "\033[35m" $2 "\033[0m";
-            $3 = "\033[34m" $3 "\033[0m";
-            $4 = "\033[32m" $4 "\033[0m";
-            $5 = "\033[33m" $5 "\033[0m";
-            $6 = "\033[36m" $6
-            print $0"\033[0m";
-        }
-'
+
+    lsblk \
+        | awk '
+            BEGIN {
+                FPAT = "([[:space:]]*[^[:space:]]+)";
+                OFS = "\t";
+            }
+            {
+                $1 = "\033[31m" $1 "\033[0m";
+                $2 = "\033[35m" $2 "\033[0m";
+                $3 = "\033[34m" $3 "\033[0m";
+                $4 = "\033[32m" $4 "\033[0m";
+                $5 = "\033[33m" $5 "\033[0m";
+                $6 = "\033[36m" $6;
+                print $0"\033[0m";
+            }' \
+        | column -s $'\t' -t
 }
+
 alias lsblk='lsblkc'
 # }}}
 
@@ -68,23 +73,26 @@ function lsusbc () {
         lsusb "$@"
         return
     fi
-    lsusb | awk '
-        BEGIN {
-            FPAT = "([[:space:]]*[^[:space:]]+)";
-            OFS = "";
-        }
-        {
-            $1 = "\033[31m" $1;
-            $2 =  $2 "\033[0m";
-            $3 = "\033[34m" $3;
-            $4 = $4 "\033[0m";
-            $5 = "\033[33m" $5;
-            $6 = $6 "\033[0m";
-            $7 = "\033[36m" $7
-            print $0"\033[0m";
-        }
-'
+
+    lsusb \
+        | awk '
+            BEGIN {
+                FPAT = "([[:space:]]*[^[:space:]]+)";
+                OFS = "";
+            }
+            {
+                $1 = "\033[31m" $1;
+                $2 =  $2 "\033[0m";
+                $3 = "\033[34m" $3;
+                $4 = $4 "\033[0m";
+                $5 = "\033[33m" $5;
+                $6 = $6 "\033[0m";
+                $7 = "\033[36m" $7
+                print $0"\033[0m";
+            }' \
+        | column -s $'\t' -t
 }
+
 alias lsusb='lsusbc'
 # }}}
 
@@ -93,49 +101,57 @@ alias lsusb='lsusbc'
 # List, List All, Long List, Long List all 
 # sort by name, (S)ize, e(X)tension, time (M)odified or use (V)ersion sort
 # A space at the start prevents commands being saved in history
-alias l=' ls'
-alias ls=' ls'
-alias ll=' llsc --no-group'
-alias lla=' llsc -A --no-group'
-alias llam=' llsc -A --sort time --no-group'
-alias llas=' llsc -A --sort size--no-group'
-alias llax=' llsc -A --sort extension --no-group'
-alias llm=' llsc --sort time --no-group'
-alias lls=' llsc --sort size --no-group'
-alias llv=' llsc --sort version --no-group'
-alias llva=' llsc -A --sort version --no-group'
-alias llx=' llsc --sort extension --no-group'
-alias la=' ls -A'
-alias lsa=' ls -A'
-alias lsm=' ls --sort time'
-alias lsma=' ls -A --sort time'
-alias lss=' ls --sort size'
-alias lssa=' ls -A --sort size'
-alias lsv=' ls --sort version'
-alias lsva=' ls -A --sort version'
-alias lsx=' ls --sort extension'
-alias lsxa=' ls -A --sort extension'
+
+# Set default arguments
+_LS_DEF_ARGS='--color=auto --escape --group-directories-first --human-readable \
+        --indicator-style=slash --time-style=long-iso \
+        --dereference-command-line'
+
+alias l=" ls $_LS_DEF_ARGS"
+alias ls=" ls $_LS_DEF_ARGS"
+alias ll=" llsc --no-group $_LS_DEF_ARGS"
+alias lla=" llsc -A --no-group $_LS_DEF_ARGS"
+alias llam=" llsc -A --sort time --no-group $_LS_DEF_ARGS"
+alias llas=" llsc -A --sort size--no-group $_LS_DEF_ARGS"
+alias llax=" llsc -A --sort extension --no-group $_LS_DEF_ARGS"
+alias llm=" llsc --sort time --no-group $_LS_DEF_ARGS"
+alias lls=" llsc --sort size --no-group $_LS_DEF_ARGS"
+alias llv=" llsc --sort version --no-group $_LS_DEF_ARGS"
+alias llva=" llsc -A --sort version --no-group $_LS_DEF_ARGS"
+alias llx=" llsc --sort extension --no-group $_LS_DEF_ARGS"
+alias la=" ls -A $_LS_DEF_ARGS"
+alias lsa=" ls -A $_LS_DEF_ARGS"
+alias lsm=" ls --sort time $_LS_DEF_ARGS"
+alias lsma=" ls -A --sort time $_LS_DEF_ARGS"
+alias lss=" ls --sort size $_LS_DEF_ARGS"
+alias lssa=" ls -A --sort size $_LS_DEF_ARGS"
+alias lsv=" ls --sort version $_LS_DEF_ARGS"
+alias lsva=" ls -A --sort version $_LS_DEF_ARGS"
+alias lsx=" ls --sort extension $_LS_DEF_ARGS"
+alias lsxa=" ls -A --sort extension $_LS_DEF_ARGS"
 # }}}
 
 # Colorise long-format ls columns {{{
 # Taken from an answer by 'Bob':
 # https://superuser.com/questions/1294743/how-to-color-output-columns-of-ls
+# FIXME: Handle escaped spaces in filenames correctly
 function llsc () {
-    ls "$@" -l --color=always | awk '
-        BEGIN {
-            FPAT = "([[:space:]]*[^[:space:]]+)";
-            OFS = "";
-        }
-        {
-            $1 = "\033[31m" $1 "\033[0m";
-            $2 = "\033[35m" $2 "\033[0m";
-            $3 = "\033[34m" $3 "\033[0m";
-            $4 = "\033[32m" $4 "\033[0m";
-            $5 = "\033[33m" $5 "\033[0m";
-            $6 = "\033[33m" $6 "\033[0m";
-            print $0
-        }
-'
+    ls "$@" -l --color=always \
+        | awk '
+            BEGIN {
+                FPAT = "([[:space:]]*[^[:space:]]+)";
+                OFS = "\t";
+            }
+            {
+                $1 = "\033[31m" $1 "\033[0m";
+                $2 = "\033[35m" $2 "\033[0m";
+                $3 = "\033[34m" $3 "\033[0m";
+                $4 = "\033[32m" $4 "\033[0m";
+                $5 = "\033[33m" $5 "\033[0m";
+                $6 = "\033[33m" $6 "\033[0m";
+                print $0
+            }' \
+        | column -s $'\t' -t
 }
 # }}}
 
@@ -282,11 +298,6 @@ LS_COLORS+="*.spx=00;36:"
 LS_COLORS+="*.xspf=00;36"
 # }}}
 # }}}
-
-# Set default arguments
-alias ls='ls --color=auto --escape --group-directories-first --human-readable \
-        --ignore-backups --indicator-style=slash --time-style=long-iso \
-        --dereference-command-line'
 # }}}
 
 #  vim: set ts=4 sw=4 tw=79 fdm=marker et : 
