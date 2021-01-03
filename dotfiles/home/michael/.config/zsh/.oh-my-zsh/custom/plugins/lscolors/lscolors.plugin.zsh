@@ -78,7 +78,7 @@ function lsusbc () {
         | awk '
             BEGIN {
                 FPAT = "([[:space:]]*[^[:space:]]+)";
-                OFS = "";
+                OFS = "\t";
             }
             {
                 $1 = "\033[31m" $1;
