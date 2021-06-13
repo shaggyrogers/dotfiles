@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2020-04-03
+" Modification Date:     2021-06-13
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -136,6 +136,7 @@ Plug 'https://github.com/zirrostig/vim-schlepp'
 " Syntax / other language-specific plugins {{{
 " NOTE: Have seen performance issues with vim-python-pep8-indent...
 Plug 'https://github.com/Vimjas/vim-python-pep8-indent.git'
+Plug 'https://github.com/mzlogin/vim-smali.git'
 Plug 'https://github.com/KeitaNakamura/highlighter.nvim.git'
 Plug 'https://github.com/gisphm/vim-gitignore.git'
 Plug 'https://github.com/cespare/vim-toml.git'
