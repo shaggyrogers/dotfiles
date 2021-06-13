@@ -5,7 +5,7 @@
 " Description:           Configuration for python syntax buffers
 " Author:                Michael De Pasquale
 " Creation Date:         2018-02-18
-" Modification Date:     2020-02-13
+" Modification Date:     2021-06-13
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -26,7 +26,7 @@ function! s:UserFtSetUp()
     " unless explicitly disabled using a modeline.
     let l:ml = rccommon#ParseModeline()
 
-    if !has_key(l:ml, 'tw') || has_key(l:ml, 'textwidth')
+    if ! (has_key(l:ml, 'tw') || has_key(l:ml, 'textwidth'))
         setlocal textwidth=88
     endif
 
@@ -56,6 +56,7 @@ augroup PythonFiletypeConfig
     autocmd BufWrite <buffer>
                 \ call rccommon#DeleteTrailingWS()
                 \ | call rccommon#UpdateModificationDate()
+                \ | ALEFix
                 \ | retab
     autocmd VimResized <buffer>
                 \ call rccommon#UpdateTagbarOptions()
