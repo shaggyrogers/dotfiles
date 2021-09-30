@@ -5,7 +5,7 @@
 " Author:                Michael De Pasquale <shaggyrogers>
 " Description:           Sets vim options for all filetypes.
 " Creation Date:         2017-12-02
-" Modification Date:     2020-02-11
+" Modification Date:     2020-09-26
 " License:               MIT
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -140,8 +140,10 @@ let g:loaded_matchparen = 1
 "}}}
 
 " Truecolor support{{{
-if exists('+termguicolors') | set termguicolors |
-elseif exists('+guicolors') | set guicolors |
+if exists('+termguicolors')
+    set termguicolors
+elseif exists('+guicolors')
+    set guicolors
 endif
 "}}}
 
@@ -149,12 +151,13 @@ endif
 set background=dark
 set cursorline
 "set cursorcolumn
+set winblend=18
 let g:solarized_cursorline_linenr = 1
 let g:solarized_diffmode = 'normal'
 let g:solarized_extra_hi_groups = 1
 let g:solarized_term_italics = 1
-let g:solarized_termtrans = 0
-if $TERM == 'xterm-kitty' | let g:solarized_termtrans = 1 | endif
+let g:solarized_termtrans = ($TERM == 'xterm-kitty'
+                                \ || $TERM == 'xterm-256color') ? 1 : 0
 let g:solarized_visibility = 'high'
 colorscheme solarized8_flat_fork
 "}}}
@@ -169,20 +172,25 @@ set number
 " Windows{{{
 set cmdheight=2
 set cmdwinheight=8
+set winminheight=0
+set winminwidth=1
+set previewheight=8
+
 set fillchars=vert:█,diff:-,fold:…
 set guioptions-=L
 set guioptions-=R
 set guioptions-=l
 set guioptions-=r
+
 set nosplitbelow
-set previewheight=8
 set splitright
 set title
 
-" Don't automatically resize windows after winodw split/close
+" Preserve window sizes on open/close
 set noequalalways
-set winminheight=0
-set winminwidth=1
+set winfixheight
+"set winfixwidth
+
 "}}}
 
 " Wild menu{{{

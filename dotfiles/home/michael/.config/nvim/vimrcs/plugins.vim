@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2021-06-13
+" Modification Date:     2021-06-24
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -410,7 +410,7 @@ let g:ale_echo_msg_format = '[%linter%] %severity% %code: %%s'
 let g:ale_echo_msg_info_str = 'Info'
 let g:ale_echo_msg_warning_str = 'Warning'
 let g:ale_emit_conflict_warnings = 1
-let g:ale_fix_on_save = 0
+let g:ale_fix_on_save = 1
             "\       'add_blank_lines_for_python_control_statements',
 let g:ale_fixers = {
             \   'python': [

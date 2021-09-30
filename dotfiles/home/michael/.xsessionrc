@@ -66,7 +66,7 @@ export XDG_DATA_HOME="$HOME/.local/share"
 
 # Configure keyboard {{{
 # Set a autorepeat rate and delay
-xset r rate 235 35
+xset r rate 250 35
 
 # Disable autorepeat for Function keys
 xset -r $F1
@@ -104,7 +104,7 @@ xset s 10800 10800
 # }}}
 
 # Configure dual monitors {{{
-xrandr --output DVI-1 --preferred --primary --pos 0x0 --output HDMI-0 --pos -1920x360 --preferred
+xrandr --output HDMI-1 --preferred --primary --pos 0x0 --output HDMI-2 --pos -1920x360 --preferred
 # }}}
 
 # vim: set ts=4 sw=4 tw=79 fdm=marker et :

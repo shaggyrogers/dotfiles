@@ -5,7 +5,7 @@
 " Description:           Contains all non-plugin shortcuts.
 " Author:                Michael De Pasquale <shaggyrogers>
 " Creation Date:         2017-12-02
-" Modification Date:     2020-01-12
+" Modification Date:     2020-08-28
 " License:               MIT
 "
 " Note that some key combinations require kitty with a certain configuration.
@@ -283,12 +283,12 @@ inoremap <Char-0x10>GA <cmd>normal! zi<CR>
 xnoremap <Char-0x10>GA <cmd>normal! zi<CR>
 
 " Ctrl + Tab / Ctrl + Shift + Tab: Move tab forward/backward
-nnoremap <silent> <Char-0x10>E0 <cmd>:tabmove +<CR>
-nnoremap <silent> <Char-0x10>F0 <cmd>:tabmove -<CR>
-xnoremap <silent> <Char-0x10>E0 <cmd>:tabmove +<CR>
-xnoremap <silent> <Char-0x10>F0 <cmd>:tabmove -<CR>
-inoremap <silent> <Char-0x10>E0 <cmd>:tabmove -<CR>
-inoremap <silent> <Char-0x10>F0 <cmd>:tabmove +<CR>
+nnoremap <silent> <Char-0x10>E0 <cmd>:silent! tabmove +<CR>
+nnoremap <silent> <Char-0x10>F0 <cmd>:silent! tabmove -<CR>
+xnoremap <silent> <Char-0x10>E0 <cmd>:silent! tabmove +<CR>
+xnoremap <silent> <Char-0x10>F0 <cmd>:silent! tabmove -<CR>
+inoremap <silent> <Char-0x10>E0 <cmd>:silent! tabmove -<CR>
+inoremap <silent> <Char-0x10>F0 <cmd>:silent! tabmove +<CR>
 
 " CTRL + T : Open a new tab
 nnoremap <silent> <C-t> <cmd>:tabe<CR>

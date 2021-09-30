@@ -4,7 +4,7 @@
 # Description:           i3 (i3-gaps) configuration file
 # Author:                Michael De Pasquale <shaggyrogers>
 # Creation Date:         2017-11-01
-# Modification Date:     2020-01-20
+# Modification Date:     2021-09-30
 #
 ###############################################################################
 
@@ -160,7 +160,7 @@ set $ws06 "6:social"
 set $ws07 "7:misc4"
 set $ws08 "8:media"
 set $ws09 "9:misc5"
-set $ws10 "10:misc6"
+set $ws10 "10:system"
 set $ws11 "11:misc7"
 set $ws12 "12:misc8"
 set $ws13 "13:misc9"
@@ -253,6 +253,7 @@ bar {
 # }}}
 
 # Applications{{{
+# FIXME: Can only show one keepass2 window at a time, need to switch with mod1 + mod2 + p
 for_window [class="KeePass2"]          floating enable
 for_window [class="KeePass2"]          sticky enable
 for_window [class="KeePass2"]          resize set 1024 640
@@ -262,18 +263,28 @@ for_window [class="kitty-quickterm"]   floating enable
 # }}}
 
 # Startup applications{{{
+# Compton - x11 compositor
 exec --no-startup-id "compton -CGb --config '/home/michael/.config/compton.conf'"
+
+# keepass2 - password manager
 exec --no-startup-id keepass2
-exec --no-startup-id "kitty --class=cmusmusicplayer --override background_opacity=0.7 --override background='#202020' 'cmus' &"
-exec --no-startup-id sh -c "tickr"
+
+# universal remote server
 exec --no-startup-id "/opt/urserver/urserver-start --no-manager &"
+
+# NetworkManager - networking settings tray applet
+exec --no-startup-id "nm-applet"
+
+# cmus - music player
+exec --no-startup-id "kitty --class=cmusmusicplayer --override background_opacity=0.7 --override background='#202020' 'cmus' &"
+
+# journalctl
+#exec --no-startup-id "kitty --class=journal --override background_opacity=0.75 --override background='#202020' 'journalctl' -f &"
 
 # Lock screen / set wallpaper
 exec --no-startup-id sh -c "$HOME/.local/bin/lock &"
 exec --no-startup-id feh --no-fehbg --bg-max ~/.config/i3/wallpaper.jpg
 
-# HACK: Hide i3bar on startup - "i3-msg bar hidden_state hide" seems to show bar...?
-exec --no-startup-id bash -c "sleep 1; i3-msg bar hidden_state hide; sleep 0.25; xdotool key --clearmodifiers --delay 50 --repeat 3 Super_L"
 # }}}
 
 #  vim: set ts=4 sw=4 tw=0 fdm=marker nowrap et :

@@ -4,26 +4,26 @@
 # apt_upgrades.sh
 # ===============
 #
-# Version:               1.0.0
+# Description:           Prints the number of apt package upgrades.
+#                        Returns 1 if there are none.
 # Author:                Michael De Pasquale
 # Creation Date:         2017-11-06
-# License:               None
-#
-# Description
-# -----------
-# Prints the number of apt package upgrades. Returns 1 if there are none.
+# Modification Date:     2020-08-28
+# License:               MIT
 #
 ###############################################################################
 
 # Simulate apt-get upgrade and get the number of upgrades
-updates=$(apt-get -q --simulate -u upgrade --assume-no | \
-          grep -Poe '[0-9]{1,5} to upgrade' | \
-          grep -Poe '[0-9]+')
+_UPDATES=$(apt-get -q --simulate -u upgrade --assume-no | \
+            grep -Poe '\d{1,4}(?= to upgrade)')
+_CODE=$?
 
-# Hide when there are no updates
-if [ "$updates" == "0" ]; then
+# Hide (in i3blocks) when there are no updates or if unsuccesful
+if [ "$_CODE" != '0' ] || [ "$_UPDATES" = '0' ]; then
     exit 1
 fi
 
-echo -n $updates
+echo -n "$_UPDATES"
 exit 0
+
+# vim: set ts=4 sw=4 tw=79 fdm=manual ff=unix fenc=utf-8 et :
