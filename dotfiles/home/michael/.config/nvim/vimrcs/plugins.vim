@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2021-06-24
+" Modification Date:     2021-10-05
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -198,14 +198,15 @@ endif
 call assert_true(exists('*deoplete#initialize'))
 
 " General configuration
+call deoplete#custom#option('auto_complete_delay', 40)
+call deoplete#custom#option('auto_complete_start_length', 1)
+call deoplete#custom#option('max_list', 10)
+call deoplete#custom#var('enable_buffer_path', 1)
+
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_camel_case = 1
-let g:deoplete#auto_complete_start_length = 1
-let g:deoplete#max_list = 10
 let g:deoplete#max_abbr_width = 100
 let g:deoplete#max_menu_width = 50
-let g:deoplete#auto_complete_delay = 40
-let g:deoplete#file#enable_buffer_path = 1
 
 " Configure dictionary
 call deoplete#custom#source('dictionary', 'matchers', ['matcher_head'])
