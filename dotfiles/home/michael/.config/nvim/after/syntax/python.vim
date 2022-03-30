@@ -2,12 +2,10 @@
 " python.vim
 " ==========
 "
+" Description:           Python syntax highlighting tweaks
 " Author:                Michael De Pasquale
 " Creation Date:         2018-02-20
-"
-" Description
-" -----------
-" python syntax tweaks
+" Modification Date:     2022-03-30
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " TODO:

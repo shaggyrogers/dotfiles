@@ -1,11 +1,11 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " c.vim
-" ======
+" =====
 "
-" Description:           Configuration for C syntax buffers
+" Description:           Configuration for C and C++ syntax buffers
 " Author:                Michael De Pasquale
 " Creation Date:         2018-02-19
-" Modification Date:     2019-01-04
+" Modification Date:     2022-03-30
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -31,4 +31,4 @@ let b:undo_ftplugin = get(b:, 'undo_ftplugin', '')
 
 call s:UserFtSetUp()
 
-" vim: set ts=4 sw=4 tw=79 fdm=marker et :
+" vim: set ts=4 sw=4 tw=79 fdm=marker ff=unix fenc=utf-8 et :
