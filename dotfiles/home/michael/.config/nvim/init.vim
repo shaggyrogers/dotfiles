@@ -20,7 +20,7 @@ endif
 let g:loaded_python_provider = 0
 
 " Folders
-let g:vim_dir = resolve(expand('~/.config/nvim'))
+let g:vim_dir = resolve(expand('<sfile>:p:h'))
 let g:vim_dir_tmp = resolve(g:vim_dir.'/temp_data')
 let g:vim_dir_rc = resolve(g:vim_dir . '/vimrcs')
 
