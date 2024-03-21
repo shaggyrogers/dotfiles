@@ -33,5 +33,8 @@ Ubuntu 22.04 LTS w/ Regolith desktop
 * vimrc cleanup
 * Finish .config cleanup
 * Review /etc/fstab and /etc/sudoers
+* Fix issues with kitty
+  - ligatures don't work
+  - operator mono doesn't work
 
 Let me know if I've included your work without attribution, the wrong license etc.
