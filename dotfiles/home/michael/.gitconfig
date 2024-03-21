@@ -2,6 +2,7 @@
 # These were used as a template:
 # https://gist.github.com/pksunkara/988716
 # https://gist.github.com/huytd/78c676a797f81eb08cdedf5400e1b6a3
+
 [color]
     ui = auto
 [core]
@@ -13,23 +14,32 @@
 
 [credential]
 	helper = store
+
 [difftool]
     prompt = false
+
 [diff]
     tool = vimdiff
+
 [instaweb]
     browser = firefox
+
 [merge]
     tool = vimdiff
+
 [mergetool]
     prompt = true
+
 [mergetool "vimdiff"]
     cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
 [web]
     browser = firefox
+
 [rerere]
     enabled = 1
     autoupdate = 1
+
 [user]
-	name = Michael De Pasquale
-	email = mickdp1@gmail.com
+	email = shaggyrogers@not.real.net
+	name = shaggyrogers
