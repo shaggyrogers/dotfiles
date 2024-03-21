@@ -4,34 +4,15 @@
 # .xsessionrc
 # ===========
 #
-# Version:               1.0.0
 # Author:                Michael De Pasquale
-# Creation Date:         2017-??-??
-# License:               None
-#
-# Description
-# -----------
-# Modifies X11 settings according to my preferences.
+# Description:           Modify X11 settings.
 #
 ###############################################################################
 
 
-# Define keycodes {{{
-# Get these with xev
+# Define keycodes (get these with xev)
 ESCAPE=9
-TAB=23
-CONTROL_L=37
-SHIFT_L=50
-SHIFT_R=62
-ALT_L=64
 CAPS_LOCK=66
-NUM_LOCK=77
-SCROLL_LOCK=78
-ALT_R=108
-CTRL_R=105
-DELETE=119
-PAUSE_BREAK=127
-SUPER_L=133
 F1=67
 F2=68
 F3=69
@@ -44,27 +25,20 @@ F9=75
 F10=76
 F11=95
 F12=96
-ALT_R=108
-MENU=135 # between Fn and Ctrl
-CANCEL=136 # Fn+F9 [3]. Should be XF86Launch3?
-FIND=144 # Fn+F10 [4]. Should be XF86Launch4?
-XF86BACK=166 # Fn + F7 [1]. Should be XF86Launch1?
-XF86FORWARD=167 # Fn + F8 [2]. Should be XF86Launch2?
-XF86SCROLLUP=185 # Fn + F11 [5]. Should be XF86Launch5?
 # }}}
 
-# Configure environment variables {{{
+# Configure environment variables
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 export EDITOR='kitty-nvim'
 export FILEBROWSER='ranger'
-export GOPATH="$HOME/.local/go"
 export TASKDATA='/var/taskd'
-export XDG_CACHE_HOME="$HOME/.cache"
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_HOME="$HOME/.local/share"
-# }}}
 
-# Configure keyboard {{{
+# Shouldn't need to set these.
+# export XDG_CACHE_HOME="$HOME/.cache"
+# export XDG_CONFIG_HOME="$HOME/.config"
+# export XDG_DATA_HOME="$HOME/.local/share"
+
+# Configure keyboard
 # Set a autorepeat rate and delay
 xset r rate 250 35
 
@@ -82,29 +56,15 @@ xset -r $F10
 xset -r $F11
 xset -r $F12
 
-# Change modifiers
-# Modifier = Keysyms
-# Remove Lock modifier from Caps_Lock button
+# Remove Lock modifier from Caps_Lock button and change Caps_Lock to Escape.
+# Shift + Caps_Lock will still work as Caps_Lock.
 xmodmap -e 'remove Lock = Caps_Lock'
-
-# Change keysyms
-# Keysym = Key Shift+Key ModeSw+Key ModeSw+Shift+Key AltGr+Key AltGr+Shift+Key
-# Change Caps_Lock to Escape and Shift + Caps_Lock to Caps_Lock
 xmodmap -e "keycode $CAPS_LOCK = Escape Caps_Lock"
-#xmodmap -e "keycode $ALT_R = Mode_switch ISO_Level3_Shift"
-# }}}
 
-# Disable mouse acceleration {{{
+# Disable mouse acceleration
 xset m 0 0
-# }}}
 
-# Set screen blanking time to 3 hours {{{
-xset s on
-xset s 10800 10800
-# }}}
-
-# Configure dual monitors {{{
-xrandr --output HDMI-1 --preferred --primary --pos 0x0 --output HDMI-2 --pos -1920x360 --preferred
-# }}}
+# Configure dual monitors
+# xrandr --output HDMI-1 --preferred --primary --pos 0x0 --output HDMI-2 --pos -1920x360 --preferred
 
 # vim: set ts=4 sw=4 tw=79 fdm=marker et :
