@@ -1,10 +1,4 @@
-# Michael's dotfiles
-
-Configuration files for everything I use frequently.
-
-Ubuntu 22.04 LTS w/ Regolith desktop
-
-## Installation notes
+# Installation notes
 
 Ubuntu 18.04 LTS -> Ubuntu 22.04 LTS (Regolith)
 
@@ -30,4 +24,7 @@ Ubuntu 18.04 LTS -> Ubuntu 22.04 LTS (Regolith)
 
 * Make symlinks in .local/bin for AppImages
 
-Let me know if I've included your work without attribution, the wrong license etc.
+
+TODO
+* Cleanup vimrcs
+    - remove tagbar and gutentags (probably dont need universal-ctags now)
