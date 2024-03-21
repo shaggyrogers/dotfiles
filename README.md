@@ -18,6 +18,7 @@ Ubuntu 22.04 LTS w/ Regolith desktop
     + pipenv
   - zsh
   - oh-my-zsh
+    + This changes default shell to zsh.
   - neofetch
   - libfuse2
   - universal-ctags
@@ -32,6 +33,9 @@ Ubuntu 22.04 LTS w/ Regolith desktop
 
 * Make symlinks in .local/bin for AppImages
 
+* Remove regolith-i3-base-launchers package
+  - WARNING: Make sure ~/.config/regolith2/i3/15_base_launchers has been copied first
+
 # TODO
 * vimrc cleanup
 * Finish .config cleanup
@@ -39,7 +43,5 @@ Ubuntu 22.04 LTS w/ Regolith desktop
 * .xinitrc/.xsessionrc doesn't execute
 * Fix issues with kitty
   - fonts don't work
-* Change default terminal emulator and shell
-  - installing oh-my-zsh sets default shell.
 
 Let me know if I've included your work without attribution, the wrong license etc.
