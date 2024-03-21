@@ -6,8 +6,6 @@ Ubuntu 22.04 LTS w/ Regolith desktop
 
 ## Installation notes
 
-Ubuntu 18.04 LTS -> Ubuntu 22.04 LTS (Regolith)
-
 * Install
   - kitty
   - neovim
