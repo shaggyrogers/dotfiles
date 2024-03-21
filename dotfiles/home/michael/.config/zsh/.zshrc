@@ -75,8 +75,6 @@ plugins=(
   python
   aliases
   lscolors
-  micktitle
-
   bgnotify
   sudo
   python_shell

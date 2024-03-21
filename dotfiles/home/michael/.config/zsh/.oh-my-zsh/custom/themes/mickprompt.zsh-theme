@@ -7,20 +7,21 @@
 # Description:           Configures custom zsh prompt
 # Author:                Michael De Pasquale
 # Creation Date:         2018-01-25
-# Modification Date:     2018-03-06
+# Modification Date:     2019-04-06
 # License:               MIT
 #
 # Notes
 # -----
 # * Requires a terminal with truecolor support.
+# * Requires nerd fonts
 #
 ###############################################################################
 
-# Ensure truecolor support, not virtual console {{{
+# Ensure truecolor support, not virtual console
 if [[ "$TERM" == 'linux' ]] || [[ "$(tput colors)" != "256" ]]; then 
+    echo "mickprompt: terminal $TERM not supported" >&2
     return
 fi
-# }}}
 
 # Style {{{
 SEPARATOR=''  # Other possibilities:      
@@ -204,24 +205,9 @@ function _prompt() { #{{{
 } # }}}
 
 # Run prompt if argument is 1
-
-[ "$1" = '1' ] && _prompt
+#[ "$1" = '1' ] && _prompt
 
 PROMPT='%{%f%b%k%}$(_prompt) '
-# }}}
-
-# Title {{{
-# Change title
-function precmd() { # {{{
-    termName=$TERM
-    termPath=$(pwd -L | sed "s/\/home\/$USER/~/")
-
-    if [ "$termName" = 'xterm-kitty' ]; then
-        termName='kitty'
-    fi
-
-    title $(printf "$termName:%s" "$termPath" )
-} # }}}
 # }}}
 
 #  vim: set ts=4 sw=4 tw=79 fdm=marker et : 
