@@ -11,21 +11,27 @@ Ubuntu 22.04 LTS w/ Regolith desktop
   - neovim
   - keepass2
   - ranger
-  - ctags
   - deluge
   - python3.10
     + pip
     + neovim-remote
+    + pipenv
   - zsh
   - libfuse2
   - universal-ctags
   - silversearcher-ag
   - exfalso
+  - cmus
 
 * Install Firefox plugins
   - Tree style tab
   - Vim vixen
 
 * Make symlinks in .local/bin for AppImages
+
+# TODO
+* vimrc cleanup
+* Finish .config cleanup
+* Review /etc/fstab and /etc/sudoers
 
 Let me know if I've included your work without attribution, the wrong license etc.
