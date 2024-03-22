@@ -30,6 +30,7 @@ Ubuntu 22.04 LTS w/ Regolith desktop
 * Install Firefox plugins
   - Tree style tab
   - Vim vixen
+  - Enhancer for YouTube
 
 * Make symlinks in .local/bin for AppImages
 
@@ -40,7 +41,6 @@ Ubuntu 22.04 LTS w/ Regolith desktop
 * vimrc cleanup
 * Finish .config cleanup
 * Review /etc/fstab and /etc/sudoers
-* .xinitrc/.xsessionrc doesn't execute
 * Fix issues with kitty
   - fonts don't work
 
