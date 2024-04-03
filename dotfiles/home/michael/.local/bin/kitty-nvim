@@ -341,7 +341,9 @@ PYTHON
 # Check WM, parse arguments, get remaining arguments, get workspace info {{{
 parse_arguments "$@"
 
-if [ -z "$GLOBAL" ] && ! [ "$XDG_CURRENT_DESKTOP" = "i3" ]; then
+if [ -z "$GLOBAL" ] \
+    && ! [ "$XDG_CURRENT_DESKTOP" = "i3" ] \
+    && ! [ "$XDG_CURRENT_DESKTOP" = "Regolith:GNOME-Flashback:GNOME" ]; then
     echo "Error: WM '$XDG_CURRENT_DESKTOP' not supported." 1>&2
     echo "Set '$XDG_CURRENT_DESKTOP' not supported." 1>&2
     exit 1
@@ -493,14 +495,6 @@ export EDITOR="kitty-nvim -i $INSTANCE_INDEX -o t"
 
 # Needed to fix neovim sudo issue
 export SUDO_ASKPASS="$(which ssh-askpass)"
-
-# bash: -c: line 0: syntax error near unexpected token `('
-# bash: -c: line 0: 
-# 
-# `kitty --config='/home/michael/.config/kitty/kitty.nvim.conf' 
-# --class='kitty-nvim-0-0' 
-# --detach nvr -s 
-# --remote /home/michael/Projects/xyzware/da Vinci mini w+ (3FM3W-PAU7-TH-8C1-0219)/NFC.md'
 
 bash -c "kitty --config='$HOME/.config/kitty/kitty.nvim.conf' --class='$CLASS_NAME' $KITTY_OPTS nvr $NVR_OPTS \"$@\""
 # }}}
