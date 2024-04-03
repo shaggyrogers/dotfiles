@@ -5,12 +5,12 @@
 " Description:           Loads vimrcs.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-06
-" Modification Date:     2019-12-02
+" Modification Date:     2024-03-21
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Configuration
-let g:python3_host_prog = '/usr/bin/python3.7'
+let g:python3_host_prog = '/usr/bin/python3.10'
 
 if exists('g:loaded_python3_provider')
     echo 'g:loaded_python3_provider = ' . g:loaded_python3_provider

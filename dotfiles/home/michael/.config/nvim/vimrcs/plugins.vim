@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2021-10-05
+" Modification Date:     2024-04-03
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -141,8 +141,6 @@ Plug 'https://github.com/KeitaNakamura/highlighter.nvim.git'
 Plug 'https://github.com/gisphm/vim-gitignore.git'
 Plug 'https://github.com/cespare/vim-toml.git'
 Plug 'https://github.com/elzr/vim-json.git'
-Plug 'https://github.com/ludovicchabant/vim-gutentags.git'
-Plug 'https://github.com/majutsushi/tagbar.git'
 Plug 'https://github.com/okcompute/vim-python-match'
 Plug 'https://github.com/okcompute/vim-python-motions.git'
 Plug 'https://github.com/rhysd/vim-gfm-syntax.git'
@@ -173,6 +171,7 @@ Plug 'https://github.com/kshenoy/vim-signature.git'
 Plug 'https://github.com/lambdalisue/neovim-prompt'
 Plug 'https://github.com/luochen1990/rainbow.git'
 Plug 'https://github.com/machakann/vim-highlightedyank.git'
+Plug 'https://github.com/shaggyrogers/vim-oblique-strategies.git'
 Plug 'https://github.com/mhinz/vim-startify.git'
 Plug 'https://github.com/nathanaelkane/vim-indent-guides.git'
 Plug 'https://github.com/ryanoasis/vim-devicons.git'
@@ -544,51 +543,6 @@ augroup END
 
 "}}}
 
-" Gutentags{{{
-call assert_true(exists(':GutentagsToggleEnabled'))
-
-" General configuration{{{
-let g:gutentags_add_default_project_roots = 0
-let g:gutentags_ctags_tagfile = '.tags'
-let g:gutentags_define_advanced_commands = 1
-let g:gutentags_exclude_project_root = []
-let g:gutentags_file_list_command = {
-                \ 'markers': {
-                    \ '.git': 'git ls-files',
-                    \ '.hg': 'hg files',
-                    \ '.svn': 'svn list',
-                \ },
-            \ }
-let g:gutentags_project_root_finder = 'FindRootDirectoryGutentagsWrapper'
-
-" Wrapper for FindRootDirectory() that takes (and ignores) variable arguments
-function! FindRootDirectoryGutentagsWrapper(...)
-    "echom 'Find root dir called, cwd: ' . getcwd() . ' buffer: ' . buffer_name('')
-    let l:rootdir = FindRootDirectory()
-
-    if l:rootdir != ''
-        return l:rootdir
-    endif
-
-    return getcwd()
-endfunction
-
-"let g:gutentags_project_root = [
-"            \ '.projectroot',
-"            \ '.git',
-"            \ '.hg',
-"            \ '.svn',
-"            \ '_darcs',
-"            \ '_FOSSIL_',
-"            \ '.fslckout',
-"            \ '.bzr',
-"            \ 'CVS',
-"            \ ]
-let g:gutentags_resolve_symlinks = 1
-"}}}
-
-"}}}
-
 " gfm-syntax{{{
 call assert_true(exists('g:loaded_gfm_syntax'))
 let g:gfm_syntax_highlight_inline_code = 1
@@ -657,39 +611,6 @@ call assert_true(exists(':SimpylFoldDocstrings'))
 let g:SimpylFold_docstring_preview = 0
 let g:SimpylFold_fold_docstring = 1
 let g:SimpylFold_fold_import = 1
-"}}}
-
-" Tagbar{{{
-
-" Configuration
-let g:tagbar_foldlevel = 1
-let g:tagbar_indent = 1
-let g:tagbar_autoclose = 1
-let g:tagbar_autofocus = 1
-let g:tagbar_compact = 1
-let g:tagbar_sort = 0
-let g:tagbar_width = 30
-let g:tagbar_iconchars = ['▶', '▼']
-let g:tagbar_type_css = {
-    \ 'ctagstype' : 'Css',
-    \ 'kinds'     : [
-        \ 'c:classes',
-        \ 's:selectors',
-        \ 'i:identities'
-    \ ]
-\ }
-let g:tagbar_type_markdown = {
-    \ 'ctagstype' : 'markdown',
-    \ 'kinds' : [
-        \ 'h:Heading_L1',
-        \ 'i:Heading_L2',
-        \ 'k:Heading_L3'
-    \ ]
-\ }
-
-" Mappings
-nnoremap <silent> <F6> <cmd>Tagbar<CR>
-
 "}}}
 
 " vim-json
@@ -780,22 +701,6 @@ let g:mundo_return_on_revert = 0
 let g:mundo_verbose_graph = 0
 let g:mundo_width = 40
 
-" Changes options
-"function! UpdateMundoOptions(...) "{{{
-"    let g:mundo_width = (rccommon#BufferColumns() - 41 > &textwidth) ? 40 : 30
-"
-"    if a:0 > 0 && a:1 != 0
-"        call MundoToggleUpdate()
-"    endif
-"endfunction "}}}
-"
-"" Updates options and then toggles Mundo
-"function! MundoToggleUpdate() "{{{
-"    TagbarClose
-"    call UpdateMundoOptions()
-"    MundoToggle
-"endfunction "}}}
-
 " Mappings
 nnoremap <silent> <F7> <cmd>MundoToggle<CR>
 "}}}
@@ -873,7 +778,7 @@ let g:airline#extensions#tabline#show_close_button = 0
 let g:airline#extensions#tabline#show_splits = 0
 let g:airline#extensions#tabline#show_tab_type = 0
 let g:airline#extensions#tabline#tab_min_count = 2
-let g:airline#extensions#tagbar#enabled = 1
+let g:airline#extensions#tagbar#enabled = 0
 let g:airline#extensions#whitespace#enabled = 0
 let g:airline#extensions#wordcount#enabled = 1
 let g:airline#extensions#wordcount#formatter#default#fmt_short = 1
@@ -950,28 +855,18 @@ let g:airline_section_z =
             \ '%{g:airline_symbols.linenr}%4l%  ' .
             \ '%{g:airline_symbols.columnnr}%3v% '
 let g:airline_section_x =
-            \ '%{airline#util#append(' .
-            \ 'airline#extensions#tagbar#currenttag(),0)}% ' .
             \ '%{airline#util#append(airline#parts#filetype(),0)}'
 "}}}
 
 " Group gutentags / ALE indicators
+" FIXME: remove
 function! plugins#AirlineCustomLoadIndicators() "{{{
-    let l:out = gutentags#statusline(g:airline_symbols.tagsload)
-
-    if l:out != ''
-        let l:out = l:out . ' '
-    endif
-
-    let l:out = l:out . plugins#ALELintStatus()
+    let l:out = plugins#ALELintStatus()
     return l:out
 endfunction "}}}
 
 augroup AirlineRefreshAutocommands "{{{
     autocmd!
-
-    autocmd User GutentagsUpdating AirlineRefresh
-    autocmd User GutentagsUpdated AirlineRefresh
 
     " ALE status indicator
     autocmd User ALELintPost let g:_ale_statusicon = '' | AirlineRefresh
@@ -1015,7 +910,6 @@ function! UpdateFunctionMenus()
     let s:menus.buffer_windows = {
         \ 'description': 'windows',
         \ 'command_candidates': [
-            \ [ '[<F6> ] Toggle Tag Explorer', 'Tagbar' ],
             \ [ '[<F7> ] Toggle Undo Tree Explorer', 'MundoToggle' ],
             \ [ '[<F12>] Edit Snippets...', 'UltiSnipsEdit' ],
             \ ],
@@ -1129,7 +1023,7 @@ call assert_true(exists(':IndentGuidesEnable'))
 let g:indent_guides_auto_colors = 0
 let g:indent_guides_default_mapping = 0
 let g:indent_guides_enable_on_vim_startup = 1
-let g:indent_guides_exclude_filetypes = ['qf', 'tagbar', 'startify', 'nerdtree', 'help', 'Mundo']
+let g:indent_guides_exclude_filetypes = ['qf', 'startify', 'nerdtree', 'help', 'Mundo']
 let g:indent_guides_guide_size = 1
 let g:indent_guides_indent_levels = 6   " 16
 let g:indent_guides_start_level = 2
@@ -1247,7 +1141,7 @@ let g:startify_list_order = [
             \ ['   Commands:'], 'commands',
         \ ]
 let g:startify_list_order = ['sessions', 'files', 'dir', 'bookmarks', 'commands']
-let g:startify_session_dir = '~/.config/nvim/sessions'
+" let g:startify_session_dir = '~/.config/nvim/session'
 let g:startify_update_oldfiles = 1
 let g:startify_change_to_dir = 1
 let g:startify_custom_indices = [
@@ -1256,12 +1150,22 @@ let g:startify_custom_indices = [
             \ '<F2>', '<F3>', '<F4>', '<F5>', '<F6>', '<F7>', '<F8>', '<F9>',
             \ '<F10>', '<F11>', '<F12>'
         \ ]
-let g:startify_files_number = 12
+let g:startify_files_number = 6
 let g:startify_skiplist = [
             \ 'COMMIT_EDITMSG',
             \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
             \ 'bundle/.*/doc',
         \ ]
+
+
+" Failsafe in case vim-oblique-strategies not installed.
+" Can't use exists() because of autoloading.
+try
+    let g:startify_custom_header_quotes = map(obliqueStrategies#GetAll(), '[v:val]')
+            \ + startify#fortune#predefined_quotes()
+catch /^Vim(let):E117/
+    echoerr "Missing vim-oblique-strategies"
+endtry
 
 let s:neovim_ascii = [
  \ '                                        ▟▙            ',
@@ -1273,8 +1177,8 @@ let s:neovim_ascii = [
  \ '▀▀    ▀▀   ▝▀▀▀▀▀     ▀▀▀▀       ▀▀     ▀▀  ▀▀  ▀▀  ▀▀',
  \ '',
  \]
-let g:startify_custom_header = map(s:neovim_ascii + startify#fortune#quote(),'"   ".v:val')
-let g:startify_custom_footer = map(['', obliqueStrategies#Get()], '"   ".v:val')
+
+let g:startify_custom_header = map(s:neovim_ascii + startify#fortune#quote(), '"   " . v:val')
 "}}}
 
 " tasklist
