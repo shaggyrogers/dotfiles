@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2024-04-03
+" Modification Date:     2024-04-05
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -18,7 +18,7 @@ let s:assert = 0
 let s:useEmojis = 0
 let s:neovimPath = $HOME.'/.config/nvim'
 let s:savedYanksPath = $HOME.'/.config/nvim/temp_data/yankhistory.txt'
-let s:python = get(filter(map(['python3.7', 'python3', 'python'], 'exepath(v:val)'), 'len(v:val)'), 0, '')
+let s:python = get(filter(map(['python3.10', 'python3', 'python'], 'exepath(v:val)'), 'len(v:val)'), 0, '')
 
 " Features
 let s:saveYanks = 1
@@ -70,30 +70,6 @@ let s:project_root_markers = [
             \ 'CMakeLists.txt',
             \ 'Rakefile',
         \ ] "}}}
-
-
-" Plugin patching
-let s:patchesDir = '/plugin_patches'
-let s:pluginsDir = '/plugged'
-
-" Apply patches in plugin_patches directory.
-" Layout must match the "plugins" folder.
-function! plugins#applyPluginPatches() "{{{
-    exec '!cp -r '.s:neovimPath.s:patchesDir.'/* '.s:neovimPath.
-        \ s:pluginsDir.'/'
-    echom 'Done. You may need to restart vim to apply the patch changes.'
-endfunction "}}}
-
-" Remove patched files and retrieve the originals.
-function! plugins#removePluginPatches() "{{{
-    exec '!find '.s:neovimPath.'/ -type f | grep -Po "(?<='.
-                \ s:patchesDir.'/).*" | xargs printf "'.
-                \ s:neovimPath.s:pluginsDir.'/\%s\n" | xargs rm'
-    PlugUpdate
-endfunction "}}}
-
-command! PlugPatchAll call plugins#applyPluginPatches()
-command! PlugUnpatchAll call plugins#removePluginPatches()
 
 
 " Load plugins
@@ -253,7 +229,6 @@ let g:necoghc_enable_detailed_browse = 1
 " Editing{{{
 
 " clever-f{{{
-call assert_true(get(g:, 'loaded_clever_f',0))
 
 let g:clever_f_across_no_line = 1
 let g:clever_f_chars_match_any_signs = ''
@@ -411,7 +386,6 @@ let g:ale_echo_msg_info_str = 'Info'
 let g:ale_echo_msg_warning_str = 'Warning'
 let g:ale_emit_conflict_warnings = 1
 let g:ale_fix_on_save = 1
-            "\       'add_blank_lines_for_python_control_statements',
 let g:ale_fixers = {
             \   'python': [
             \       'black',
@@ -464,10 +438,6 @@ let g:ale_warn_about_trailing_whitespace = 1
 let g:ale_writegood_executable = 'writegood'
 let g:ale_writegood_options = ''
 let g:ale_writegood_use_global = 0
-
-" Python
-let g:ale_python_flake8_executable = s:python
-let g:ale_python_flake8_options = '-m flake8'
 
 " Appearance{{{
 let g:ale_change_sign_column_color = 0
@@ -640,8 +610,8 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_use_caching = 1
 
 " Use cpsm matcher
-let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
-let g:cpsm_match_empty_query = 1
+" let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
+" let g:cpsm_match_empty_query = 1
 
 " List tracked files when in a repo, otherwise use find
 let g:ctrlp_user_command = {
@@ -881,7 +851,6 @@ call assert_true(exists(':Denite'))
 " Add custom menus{{{
 function! UpdateFunctionMenus()
     let s:menus = {}
-                "\ 'Denite register -mode=normal' ],
     let s:menus.main_menu = {
         \ 'description': 'misc',
         \ 'command_candidates': [

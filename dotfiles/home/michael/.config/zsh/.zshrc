@@ -101,7 +101,7 @@ fi
 # Display fortune
 # Note: After editing a fortune fils, compile with 'sudo strfile <file>'
 printf "\033[34m\033[1m" 
-fortune oblique | fmt -u -w$(($COLUMNS*8/10))| sed 's/^.*$/        \0/g'
+fortune
 printf "\033[0m\n" 
 # }}}
 
