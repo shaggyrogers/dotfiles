@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2024-04-05
+" Modification Date:     2024-04-23
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -121,7 +121,8 @@ Plug 'https://github.com/okcompute/vim-python-match'
 Plug 'https://github.com/okcompute/vim-python-motions.git'
 Plug 'https://github.com/rhysd/vim-gfm-syntax.git'
 Plug 'https://github.com/tmhedberg/SimpylFold.git'
-Plug 'https://github.com/tweekmonster/impsort.vim.git'
+" TODO: Fix or remove
+" Plug 'https://github.com/tweekmonster/impsort.vim.git'
 Plug 'https://github.com/vim-python/python-syntax.git'
 Plug 'https://github.com/w0rp/ale.git'
 "}}}
@@ -558,18 +559,19 @@ let g:python_pep8_indent_skip_concealed = 0
 " }}}
 
 " impsort{{{
-let g:impsort_override_formatexpr = 1
-let g:impsort_highlight_imported = 1
-let g:impsort_method_module = ['depth', 'alpha', 'length']
-let g:impsort_method_group = ['alpha', 'length']
-let g:impsort_start_nextline = 0
-let g:impsort_lines_after_imports = 1
-
-hi IdentifierSpecial ctermfg=14 ctermbg=NONE guifg=#42A5F5 guibg=NONE
-hi TypeSpecial ctermfg=121 ctermbg=NONE guifg=#C7A90C guibg=NONE
-hi link pythonImportedClassDef TypeSpecial
-hi link pythonImportedModule IdentifierSpecial
-hi link pythonImportedObject TypeSpecial
+" TODO: Fix or remove
+" let g:impsort_override_formatexpr = 1
+" let g:impsort_highlight_imported = 1
+" let g:impsort_method_module = ['depth', 'alpha', 'length']
+" let g:impsort_method_group = ['alpha', 'length']
+" let g:impsort_start_nextline = 0
+" let g:impsort_lines_after_imports = 1
+"
+" hi IdentifierSpecial ctermfg=14 ctermbg=NONE guifg=#42A5F5 guibg=NONE
+" hi TypeSpecial ctermfg=121 ctermbg=NONE guifg=#C7A90C guibg=NONE
+" hi link pythonImportedClassDef TypeSpecial
+" hi link pythonImportedModule IdentifierSpecial
+" hi link pythonImportedObject TypeSpecial
 " }}}
 
 " python-syntax{{{

@@ -30,16 +30,20 @@ LAST_BG_FG=''
 function ft_color { # {{{
     echo -n "%{[38;2;$1;$2;$3m%}"
 } # }}}
+
 function bg_color { # {{{
     LAST_BG_FG="%{[38;2;$1;$2;$3m%}"
     echo -n "%{[48;2;$1;$2;$3m%}"
 } # }}}
+
 function ft_style_clear { # {{{
     echo -n "%{[0m%}"
 } # }}}
+
 function ft_style_b { # {{{
     echo -n "%{[1m%}"
 } # }}}
+
 # _nextseg(fg_color(r, g, b), [bg_color(r, g, b)], [bold]) : 
 # Add the next segment. Adds a separator, if the segment is not the first.
 function _nextseg { # {{{
@@ -72,14 +76,17 @@ function _seg_return_code() { # {{{
         printf "  "
     fi
 } # }}}
+
 function _seg_username() { # {{{
     _nextseg 207 216 220 88 88 88
     printf " $USER "
 } # }}}
+
 function _seg_hostname() { # {{{
     _nextseg 163 173 179 68 68 68
     printf " $(hostname) "
 } # }}}
+
 function _seg_pipenv() { # {{{
     if [ -z "$VIRTUAL_ENV" ] || ! basename $VIRTUAL_ENV &> /dev/null; then 
         return
@@ -90,6 +97,7 @@ function _seg_pipenv() { # {{{
     printf "  $VENV "
 
 } # }}}
+
 function _seg_cwd() { # {{{
     _nextseg 253 246 227 0 135 175
 
@@ -107,6 +115,7 @@ function _seg_cwd() { # {{{
         printf " $(printf "$CURPATH" | sed 's/\//  /g') "
     fi
 } # }}}
+
 function _seg_jobs() { # {{{
     JOBS_RUNNING="$(jobs -rp | wc -l)" 
     JOBS_STOPPED="$(jobs -sp | wc -l)" 
@@ -119,6 +128,7 @@ function _seg_jobs() { # {{{
     ! [ "$JOBS_RUNNING" = '0' ] && printf "  %s" "$JOBS_RUNNING"
     ! [ "$JOBS_STOPPED" = '0' ] && printf " %s" "$JOBS_RUNNING"
 } # }}}
+
 function _seg_git() {  # {{{
     # NOTE: Taken from agnoster theme (prompt_git)
     (( $+commands[git] )) || return
@@ -170,15 +180,12 @@ function _seg_git() {  # {{{
         vcs_info
         echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
     fi
-
-    #       
-    #                    
 } # }}}
+
 function _seg_ranger() { # {{{
     if [ $RANGER_LEVEL ]; then
         _nextseg 250 166 181 127 87 134
         printf "  " 
-        #c
     fi
 } # }}}
 #}}}

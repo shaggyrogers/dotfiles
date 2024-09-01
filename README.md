@@ -11,7 +11,7 @@ Ubuntu 22.04 LTS w/ Regolith desktop
   - neovim
   - keepass2
   - ranger
-  - deluge
+  - qbittorrent
   - python3.10
     + pip
     + neovim-remote
@@ -30,6 +30,8 @@ Ubuntu 22.04 LTS w/ Regolith desktop
   - exfalso
   - cmus
   - fortune + fortunes
+  - trash-cli
+  - htop
 
 * Install Firefox plugins
   - Tree style tab
