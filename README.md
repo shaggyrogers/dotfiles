@@ -32,6 +32,7 @@ Ubuntu 22.04 LTS w/ Regolith desktop
   - fortune + fortunes
   - trash-cli
   - htop
+  - clang
 
 * Install Firefox plugins
   - Tree style tab
