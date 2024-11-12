@@ -1,2 +1,0 @@
-# Runs ~/.xinitrc (not executed automatically?)
-exec_always --no-startup-id bash -c ". ~/.xinitrc"

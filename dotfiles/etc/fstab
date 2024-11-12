@@ -12,7 +12,7 @@ UUID=AB4E-0869  /boot/efi       vfat    umask=0077      0       1
 # swap was on /dev/nvme0n1p1 during installation
 UUID=d177be4e-d32b-465e-a3c6-6c9c799b10e6 none            swap    sw              0       0
 # swap was on /dev/sdb3 during installation
-UUID=baeb7ebd-b2ef-4478-a09d-6b332327b1c1 none            swap    sw              0       0
+# UUID=baeb7ebd-b2ef-4478-a09d-6b332327b1c1 none            swap    sw              0       0
 
 # SSD 3
 UUID=70FFE9C57AE9242C /media/michael/SSD\0403 ntfs defaults 0 0

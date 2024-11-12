@@ -1,0 +1,5 @@
+# Runs ~/.xinitrc (not executed automatically?)
+# HACK: after upgrading to regolith3/ubuntu 24, it seems the settings are reset
+# some time after this runs. So just wait a bit and run again to fix this...
+exec_always --no-startup-id bash -c ". ~/.xinitrc"
+exec_always --no-startup-id bash -c "sleep 2; . ~/.xinitrc"
