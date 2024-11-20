@@ -2,7 +2,7 @@
 
 Configuration files for everything I use frequently.
 
-Ubuntu 22.04 LTS w/ Regolith desktop
+Ubuntu 24.04 LTS w/ Regolith 3 desktop
 
 ## Installation notes
 
@@ -12,14 +12,9 @@ Ubuntu 22.04 LTS w/ Regolith desktop
   - keepass2
   - ranger
   - qbittorrent
-  - python3.10
-    + pip
-    + neovim-remote
-    + pipenv
-    + jedi
-    + pynvim
-    + black
-    + pylint
+  - python3
+    + pip (python3-full will install this)
+    + `python3 -m pip install --break-system-packages neovim-remote pipenv jedi pynvim black pylint`
   - zsh
   - oh-my-zsh
     + This changes default shell to zsh.
@@ -38,15 +33,17 @@ Ubuntu 22.04 LTS w/ Regolith desktop
   - Tree style tab
   - Vim vixen
   - Enhancer for YouTube
+  - Sponsorblock
 
 * Make symlinks in .local/bin for AppImages
 
-* Remove regolith-i3-base-launchers package
+* Remove regolith-wm-base-launchers package
   - WARNING: Make sure ~/.config/regolith2/i3/15_base_launchers has been copied first
+
+* May need to remove regolith-i3-control-center-gnome (conflicting i3 config with regolith-i3-control-center-regolith)
 
 # TODO
 * vimrc cleanup
-* Finish .config cleanup
 * Review /etc/fstab and /etc/sudoers
 
 Let me know if I've included your work without attribution, the wrong license etc.

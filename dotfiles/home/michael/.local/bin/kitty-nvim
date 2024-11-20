@@ -478,7 +478,7 @@ if [ -n "$X_WIN" ]; then
     xdotool windowactivate --sync "$X_WIN"
     xdotool key --clearmodifiers --window "$X_WIN" ctrl+backslash ctrl+n
 
-    if nvr --nostart "$NVR_OPTS" "$@"; then
+    if nvr --nostart $NVR_OPTS "$@"; then
         # Focus existing instance if we opened files
         if ! [ "$ARGS_REMAINING" = '0' ] && [ -n "$X_WIN" ]; then
             xdotool windowactivate --sync "$X_WIN"
@@ -490,14 +490,13 @@ if [ -n "$X_WIN" ]; then
     echo 'Warning: Could not connect to existing instance!' 1>&2
 fi # }}}
 
-# Create a new instance in kitty {{{
+# Create a new instance in kitty
 export EDITOR="kitty-nvim -i $INSTANCE_INDEX -o t"
 
 # Needed to fix neovim sudo issue
 export SUDO_ASKPASS="$(which ssh-askpass)"
 
 bash -c "kitty --config='$HOME/.config/kitty/kitty.nvim.conf' --class='$CLASS_NAME' $KITTY_OPTS nvr $NVR_OPTS \"$@\""
-# }}}
 
 exit 0
 
