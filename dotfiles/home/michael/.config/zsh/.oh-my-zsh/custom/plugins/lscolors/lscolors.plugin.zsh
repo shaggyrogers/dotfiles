@@ -11,82 +11,82 @@
 #
 ###############################################################################
 
-# Color df {{{
-function dfc () {
-    if ! [ "$#" = '0' ]; then
-        df "$@"
-        return
-    fi
+# NOTE: Disabled coloring df, lsblk, lsusb, these are broken..
+# Probably not worth fixing - just remove?
 
-    df -h | awk '
-        BEGIN {
-            FPAT = "([[:space:]]*[^[:space:]]+)";
-            OFS = "";
-        }
-        {
-            $1 = "\033[31m" $1 "\033[0m";
-            $2 = "\033[35m" $2 "\033[0m";
-            $3 = "\033[34m" $3 "\033[0m";
-            $4 = "\033[32m" $4 "\033[0m";
-            $5 = "\033[33m" $5 "\033[0m";
-            $6 = "\033[36m" $6
-            print $0"\033[0m";
-        }
-'
-}
-alias df='dfc'
-# }}}
-
-# Color lsblk {{{
-function lsblkc () {
-    if ! [ "$#" = '0' ]; then
-        lsblk "$@"
-        return
-    fi
-    lsblk | awk '
-        BEGIN {
-            FPAT = "([[:space:]]*[^[:space:]]+)";
-            OFS = "";
-        }
-        {
-            $1 = "\033[31m" $1 "\033[0m";
-            $2 = "\033[35m" $2 "\033[0m";
-            $3 = "\033[34m" $3 "\033[0m";
-            $4 = "\033[32m" $4 "\033[0m";
-            $5 = "\033[33m" $5 "\033[0m";
-            $6 = "\033[36m" $6
-            print $0"\033[0m";
-        }
-'
-}
-alias lsblk='lsblkc'
-# }}}
-
-# Color lsusb {{{
-function lsusbc () {
-    if ! [ "$#" = '0' ]; then
-        lsusb "$@"
-        return
-    fi
-    lsusb | awk '
-        BEGIN {
-            FPAT = "([[:space:]]*[^[:space:]]+)";
-            OFS = "";
-        }
-        {
-            $1 = "\033[31m" $1;
-            $2 =  $2 "\033[0m";
-            $3 = "\033[34m" $3;
-            $4 = $4 "\033[0m";
-            $5 = "\033[33m" $5;
-            $6 = $6 "\033[0m";
-            $7 = "\033[36m" $7
-            print $0"\033[0m";
-        }
-'
-}
-alias lsusb='lsusbc'
-# }}}
+# Color df
+#function dfc () {
+#    if ! [ "$#" = '0' ]; then
+#        df "$@"
+#        return
+#    fi
+#
+#    df -h | awk '
+#        BEGIN {
+#            FPAT = "([[:space:]]*[^[:space:]]+)";
+#            OFS = "";
+#        }
+#        {
+#            $1 = "\033[31m" $1 "\033[0m";
+#            $2 = "\033[35m" $2 "\033[0m";
+#            $3 = "\033[34m" $3 "\033[0m";
+#            $4 = "\033[32m" $4 "\033[0m";
+#            $5 = "\033[33m" $5 "\033[0m";
+#            $6 = "\033[36m" $6
+#            print $0"\033[0m";
+#        }
+#'
+#}
+#alias df='dfc'
+#
+## Color lsblk
+#function lsblkc () {
+#    if ! [ "$#" = '0' ]; then
+#        lsblk "$@"
+#        return
+#    fi
+#    lsblk | awk '
+#        BEGIN {
+#            FPAT = "([[:space:]]*[^[:space:]]+)";
+#            OFS = "";
+#        }
+#        {
+#            $1 = "\033[31m" $1 "\033[0m";
+#            $2 = "\033[35m" $2 "\033[0m";
+#            $3 = "\033[34m" $3 "\033[0m";
+#            $4 = "\033[32m" $4 "\033[0m";
+#            $5 = "\033[33m" $5 "\033[0m";
+#            $6 = "\033[36m" $6
+#            print $0"\033[0m";
+#        }
+#'
+#}
+#alias lsblk='lsblkc'
+#
+## Color lsusb
+#function lsusbc () {
+#    if ! [ "$#" = '0' ]; then
+#        lsusb "$@"
+#        return
+#    fi
+#    lsusb | awk '
+#        BEGIN {
+#            FPAT = "([[:space:]]*[^[:space:]]+)";
+#            OFS = "";
+#        }
+#        {
+#            $1 = "\033[31m" $1;
+#            $2 =  $2 "\033[0m";
+#            $3 = "\033[34m" $3;
+#            $4 = $4 "\033[0m";
+#            $5 = "\033[33m" $5;
+#            $6 = $6 "\033[0m";
+#            $7 = "\033[36m" $7
+#            print $0"\033[0m";
+#        }
+#'
+#}
+#alias lsusb='lsusbc'
 
 # color ls {{{
 # Aliases {{{
