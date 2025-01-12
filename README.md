@@ -8,6 +8,7 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
 
 * Install
   - kitty
+    + May need to install kitty-terminfo package depending on install method
   - neovim
   - keepass2
   - ranger
@@ -45,5 +46,6 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
 # TODO
 * vimrc cleanup
 * Review /etc/fstab and /etc/sudoers
+* Remove unused features/options from kitty-nvim
 
 Let me know if I've included your work without attribution, the wrong license etc.
