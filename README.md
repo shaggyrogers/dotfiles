@@ -41,7 +41,14 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
 * Remove regolith-wm-base-launchers package
   - WARNING: Make sure ~/.config/regolith2/i3/15_base_launchers has been copied first
 
+* Install regolith packages
+  - i3xrocks-time
+  - May be others?
+
 * May need to remove regolith-i3-control-center-gnome (conflicting i3 config with regolith-i3-control-center-regolith)
+
+* Install npm packages for javascript linting/formatting
+  - `npm install -g eslint prettier globals @eslint/js eslint-plugin-vue`
 
 # TODO
 * vimrc cleanup

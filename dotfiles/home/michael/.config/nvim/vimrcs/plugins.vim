@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2024-04-23
+" Modification Date:     2025-02-28
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -388,13 +388,16 @@ let g:ale_echo_msg_warning_str = 'Warning'
 let g:ale_emit_conflict_warnings = 1
 let g:ale_fix_on_save = 1
 let g:ale_fixers = {
-            \   'python': [
-            \       'black',
-            \   ],
             \   'cpp': [
             \       'clang-format',
             \       'remove_trailing_lines',
             \       'trim_whitespace',
+            \   ],
+            \   'javascript': [
+            \       'prettier',
+            \   ],
+            \   'python': [
+            \       'black',
             \   ],
             \}
 let g:ale_history_enabled = 1
