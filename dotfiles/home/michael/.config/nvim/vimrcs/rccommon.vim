@@ -5,7 +5,7 @@
 " Description:           Shared functions for vim scripts
 " Author:                Michael De Pasquale <shaggyrogers>
 " Creation Date:         2018-02-18
-" Modification Date:     2020-01-26
+" Modification Date:     2025-02-28
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -398,7 +398,7 @@ endfunction  "}}}
 " RestoreBufferOptions() - CALLED AUTOMATICALLY
 " Restore options changed by SetAndSaveBufferOptions().
 function! rccommon#RestoreBufferOptions() abort " {{{
-    if !exists('b:_user_ftplugin_bufopts_prev')
+    if !exists('b:_user_ftplugin_bufopts_prev') || !exists('w:_user_ftplugin_winopts_prev')
         return
     endif
 
