@@ -16,6 +16,8 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
   - python3
     + pip (python3-full will install this)
     + `python3 -m pip install --break-system-packages neovim-remote pipenv jedi pynvim black pylint`
+  - node/npm
+    + `npm install -g eslint prettier globals @eslint/js eslint-plugin-vue`
   - zsh
   - oh-my-zsh
     + This changes default shell to zsh.
@@ -43,12 +45,10 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
 
 * Install regolith packages
   - i3xrocks-time
+  - i3xrocks-temp
   - May be others?
 
 * May need to remove regolith-i3-control-center-gnome (conflicting i3 config with regolith-i3-control-center-regolith)
-
-* Install npm packages for javascript linting/formatting
-  - `npm install -g eslint prettier globals @eslint/js eslint-plugin-vue`
 
 # TODO
 * vimrc cleanup
