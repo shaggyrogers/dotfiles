@@ -2,3 +2,4 @@ regolith.wallpaper.file: /usr/share/backgrounds/Fuji_san_by_amaral.png
 regolith.wallpaper.options: scaled
 regolith.lockscreen.wallpaper.file: /usr/share/backgrounds/Clouds_by_Tibor_Mokanszki.jpg
 regolith.lockscreen.wallpaper.options: scaled
+i3xrocks.value.mediaplayerwidth: 60
