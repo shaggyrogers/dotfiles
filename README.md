@@ -34,7 +34,7 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
 
 * Install Firefox plugins
   - Tree style tab
-  - Vim vixen
+  - Vimmatic
   - Enhancer for YouTube
   - Sponsorblock
 
