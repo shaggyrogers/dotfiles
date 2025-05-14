@@ -31,6 +31,7 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
   - trash-cli
   - htop
   - clang
+    + clang-format
 
 * Install Firefox plugins
   - Tree style tab
