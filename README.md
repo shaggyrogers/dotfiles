@@ -4,6 +4,9 @@ Configuration files for everything I use frequently.
 
 Ubuntu 24.04 LTS w/ Regolith 3 desktop
 
+
+![this is a screenshot of my setup :)](screenshot-2025-05-19.png)
+
 ## Installation notes
 
 * Install
