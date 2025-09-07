@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2025-02-28
+" Modification Date:     2025-09-05
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -88,7 +88,7 @@ Plug 'https://github.com/Shougo/neco-syntax'
 Plug 'https://github.com/Shougo/neco-vim'
 Plug 'https://github.com/Shougo/neocomplete.vim'
 Plug 'https://github.com/Shougo/neoinclude.vim.git'
-Plug 'https://github.com/tweekmonster/deoplete-clang2'
+" Plug 'https://github.com/tweekmonster/deoplete-clang2'
 Plug 'https://github.com/zchee/deoplete-go'
 Plug 'https://github.com/zchee/deoplete-jedi.git',
             \ { 'do': 'git submodule update --init'}
@@ -1152,6 +1152,7 @@ let s:neovim_ascii = [
  \ '',
  \]
 
+" startify#fortune#quote inexplicably returns a multiply-n
 let g:startify_custom_header = map(s:neovim_ascii + startify#fortune#quote(), '"   " . v:val')
 "}}}
 

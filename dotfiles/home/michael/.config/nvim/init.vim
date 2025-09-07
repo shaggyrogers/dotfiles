@@ -5,18 +5,20 @@
 " Description:           Loads vimrcs.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-06
-" Modification Date:     2024-11-12
+" Modification Date:     2025-09-05
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Configuration
 let g:python3_host_prog = '/usr/bin/python3'
 
-if exists('g:loaded_python3_provider')
-    echo 'g:loaded_python3_provider = ' . g:loaded_python3_provider
-    unlet g:loaded_python3_provider
-endif
+" why??? leaving this commented out here for now in case I had a good reason
+"if exists('g:loaded_python3_provider')
+"    echo 'g:loaded_python3_provider = ' . g:loaded_python3_provider
+"    unlet g:loaded_python3_provider
+"endif
 
+" Disable python 2.x provider
 let g:loaded_python_provider = 0
 
 " Folders
@@ -97,7 +99,7 @@ function! ReloadVimScript(path) " {{{
         try
             execute 'source ' . escape(a:path, ' ",*|[')
         catch
-            echoerr 'Failed to reload ' . a:path . ': ' . v:exception
+            echoerr 'Failed to reload ' . a:path . ': ' . v:exception . ' @ ' . v:throwpoint
             return
         endtry
 

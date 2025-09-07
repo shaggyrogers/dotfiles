@@ -5,7 +5,7 @@
 " Author:                Michael De Pasquale <shaggyrogers>
 " Description:           Sets vim options for all filetypes.
 " Creation Date:         2017-12-02
-" Modification Date:     2020-09-26
+" Modification Date:     2025-09-07
 " License:               MIT
 "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -26,11 +26,6 @@ set mkspellmem=900000,10000,1000
 " Spell checking
 set nospell
 set spelllang=en_au
-
-" Mouse support
-behave xterm
-set mouse=ar
-set mouseshape=i:beam,r:beam,s:updown,sd:cross,m:no,ml:up-arrow,v:rightup-arrow
 " }}}
 
 " Behaviour{{{
@@ -112,8 +107,8 @@ set showmatch
 " File Search
 set tags=.tags
 " }}}
-
-" Navigation {{{
+"
+" " Navigation {{{
 " Movement restrictions/jumps
 set backspace=eol,start,indent
 set selection=inclusive
