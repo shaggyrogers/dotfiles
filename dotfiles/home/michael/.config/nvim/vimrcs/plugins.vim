@@ -5,7 +5,7 @@
 " Description:           All plugin-related options and shortcuts go here.
 " Author:                Michael De Pasquale
 " Creation Date:         2017-12-02
-" Modification Date:     2025-09-05
+" Modification Date:     2025-09-07
 " License:               MIT
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1152,7 +1152,6 @@ let s:neovim_ascii = [
  \ '',
  \]
 
-" startify#fortune#quote inexplicably returns a multiply-n
 let g:startify_custom_header = map(s:neovim_ascii + startify#fortune#quote(), '"   " . v:val')
 "}}}
 
