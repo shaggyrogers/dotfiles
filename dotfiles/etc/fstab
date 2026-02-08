@@ -17,3 +17,5 @@ UUID=d177be4e-d32b-465e-a3c6-6c9c799b10e6 none            swap    sw            
 # SSD 3
 UUID=70FFE9C57AE9242C /media/michael/SSD\0403 ntfs defaults 0 0
 
+# SSD 4
+UUID=56C01E5EC01E44A1 /media/michael/SSD\0404 ntfs defaults 0 0
