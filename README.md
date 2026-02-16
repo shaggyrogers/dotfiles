@@ -16,8 +16,9 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
   - keepass2
   - ranger
   - qbittorrent
-  - python3
-    + pip (python3-full will install this)
+  - Python
+    + python3-full
+    + python3-pip
     + `python3 -m pip install --break-system-packages neovim-remote pipenv jedi pynvim black pylint`
   - node/npm
     + `npm install -g eslint prettier globals @eslint/js eslint-plugin-vue`
