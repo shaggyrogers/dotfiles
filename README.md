@@ -21,7 +21,7 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
     + python3-pip
     + `python3 -m pip install --break-system-packages neovim-remote pipenv jedi pynvim black pylint`
   - node/npm
-    + `npm install -g eslint prettier globals @eslint/js eslint-plugin-vue`
+    + `sudo npm install -g eslint prettier globals @eslint/js eslint-plugin-vue`
   - zsh
   - oh-my-zsh
     + This changes default shell to zsh.
