@@ -9,13 +9,11 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
 
 ## Installation notes
 
-* Install
+* Required
   - kitty
     + May need to install kitty-terminfo package depending on install method
   - neovim
-  - keepass2
   - ranger
-  - qbittorrent
   - Python
     + python3-full
     + python3-pip
@@ -28,14 +26,18 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
   - neofetch
   - libfuse2
   - universal-ctags
+  - fortune + fortunes
+  - trash-cli
+  - clang
+    + clang-format
+      
+* Optional
+  - htop
   - silversearcher-ag
   - exfalso
   - cmus
-  - fortune + fortunes
-  - trash-cli
-  - htop
-  - clang
-    + clang-format
+  - keepass2
+  - qbittorrent
 
 * Install Firefox plugins
   - Tree style tab
