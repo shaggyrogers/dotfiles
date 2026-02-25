@@ -21,7 +21,9 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
   - node/npm
     + `sudo npm install -g eslint prettier globals @eslint/js eslint-plugin-vue`
   - zsh
-  - oh-my-zsh
+    + zsh
+    + oh-my-zsh
+      * First set alternate dir (`ZSH="$HOME/.config/zsh/.oh-my-zsh"`), install, then copy relevant dotfiles
     + This changes default shell to zsh.
   - neofetch
   - libfuse2
@@ -44,6 +46,9 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
   - Vimmatic
   - Enhancer for YouTube
   - Sponsorblock
+
+* Install Nerd Fonts
+  - FiraCode
 
 * Make symlinks in .local/bin for AppImages
   - `ln -s ../AppImages/nvim-linux-x86_64.appimage nvim`
