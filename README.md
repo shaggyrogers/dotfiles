@@ -30,7 +30,7 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
   - trash-cli
   - clang
     + clang-format
-      
+
 * Optional
   - htop
   - silversearcher-ag
@@ -46,6 +46,8 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
   - Sponsorblock
 
 * Make symlinks in .local/bin for AppImages
+  - `ln -s ../AppImages/nvim-linux-x86_64.appimage nvim`
+  - `ln -s ../kitty.app/bin/kitty kitty`
 
 * Remove regolith-wm-base-launchers package
   - WARNING: Make sure ~/.config/regolith2/i3/15_base_launchers has been copied first
