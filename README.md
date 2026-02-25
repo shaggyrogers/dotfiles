@@ -60,7 +60,11 @@ Ubuntu 24.04 LTS w/ Regolith 3 desktop
 * Install regolith packages
   - i3xrocks-time
   - i3xrocks-temp
-  - May be others?
+  - i3xrocks-memory
+  - i3xrocks-media-player
+  - i3xrocks-volume
+  - i3xrocks-updates
+  - i3xrocks-battery (laptop)
 
 * May need to remove regolith-i3-control-center-gnome (conflicting i3 config with regolith-i3-control-center-regolith)
 
